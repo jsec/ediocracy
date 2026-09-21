@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 export default defineConfig({
+  site: 'https://ediocracy.jsec.app',
   integrations: [
     starlight({
       title: 'X12 271 response guide',
