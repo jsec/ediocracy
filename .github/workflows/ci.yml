@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      guide: ${{ steps.filter.outputs.guide }}
+      parser: ${{ steps.filter.outputs.parser }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Use Node.js >=22.19.0 <23
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '>=22.19.0 <23'
+
+      - name: Test path filters
+        run: node --test tests/ci-paths.test.mjs
+
+      - name: Detect changed workspaces
+        id: filter
+        uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3.0.3
+        with:
+          filters: .github/path-filters.json
+
+  guide:
+    needs: changes
+    if: needs.changes.outputs.guide == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 11.20.0
+
+      - name: Use Node.js >=22.19.0 <23
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '>=22.19.0 <23'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check and build the guide
+        run: pnpm turbo run build --filter=@ediocracy/guide
+
+  parser:
+    needs: changes
+    if: needs.changes.outputs.parser == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: 11.20.0
+
+      - name: Use Node.js >=22.19.0 <23
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '>=22.19.0 <23'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the parser
+        run: pnpm turbo run check --filter=@ediocracy/parser
+
+  required:
+    if: always()
+    needs: [changes, guide, parser]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require successful checks
+        env:
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          GUIDE_RESULT: ${{ needs.guide.result }}
+          PARSER_RESULT: ${{ needs.parser.result }}
+        run: |
+          test "$CHANGES_RESULT" = success
+          case "$GUIDE_RESULT" in success|skipped) ;; *) exit 1 ;; esac
+          case "$PARSER_RESULT" in success|skipped) ;; *) exit 1 ;; esac

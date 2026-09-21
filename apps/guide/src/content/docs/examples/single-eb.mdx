@@ -1,0 +1,22 @@
+---
+title: Single benefit statement
+description: A complete 271 response with one benefit statement.
+---
+
+import X12Example from '../../../components/X12Example.astro';
+
+## Scenario
+
+This example shows one eligibility or benefit statement for a subscriber. The
+`HL` and `NM1` hierarchy identifies the response context before the `EB`
+segment.
+
+## Complete response
+
+<X12Example file="single-eb.edi" />
+
+## Sources
+
+- [X12-EXAMPLES-005010X279](https://x12.org/examples/005010x279) supports the public 271 interchange and transaction pattern.
+- [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-HL](https://www.stedi.com/edi/x12-005010/segment/HL), and [STEDI-NM1](https://www.stedi.com/edi/x12-005010/segment/NM1) provide public segment cross-references.
+- [STEDI-BHT](https://www.stedi.com/edi/x12-005010/segment/BHT) provides the public BHT field cross-reference.

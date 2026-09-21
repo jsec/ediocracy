@@ -1,0 +1,87 @@
+---
+import { loadExample, type ExampleFilename } from '../lib/examples';
+import { buildWalkthrough } from '../lib/walkthrough.mjs';
+
+interface Props {
+  file: ExampleFilename;
+}
+
+const { file } = Astro.props;
+const source = await loadExample(file);
+const walkthrough = buildWalkthrough(source);
+---
+
+<p>
+  <a href={`/examples/${file}`} download={file}>Download the EDI file</a>
+</p>
+<pre class="x12-complete-response"><code>{walkthrough.displaySource}</code></pre>
+
+<section class="x12-walkthrough" aria-labelledby={`breakdown-${file}`}>
+<h3 id={`breakdown-${file}`}>Segment breakdown</h3>
+<p>
+  The entries below follow the source order. Empty fields are shown as
+  <code>(empty)</code>; fields not present in a source segment are not added.
+  Stedi links identify public field references; the licensed X279A1
+  implementation guide supplies the complete transaction rules.
+</p>
+
+{walkthrough.interchanges.map((interchange) => (
+  <section class="x12-interchange" aria-labelledby={`interchange-${file}-${interchange.ordinal}`}>
+    <h4 id={`interchange-${file}-${interchange.ordinal}`}>Interchange {interchange.ordinal}</h4>
+    <nav aria-label={`Interchange ${interchange.ordinal} segment navigation`}>
+      <ul class="x12-segment-navigation">
+        {interchange.segments.map((segment) => (
+          <li>
+            <a href={`#segment-${file}-${interchange.ordinal}-${segment.ordinal}`}>
+              {segment.ordinal}. {segment.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <ol class="x12-segments">
+      {interchange.segments.map((segment) => (
+        <li>
+          <h5 id={`segment-${file}-${interchange.ordinal}-${segment.ordinal}`}>{segment.name}</h5>
+          <p><strong>Raw segment:</strong>{' '}<code>{segment.raw}</code></p>
+          <p>{segment.explanation}</p>
+          <div class="x12-field-table-wrap">
+            <table class="x12-field-table" aria-labelledby={`segment-table-${file}-${interchange.ordinal}-${segment.ordinal}`}>
+              <colgroup>
+                <col class="x12-position-column" />
+                <col class="x12-value-column" />
+                <col class="x12-name-column" />
+                <col />
+              </colgroup>
+              <caption id={`segment-table-${file}-${interchange.ordinal}-${segment.ordinal}`}>{segment.name} fields</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Position</th>
+                  <th scope="col">Raw value</th>
+                  <th scope="col">Field name</th>
+                  <th scope="col">Explanation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {segment.fields.map((field) => (
+                  <tr>
+                    <td><code>{field.position}</code></td>
+                    <td><code>{field.displayValue}</code></td>
+                    <td>{field.name}</td>
+                    <td>{field.explanation}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {segment.reference && (
+            <p class="x12-reference">
+              Field reference: <a href={segment.reference}>Stedi {segment.name} segment reference</a>.
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+))}
+</section>

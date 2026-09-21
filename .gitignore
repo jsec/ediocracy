@@ -1,0 +1,8 @@
+node_modules/
+.pnpm-store/
+.turbo/
+.astro/
+dist/
+.DS_Store
+/docs/
+.worktrees/

@@ -1,0 +1,26 @@
+{
+  "guide": [
+    "apps/guide/**",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "turbo.json",
+    "lefthook.yml",
+    "renovate.json",
+    "commitlint.config.mjs",
+    ".github/path-filters.json",
+    ".github/workflows/ci.yml"
+  ],
+  "parser": [
+    "packages/parser/**",
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "turbo.json",
+    "lefthook.yml",
+    "renovate.json",
+    "commitlint.config.mjs",
+    ".github/path-filters.json",
+    ".github/workflows/ci.yml"
+  ]
+}

@@ -1,0 +1,22 @@
+---
+title: Medicare Advantage context
+description: A complete response illustrating Medicare Advantage program context.
+---
+
+import X12Example from '../../../components/X12Example.astro';
+
+## Scenario
+
+This example places an `EB` statement, a `DTP` date, and `MSG` text under one
+subscriber in a Medicare Advantage scenario. The values were written for this
+guide.
+
+## Complete response
+
+<X12Example file="medicare-advantage.edi" />
+
+## Sources
+
+- [CMS-MA](https://www.cms.gov/medicare/enrollment-renewal/health-plans) supports program-level Medicare Advantage context.
+- [X12-RFI-2628](https://x12.org/resources/requests-for-interpretation/rfi-2628-msg-segment-271) explains the `MSG` case described on the page.
+- [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-DTP](https://www.stedi.com/edi/x12-005010/segment/DTP), [STEDI-MSG](https://www.stedi.com/edi/x12-005010/segment/MSG), [STEDI-ISA](https://www.stedi.com/edi/x12-005010/segment/ISA), [STEDI-IEA](https://www.stedi.com/edi/x12-005010/segment/IEA), [STEDI-GS](https://www.stedi.com/edi/x12-005010/segment/GS), and [STEDI-GE](https://www.stedi.com/edi/x12-005010/segment/GE) provide public cross-references.

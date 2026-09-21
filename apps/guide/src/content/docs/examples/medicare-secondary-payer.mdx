@@ -1,0 +1,24 @@
+---
+title: Medicare Secondary Payer context
+description: A complete response illustrating a Medicare Secondary Payer scenario.
+---
+
+import X12Example from '../../../components/X12Example.astro';
+
+## Scenario
+
+This example uses a Medicare Secondary Payer scenario with a subscriber,
+benefit statement, and date. The label helps explain coordination concepts;
+the message was written for this guide and was not returned by CMS HETS.
+Scenario labels do not establish payer order. Use the actual response, payer or
+plan records, and applicable route rules when determining coverage order.
+
+## Complete response
+
+<X12Example file="medicare-secondary-payer.edi" />
+
+## Sources
+
+- [CMS-MSP](https://www.cms.gov/medicare/coordination-benefits-recovery/overview/secondary-payer) supports Medicare Secondary Payer program context.
+- [X12-EXAMPLES-005010X279](https://x12.org/examples/005010x279) supports the public 271 pattern and hierarchy examples.
+- [STEDI-271-GUIDE](https://www.stedi.com/edi/hipaa/transaction-set/271-B1), [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-DTP](https://www.stedi.com/edi/x12-005010/segment/DTP), and [STEDI-NM1](https://www.stedi.com/edi/x12-005010/segment/NM1) provide public cross-references.

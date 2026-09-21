@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices"
+  ],
+  "timezone": "America/Detroit",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "* * 1-7,15-21 * 6"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": "Run dependency updates on the first and third Saturday every month.",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "bump",
+        "replacement"
+      ],
+      "schedule": [
+        "* * 1-7,15-21 * 6"
+      ]
+    },
+    {
+      "description": "Wait 7 days before patch and minor updates.",
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Wait 30 days before major updates.",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "minimumReleaseAge": "30 days"
+    },
+    {
+      "description": "Pin npm dependency ranges to exact versions.",
+      "matchManagers": [
+        "npm"
+      ],
+      "rangeStrategy": "pin"
+    },
+    {
+      "description": "Group non-major workspace dependency updates.",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "minor"
+      ],
+      "groupName": "workspace dependencies",
+      "groupSlug": "workspace-dependencies",
+      "groupSingleUpdates": true
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+:root {
+  --sl-content-width: 52rem;
+}
+
+.sl-markdown-content pre {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+.sl-markdown-content .x12-complete-response {
+  overflow-x: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.sl-markdown-content table {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.sl-markdown-content .x12-field-table-wrap {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.sl-markdown-content .x12-field-table {
+  display: table;
+  inline-size: 100%;
+  min-inline-size: 48rem;
+  table-layout: fixed;
+}
+
+.sl-markdown-content .x12-position-column {
+  inline-size: 7rem;
+}
+
+.sl-markdown-content .x12-value-column {
+  inline-size: 10rem;
+}
+
+.sl-markdown-content .x12-name-column {
+  inline-size: 15rem;
+}
+
+.sl-markdown-content .x12-field-table th,
+.sl-markdown-content .x12-field-table td {
+  vertical-align: top;
+}
+
+.sl-markdown-content .x12-field-table th:nth-child(-n + 3),
+.sl-markdown-content .x12-field-table td:nth-child(-n + 2) {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.sl-markdown-content p,
+.sl-markdown-content li {
+  max-inline-size: 76ch;
+}
+
+.sl-markdown-content .synthetic-callout,
+.sl-markdown-content .source-boundary {
+  border-inline-start: 0.25rem solid var(--sl-color-accent);
+  padding: 0.75rem 1rem;
+}
