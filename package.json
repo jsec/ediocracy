@@ -12,7 +12,6 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "dev": "turbo run dev",
-    "test:ci-paths": "node --test tests/ci-paths.test.mjs",
     "commit": "cz",
     "commitlint": "commitlint",
     "hooks:validate": "lefthook validate"

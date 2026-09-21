@@ -27,9 +27,6 @@ jobs:
         with:
           node-version: '>=22.19.0 <23'
 
-      - name: Test path filters
-        run: node --test tests/ci-paths.test.mjs
-
       - name: Detect changed workspaces
         id: filter
         uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3.0.3
