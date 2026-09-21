@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import catppuccin from '@catppuccin/starlight';
 
 export default defineConfig({
   site: 'https://ediocracy.jsec.app',
@@ -9,6 +10,7 @@ export default defineConfig({
       description:
         'A source-backed introduction to X12 271 eligibility responses for readers who understand the insurance eligibility check process but do not know the X12 data format.',
       customCss: ['./src/styles/custom.css'],
+      plugins: [catppuccin()],
       sidebar: [
         {
           label: 'Start here',
