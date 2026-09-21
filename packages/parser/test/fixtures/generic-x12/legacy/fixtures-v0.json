@@ -1,0 +1,446 @@
+{
+  "format": "ediocracy.generic-x12.fixture/v1",
+  "purpose": "Implementation-neutral acceptance inputs for a lossless generic X12 parser and serializer.",
+  "fixtures": [
+    {
+      "id": "001-nondefault-delimiters",
+      "file": "001-nondefault-delimiters.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/assets/tr3/x230-005010-PDF.pdf",
+        "https://ecommerce.x12.org/assets/tr3/x318-005010-PDF.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000001",
+            "iea02": "000000001",
+            "delimiters": {
+              "element": "|",
+              "repetition": "^",
+              "component": ":",
+              "segment": "!"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "002-empty-elements-components-repetitions",
+      "file": "002-empty-elements-components-repetitions.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999",
+        "https://x12.org/resources/requests-for-interpretation/rfi-1140-new-repetition-separator"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000002", "iea02": "000000002" }
+        ],
+        "empty_elements": [
+          { "segment": "N1", "element": 3 },
+          { "segment": "REF", "element": 4 }
+        ],
+        "ref02": "ALPHA:BETA^GAMMA:DELTA"
+      }
+    },
+    {
+      "id": "003-multiple-interchanges",
+      "file": "003-multiple-interchanges.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000003",
+            "iea02": "000000003",
+            "delimiters": { "element": "*", "repetition": "^", "component": ":", "segment": "~" }
+          },
+          {
+            "isa13": "000000004",
+            "iea02": "000000004",
+            "delimiters": { "element": "|", "repetition": "^", "component": ":", "segment": "!" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "004-se01-segment-count-mismatch",
+      "file": "004-se01-segment-count-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000004", "iea02": "000000004" }
+        ],
+        "diagnostic_codes": [
+          "transaction-segment-count-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "005-se02-control-number-mismatch",
+      "file": "005-se02-control-number-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000005", "iea02": "000000005" }
+        ],
+        "diagnostic_codes": [
+          "transaction-control-number-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "006-ge01-transaction-count-mismatch",
+      "file": "006-ge01-transaction-count-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000006", "iea02": "000000006" }
+        ],
+        "diagnostic_codes": [
+          "functional-group-transaction-count-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "007-ge02-control-number-mismatch",
+      "file": "007-ge02-control-number-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000007", "iea02": "000000007" }
+        ],
+        "diagnostic_codes": [
+          "functional-group-control-number-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "008-iea01-group-count-mismatch",
+      "file": "008-iea01-group-count-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000008", "iea02": "000000008" }
+        ],
+        "diagnostic_codes": [
+          "interchange-group-count-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "009-iea02-control-number-mismatch",
+      "file": "009-iea02-control-number-mismatch.edi",
+      "source_kind": "synthetic",
+      "scope": "cms-5010-validation-matrix",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000009", "iea02": "DIFFERENT" }
+        ],
+        "diagnostic_codes": [
+          "interchange-control-number-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "010-short-isa",
+      "file": "010-short-isa.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/assets/tr3/x318-005010-PDF.pdf"
+      ],
+      "parse": {
+        "diagnostic_codes": [
+          "short-isa"
+        ]
+      }
+    },
+    {
+      "id": "011-multiple-functional-groups",
+      "file": "011-multiple-functional-groups.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/assets/tr3/x231-005010-PDF.pdf",
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000011",
+            "iea02": "000000011",
+            "functional_groups": [
+              { "gs06": "11", "ge02": "11" },
+              { "gs06": "12", "ge02": "12" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "012-multiple-transaction-sets",
+      "file": "012-multiple-transaction-sets.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/assets/tr3/x231-005010-PDF.pdf",
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000012",
+            "iea02": "000000012",
+            "functional_groups": [
+              {
+                "gs06": "12",
+                "ge02": "12",
+                "ge01": "2",
+                "transaction_sets": [
+                  { "st02": "0012", "se02": "0012" },
+                  { "st02": "0013", "se02": "0013" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "013-trailing-element-separator",
+      "file": "013-trailing-element-separator.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000013",
+            "iea02": "000000013",
+            "functional_groups": [
+              {
+                "gs06": "13",
+                "ge02": "13",
+                "ge01": "1",
+                "transaction_sets": [
+                  { "st02": "0013", "se02": "0013" }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic_codes": [
+          "trailing-element-separator"
+        ]
+      }
+    },
+    {
+      "id": "014-trailing-repetition-separator",
+      "file": "014-trailing-repetition-separator.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000014", "iea02": "000000014" }
+        ],
+        "diagnostic_codes": [
+          "trailing-repetition-separator"
+        ]
+      }
+    },
+    {
+      "id": "015-trailing-component-separator",
+      "file": "015-trailing-component-separator.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000015", "iea02": "000000015" }
+        ],
+        "diagnostic_codes": [
+          "trailing-component-separator"
+        ]
+      }
+    },
+    {
+      "id": "016-missing-se",
+      "file": "016-missing-se.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000016", "iea02": "000000016" }
+        ],
+        "diagnostic_codes": [
+          "missing-transaction-trailer"
+        ]
+      }
+    },
+    {
+      "id": "017-missing-ge",
+      "file": "017-missing-ge.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000017", "iea02": "000000017" }
+        ],
+        "diagnostic_codes": [
+          "missing-functional-group-trailer"
+        ]
+      }
+    },
+    {
+      "id": "018-missing-iea",
+      "file": "018-missing-iea.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://www.cms.gov/files/document/r13816otn.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000018" }
+        ],
+        "diagnostic_codes": [
+          "missing-interchange-trailer"
+        ]
+      }
+    },
+    {
+      "id": "019-ta1",
+      "file": "019-ta1.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/assets/tr3/x230-005010-PDF.pdf"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000019",
+            "iea02": "000000019",
+            "acknowledgment": { "segment": "TA1", "control_number": "000000019" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "020-999",
+      "file": "020-999.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://ecommerce.x12.org/products/implementation-acknowledgment-for-health-care-insurance-005010-x231"
+      ],
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000020",
+            "iea02": "000000020",
+            "functional_groups": [
+              {
+                "gs06": "20",
+                "ge02": "20",
+                "ge01": "1",
+                "transaction_sets": [
+                  { "st01": "999", "st02": "0020", "se02": "0020" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "021-malformed-then-valid-interchange",
+      "file": "021-malformed-then-valid-interchange.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "references": [
+        "https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999"
+      ],
+      "parse": {
+        "interchanges": [
+          { "isa13": "000000021", "iea02": "000000021" },
+          {
+            "isa13": "000000022",
+            "iea02": "000000022",
+            "delimiters": { "element": "|", "repetition": "^", "component": ":", "segment": "!" }
+          }
+        ],
+        "diagnostic_codes": [
+          "transaction-segment-count-mismatch"
+        ]
+      }
+    },
+    {
+      "id": "022-whitespace-outside-interchange",
+      "file": "022-whitespace-outside-interchange.edi",
+      "source_kind": "synthetic",
+      "scope": "x12-005010",
+      "parse": {
+        "interchanges": [
+          {
+            "isa13": "000000022",
+            "iea02": "000000022",
+            "functional_groups": [
+              {
+                "gs06": "22",
+                "ge02": "22",
+                "ge01": "1",
+                "transaction_sets": [
+                  { "st02": "0022", "se02": "0022" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
