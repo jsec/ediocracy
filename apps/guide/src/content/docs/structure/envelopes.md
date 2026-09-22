@@ -19,9 +19,9 @@ IEA*1*000000101~
 ```
 
 - `ISA01` through `ISA04` show that the example does not supply authorization
-  or security information. The blank fields retain their fixed widths.
+  or security information. The spaces still fill fixed-width positions.
 - `ISA05`/`ISA06` identify the sender, and `ISA07`/`ISA08` identify the
-  receiver. Both use the mutually defined `ZZ` qualifier.
+  receiver. Both use `ZZ`, the mutually defined qualifier.
 - `ISA09` and `ISA10` carry the interchange date and time. `ISA11`, `ISA12`,
   and `ISA16` establish the repetition separator, control version, and
   component separator.

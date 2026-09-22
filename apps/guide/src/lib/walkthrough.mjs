@@ -77,7 +77,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     reference: `${STEDI_SEGMENT_URL}/HL`,
     fields: [
       ['Hierarchical ID Number', 'Identifies this hierarchy level.'],
-      ['Hierarchical Parent ID Number', 'Identifies the parent level; an empty value marks the top level.'],
+      ['Hierarchical Parent ID Number', 'Identifies the parent level. It is blank at the top level.'],
       ['Hierarchical Level Code', 'Identifies the kind of entity represented by this level.'],
       ['Hierarchical Child Code', 'Indicates whether this level has subordinate levels.'],
     ],
@@ -195,8 +195,8 @@ function segmentExplanation(name, fields) {
 const CODE_EXPLANATIONS = Object.freeze({
   ISA01: { '00': 'The value 00 means no authorization information is present.' },
   ISA03: { '00': 'The value 00 means no security information is present.' },
-  ISA05: { ZZ: 'The value ZZ identifies a mutually defined sender identifier.' },
-  ISA07: { ZZ: 'The value ZZ identifies a mutually defined receiver identifier.' },
+  ISA05: { ZZ: 'ZZ is the mutually defined sender identifier qualifier.' },
+  ISA07: { ZZ: 'ZZ is the mutually defined receiver identifier qualifier.' },
   ISA14: { '0': 'The value 0 means no interchange acknowledgment is requested.' },
   ISA15: { P: 'The value P is the code for production data.' },
   GS01: { HB: 'The value HB means Eligibility, Coverage or Benefit Information.' },

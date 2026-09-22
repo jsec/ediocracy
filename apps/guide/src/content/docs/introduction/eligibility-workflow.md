@@ -4,8 +4,8 @@ description: The request, routing, acknowledgment, and response stages around a 
 ---
 
 An eligibility workflow moves a request from a submitter through a route to a
-payer and returns either a 271 response or a separate processing outcome. The
-transport status answers a different question from the benefit result.
+payer and returns either a 271 response or a separate processing outcome.
+Transport status is not a benefit result.
 
 ## Request and route
 
@@ -36,5 +36,5 @@ applicable.
 
 Payers and intermediaries can require enrollment, specific identifiers, date
 windows, or connectivity options. For example, the [CMS HETS companion guide](https://www.cms.gov/files/document/current-hets-270/271-companion-guide.pdf)
-defines HETS-specific operational requirements. Apply them to HETS traffic;
-other routes publish their own requirements.
+defines HETS-specific operational requirements. Those requirements apply to
+HETS traffic only.

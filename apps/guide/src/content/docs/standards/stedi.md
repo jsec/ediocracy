@@ -3,19 +3,14 @@ title: Stedi as a clearinghouse example
 description: What Stedi's published APIs show about translation, validation, and routing.
 ---
 
-Stedi publishes two useful views of eligibility data: a raw X12 API and a JSON
-API. Each has its own contract. Their behavior describes Stedi's service and
-should be applied only when you use that service. The [Raw X12 endpoint](https://www.stedi.com/docs/healthcare/api-reference/post-healthcare-eligibility-raw-x12)
-and [JSON eligibility endpoint](https://www.stedi.com/docs/healthcare/api-reference/post-eligibility-check)
-show two different product contracts.
+Stedi's [Raw X12 endpoint](https://www.stedi.com/docs/healthcare/api-reference/post-healthcare-eligibility-raw-x12)
+is one example of a clearinghouse X12 contract. Its behavior applies to Stedi
+routes, not to every 271 route.
 
-## Raw X12 and JSON projection
+## Raw X12 transaction
 
-The Raw X12 product exposes an X12-oriented payload contract. The JSON product
-projects eligibility data into Stedi's API response shape. A projection can
-rename, combine, omit, or add fields for the API consumer. Consult the raw
-transaction when field placement matters, and use the licensed X279A1 guide
-for the transaction rules.
+Consult the raw transaction when segment placement matters. Use the licensed
+X279A1 guide for transaction rules.
 
 Stedi's public [271 transaction cross-reference](https://www.stedi.com/edi/hipaa/transaction-set/271-B1)
 and [EB segment reference](https://www.stedi.com/edi/x12-005010/segment/EB)

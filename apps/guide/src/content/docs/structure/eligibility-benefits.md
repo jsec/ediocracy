@@ -47,9 +47,9 @@ LE*2120~
 
 `LS01=2120` and `LE01=2120` carry the same loop identifier. The `NM1` between
 them identifies the related payer in this example. The applicable 271 guide
-determines when this loop is used; the generic [LS](https://www.stedi.com/edi/x12-005010/segment/LS)
-and [LE](https://www.stedi.com/edi/x12-005010/segment/LE) references only define
-the control pair.
+determines whether this loop is used. The generic [LS](https://www.stedi.com/edi/x12-005010/segment/LS)
+and [LE](https://www.stedi.com/edi/x12-005010/segment/LE) references document
+the control pair only.
 
 ## DTP example
 

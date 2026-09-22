@@ -12,10 +12,6 @@ date is 2025-02-02, and its change log is dated 2025-02-04.
 
 Within that named guide, UHC documents interchange values, delimiter requests,
 scoped payer identifiers, and differences between batch and real-time flows.
-The [UHC EDI transactions page](https://www.uhcprovider.com/en/resource-library/edi/edi-transactions.html?cid=none)
-is the public entry point for connectivity methods. Confirm the payer, product,
-route availability, and any Optum API behavior with the documentation for the
-specific connection.
 
 The guide's examples also provide profile-scoped context for repeated `EB`
 benefit statements, `HSD` service-delivery details, `MSG` text, and `2120`

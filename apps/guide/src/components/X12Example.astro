@@ -19,10 +19,10 @@ const walkthrough = buildWalkthrough(source);
 <section class="x12-walkthrough" aria-labelledby={`breakdown-${file}`}>
 <h3 id={`breakdown-${file}`}>Segment breakdown</h3>
 <p>
-  The entries below follow the source order. Empty fields are shown as
-  <code>(empty)</code>; fields not present in a source segment are not added.
-  Stedi links identify public field references; the licensed X279A1
-  implementation guide supplies the complete transaction rules.
+  The entries below keep the source order. An empty present field appears as
+  <code>(empty)</code>; an absent field is not added. The Stedi links are field
+  references. Use the licensed X279A1 implementation guide for transaction
+  rules.
 </p>
 
 {walkthrough.interchanges.map((interchange) => (

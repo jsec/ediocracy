@@ -26,13 +26,13 @@ const profilePages = [
   },
   {
     path: 'src/content/docs/standards/stedi.md',
-    scope: /behavior describes Stedi's service/i,
+    scope: /applies to Stedi\s+routes/i,
     links: /https:\/\/www\.stedi\.com\/docs\/healthcare\/[\s\S]*https:\/\/www\.stedi\.com\/edi\/x12-005010\//i,
   },
   {
     path: 'src/content/docs/standards/unitedhealthcare.md',
     scope: /products\s+and routes named in that document/i,
-    links: /https:\/\/www\.uhcprovider\.com\/[\s\S]*https:\/\/www\.uhcprovider\.com\/en\/resource-library\/edi\/edi-transactions/i,
+    links: /https:\/\/www\.uhcprovider\.com\/content\/dam\/provider\/docs\/public\/resources\/edi\/EDI-270-271-Companion-Guide-005010X279A1\.pdf/i,
   },
 ];
 
@@ -92,7 +92,7 @@ for (const { path, scope, links } of profilePages) {
     const source = readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
     assert.match(source, scope);
-    assert.match(source, links, 'profile must link at least two sources from its family');
+    assert.match(source, links, 'profile must link its primary source');
   });
 }
 

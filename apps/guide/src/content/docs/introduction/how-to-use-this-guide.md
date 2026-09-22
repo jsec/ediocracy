@@ -18,8 +18,8 @@ an `EB` statement.
 
 When investigating a response, identify the outer interchange first. Follow
 the `GS`/`GE` functional group and `ST`/`SE` transaction set, then locate the
-relevant `HL` hierarchy and `NM1` party. Interpret each `EB` with its nearby
-context rather than as a standalone flag.
+relevant `HL` hierarchy and `NM1` party. Read each `EB` with its surrounding
+context.
 
 The [single-benefit example](/examples/single-eb.edi) uses invented values.
 The [X12 public examples](https://x12.org/examples/005010x279) and [Stedi 271
@@ -36,5 +36,5 @@ The guide keeps four evidence types separate:
 - CMS material describes Medicare HETS or program-level context.
 - Payer and clearinghouse documents describe their own route requirements.
 
-No single source answers every implementation question. Start with the X279A1
-guide, then apply the companion guide for the payer and route you use.
+Use X279A1 for the standard rules, then use the companion guide for the payer
+and route in use.
