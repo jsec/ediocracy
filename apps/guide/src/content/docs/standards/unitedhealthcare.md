@@ -27,12 +27,10 @@ Keep the acknowledgment and application layers distinct:
 - `AAA` supplies request-level response-error context inside the applicable
   transaction.
 
-The profile describes batch and real-time handling for its own routes. If an
-Optum product or another clearinghouse sits in the path, follow that service's
-instructions too.
+The profile applies only to its own batch and real-time routes. When another
+service is in the path, use that service's guide for its route.
 
 ## Version and route checks
 
-Before implementation, verify that Version 9.0 covers the payer, product, and
-connection you plan to use. Obtain payer lists and current route details from
-UHC or the route owner. Use X279A1 for the base transaction.
+Before implementation, confirm that Version 9.0 covers the payer, product,
+and connection in use. Use X279A1 for the base transaction.

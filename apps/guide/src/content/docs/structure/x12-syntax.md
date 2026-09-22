@@ -34,6 +34,6 @@ Control values identify and count containers: `ISA13` pairs with `IEA02`,
 `GS06` with `GE02`, and `ST02` with `SE02`. Matching values tie each trailer
 to its header.
 
-These observations describe the public examples and [Stedi's ISA reference](https://www.stedi.com/edi/x12-005010/segment/ISA).
-Use the implementation and partner guides for situational rules and parser
-requirements.
+The public examples and [Stedi's ISA reference](https://www.stedi.com/edi/x12-005010/segment/ISA)
+show the syntax used here. X279A1 and partner guides set the transaction and
+route rules.

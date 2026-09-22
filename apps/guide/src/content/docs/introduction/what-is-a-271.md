@@ -14,12 +14,12 @@ business transactions. A transaction is a message with a defined
 purpose. In this guide, a response is the message returned after a sender's
 inquiry reaches the responding organization.
 
-A payer is the organization that administers or pays for coverage. A
-clearinghouse is an intermediary that can transport, validate, translate, or
-route transactions between a sender and a payer. A payer's companion guide is
-its local trading-partner documentation. An implementation guide is the
-licensed standard that defines the transaction's full requirements. A public
-example or cross-reference, such as [X12's 005010 X279 examples](https://x12.org/examples/005010x279), helps explain the format. The implementation guide contains the complete requirements.
+A payer administers or pays for coverage. A clearinghouse can transport,
+validate, translate, or route transactions between a sender and payer.
+Companion guides add local trading-partner instructions; the licensed
+implementation guide defines the full transaction requirements. Public
+examples and cross-references, such as [X12's 005010 X279 examples](https://x12.org/examples/005010x279),
+help explain the format.
 
 ## What a 271 can communicate
 

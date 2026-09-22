@@ -19,11 +19,9 @@ cross-references. They do not list every X279A1 rule.
 
 ## Interchange and validation behavior
 
-An API can generate or manage the `ISA` through `IEA` interchange, validate fields,
-repair input, and return a route-specific error. Stedi documents submission
-modes and documented repair behavior in [Send eligibility checks](https://www.stedi.com/docs/healthcare/send-eligibility-checks).
-Those actions are part of Stedi's product contract. Other clearinghouses can
-handle validation and repair differently.
+Stedi documents submission modes and repair behavior in [Send eligibility checks](https://www.stedi.com/docs/healthcare/send-eligibility-checks).
+Other clearinghouses can handle validation, repair, and route errors
+differently.
 
 An intermediary response can differ by layer: a 999 can report a functional
 validation outcome, while a 271 can carry eligibility information or `AAA`
