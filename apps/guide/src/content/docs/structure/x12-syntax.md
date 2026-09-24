@@ -25,11 +25,33 @@ transaction permits them. Adjacent separators mark an empty element without
 changing the position of the elements that follow. In this example, the
 separator pair after `EB*1` marks an empty `EB02`.
 
+### Empty and trailing elements
+
+Parser fixture `GX12-003` shows both an interior empty element and an empty
+element at the end of a segment:
+
+```text
+N1*ALPHA**GAMMA~
+REF*ZZ*VALUE*~
+```
+
+The doubled separator in `N1` marks an empty `N102`. The separator before `~`
+in `REF` marks an empty `REF03`. This fixture shows raw element positions; it
+does not establish X279A1 transaction rules.
+
 ## Delimiters and control values
 
 The interchange header supplies delimiter characters at defined positions for
 that interchange. Read them from each `ISA`: trading partners can use
 different characters.
+
+### Alternate delimiters
+
+Parser fixture `GX12-002` uses `|` as its element separator and `` ` `` as its
+segment terminator. Its `ISA11` repetition separator is `!`, and its `ISA16`
+component separator is `;`. The fixture demonstrates that one interchange can
+use a different delimiter set; it is not an eligibility-benefit example.
+
 Control values identify and count containers: `ISA13` pairs with `IEA02`,
 `GS06` with `GE02`, and `ST02` with `SE02`. Matching values tie each trailer
 to its header.

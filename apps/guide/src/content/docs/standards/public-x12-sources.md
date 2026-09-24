@@ -3,7 +3,8 @@ title: Public X12 sources
 description: What the public X12 material explains and when to consult the licensed implementation guide.
 ---
 
-Public X12 material can help you recognize the shape of a 271. The licensed
+Public X12 material can help you recognize the segment and container structure
+of a 271. The licensed
 005010X279A1 implementation guide contains the complete grammar, code lists,
 and situational requirements. The public [X279 product page](https://ecommerce.x12.org/products/health-care-eligibility-benefit-inquiry-and-response-005010-x279)
 identifies the 270/271 transaction pair and explains how to obtain the guide.

@@ -32,6 +32,25 @@ Handle each outcome at its own layer. A 999 reports validation results. A 271
 reports the eligibility response, including request-level `AAA` errors when
 applicable.
 
+### TA1 and 999 fixture excerpts
+
+Parser fixture `GX12-018` contains a TA1 directly inside its interchange:
+
+```text
+TA1*000000018*260914*1200*A*000~
+```
+
+Parser fixture `GX12-019` contains a 999 transaction set:
+
+```text
+ST*999*0019~
+AK1*HS*19~
+AK9*A*1*1*1~
+```
+
+These fixtures show segment placement only. Neither is a 271 response or a
+claim about a payer's behavior.
+
 ## Payer-specific behavior
 
 Payers and intermediaries can require enrollment, specific identifiers, date

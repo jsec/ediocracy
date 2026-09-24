@@ -35,7 +35,7 @@ to implementation work.
 | Intermediary | A clearinghouse or other route participant between a submitter and payer. |
 | `IEA` | Interchange Control Trailer; it closes an `ISA` interchange and declares the group count and interchange control number. |
 | `ISA` | Interchange Control Header; it opens an outer interchange and establishes fixed-position control and delimiter values. |
-| `JSON` | JavaScript Object Notation; an API can map X12 data into a JSON response shape. |
+| `JSON` | JavaScript Object Notation; an API can map X12 data into JSON response fields. |
 | `LE` | Loop Trailer; it closes the additional-information loop opened by a matching `LS`. |
 | `LS` | Loop Header; it starts an additional-information loop that `LE` closes. |
 | `MSG` | A Message Text segment used for explanatory text in a profile-scoped context. |

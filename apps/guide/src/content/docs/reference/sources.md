@@ -23,7 +23,7 @@ complete grammar and situational requirements.
 
 | Source | Use in this guide |
 | --- | --- |
-| [STEDI-271-GUIDE](https://www.stedi.com/edi/hipaa/transaction-set/271-B1) | Public cross-reference for 271 segments, elements, loops, and example shapes. |
+| [STEDI-271-GUIDE](https://www.stedi.com/edi/hipaa/transaction-set/271-B1) | Public cross-reference for 271 segments, elements, loops, and examples. |
 | [STEDI-ISA](https://www.stedi.com/edi/x12-005010/segment/ISA) and [STEDI-IEA](https://www.stedi.com/edi/x12-005010/segment/IEA) | Public field references for the interchange header and trailer. |
 | [STEDI-GS](https://www.stedi.com/edi/x12-005010/segment/GS) and [STEDI-GE](https://www.stedi.com/edi/x12-005010/segment/GE) | Public field references for functional-group headers, trailers, and counts. |
 | [STEDI-ST](https://www.stedi.com/edi/x12-005010/segment/ST) and [STEDI-SE](https://www.stedi.com/edi/x12-005010/segment/SE) | Public field references for transaction-set headers, trailers, and counts. |
