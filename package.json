@@ -1,32 +1,29 @@
 {
-  "name": "ediocracy",
-  "private": true,
-  "type": "module",
-  "packageManager": "pnpm@11.20.0",
-  "engines": {
-    "node": ">=22.19.0"
-  },
-  "scripts": {
-    "build": "turbo run build",
-    "check": "turbo run check",
-    "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "dev": "turbo run dev",
-    "commit": "cz",
-    "commitlint": "commitlint",
-    "hooks:validate": "lefthook validate"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "21.2.3",
-    "@commitlint/config-conventional": "21.2.3",
-    "commitizen": "4.3.2",
-    "cz-conventional-changelog": "3.3.0",
-    "lefthook": "2.1.14",
-    "turbo": "2.11.2"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
+    "name": "ediocracy",
+    "private": true,
+    "type": "module",
+    "packageManager": "pnpm@11.20.0",
+    "engines": {
+        "node": ">=22.19.0"
+    },
+    "scripts": {
+        "build": "turbo run build",
+        "check": "turbo run check",
+        "test": "turbo run test",
+        "typecheck": "turbo run typecheck",
+        "dev": "turbo run dev",
+        "commit": "cz",
+        "hooks:validate": "lefthook validate"
+    },
+    "devDependencies": {
+        "commitizen": "4.3.2",
+        "cz-conventional-changelog": "3.3.0",
+        "lefthook": "2.1.14",
+        "turbo": "2.11.2"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
     }
-  }
 }
