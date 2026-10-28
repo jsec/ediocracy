@@ -24,9 +24,8 @@ Other clearinghouses can handle validation, repair, and route errors
 differently.
 
 An intermediary response can differ by layer: a 999 can report a functional
-validation outcome, while a 271 can carry eligibility information or `AAA`
-request-level error context. The [Stedi SOAP documentation](https://www.stedi.com/docs/healthcare/api-reference/post-healthcare-eligibility-soap)
-describes its wrapper and response branching. Interpret each outcome with its
+validation outcome, while a 271 can contain eligibility information or `AAA`
+request-level error context. Interpret each outcome with its
 applicable X12 standard or implementation guide and the route owner's
 instructions.
 

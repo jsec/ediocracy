@@ -296,7 +296,8 @@ test('coded field explanations use the public code meanings without markup punct
   assert.match(fieldExplanation(secondary, 'BHT', 'BHT02'), /Response/);
   assert.match(fieldExplanation(secondary, 'DTP', 'DTP01'), /Plan \(date\/range for which plan is in effect\)/);
   assert.match(fieldExplanation(secondary, 'EB', 'EB01'), /Active Coverage/);
-  assert.match(fieldExplanation(secondary, 'ISA', 'ISA15'), /code for production data/);
+  assert.match(fieldExplanation(secondary, 'ISA', 'ISA15'), /code for test data/);
+  assert.match(fieldExplanation(secondary, 'NM1', 'NM108'), /Payor Identification/);
   assert.match(fieldExplanation(advantage, 'GS', 'GS01'), /Eligibility, Coverage or Benefit Information/);
   assert.doesNotMatch(
     secondary.flatMap(({ fields }) => fields).map(({ explanation }) => explanation).join(' '),
@@ -311,7 +312,7 @@ test('all exercised fields use the exact Stedi 005010 labels', () => {
     ST: ['Transaction Set Identifier Code', 'Transaction Set Control Number', 'Implementation Convention Reference'],
     BHT: ['Hierarchical Structure Code', 'Transaction Set Purpose Code', 'Reference Identification', 'Date', 'Time'],
     HL: ['Hierarchical ID Number', 'Hierarchical Parent ID Number', 'Hierarchical Level Code', 'Hierarchical Child Code'],
-    NM1: ['Entity Identifier Code', 'Entity Type Qualifier', 'Name Last or Organization Name', 'Name First'],
+    NM1: ['Entity Identifier Code', 'Entity Type Qualifier', 'Name Last or Organization Name', 'Name First', 'Name Middle', 'Name Prefix', 'Name Suffix', 'Identification Code Qualifier', 'Identification Code'],
     EB: ['Eligibility or Benefit Information Code', 'Coverage Level Code', 'Service Type Code', 'Insurance Type Code', 'Plan Coverage Description'],
     DTP: ['Date/Time Qualifier', 'Date Time Period Format Qualifier', 'Date Time Period'],
     MSG: ['Free-Form Message Text'],

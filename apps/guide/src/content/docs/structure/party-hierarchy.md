@@ -32,8 +32,8 @@ See the public [HL field reference](https://www.stedi.com/edi/x12-005010/segment
 An `NM1` segment identifies the party at the current level:
 
 ```text
-NM1*PR*2*CEDAR VALLEY HEALTH PLAN~
-NM1*1P*2*OAK STREET MEDICAL GROUP~
+NM1*PR*2*CEDAR VALLEY HEALTH PLAN*****PI*99001~
+NM1*1P*2*OAK STREET MEDICAL GROUP*****XX*1234567810~
 NM1*IL*1*REED*JORDAN~
 ```
 
@@ -41,8 +41,13 @@ NM1*IL*1*REED*JORDAN~
   insured or subscriber (`IL`) in these examples.
 - `NM102=2` identifies the payer and provider as organizations. `NM102=1`
   identifies the subscriber as a person.
-- `NM103` carries an organization name or a person's family name. `NM104`
-  carries the person's given name when present.
+- `NM103` contains an organization name or a person's family name. `NM104` contains the person's given name when present.
+- `NM108` names the identifier type and `NM109` holds the identifier. X279A1
+  requires both for the information source (loop 2100A) and the information
+  receiver (loop 2100B). Here `PI` marks a payer identifier and `XX` marks a
+  National Provider Identifier. Both values were written for this guide. The
+  subscriber `NM1` (loop 2100C) leaves them out; X279A1 does not require them
+  there.
 
 See the public [NM1 field reference](https://www.stedi.com/edi/x12-005010/segment/NM1).
 

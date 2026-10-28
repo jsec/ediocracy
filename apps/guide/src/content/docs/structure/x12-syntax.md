@@ -35,9 +35,13 @@ N1*ALPHA**GAMMA~
 REF*ZZ*VALUE*~
 ```
 
-The doubled separator in `N1` marks an empty `N102`. The separator before `~`
-in `REF` marks an empty `REF03`. This fixture shows raw element positions; it
-does not establish X279A1 transaction rules.
+The doubled separator in `N1` marks an empty `N102`, which X12 syntax allows.
+The separator before `~` in `REF` is different: X12 treats a separator
+directly before the segment terminator as incorrect usage. A receiver can
+report it in a 999 with `IK403=3` (Too Many Data Elements); see
+[RFI 1498](https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999).
+The fixture includes it so that a reader can be tested on keeping the raw
+position when a sender makes this error.
 
 ## Delimiters and control values
 

@@ -384,7 +384,6 @@ test('terminology defines every cross-page domain and X12 term', () => {
     'BHT',
     'API',
     'JSON',
-    'SOAP',
     'RFI',
   ];
   const missingTerms = requiredTerms.filter((term) => !new RegExp('\\|\\s*`?' + term + '`?\\s*\\|').test(source));

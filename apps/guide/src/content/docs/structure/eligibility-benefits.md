@@ -45,7 +45,7 @@ NM1*PR*2*RIVERBEND HEALTH PLAN~
 LE*2120~
 ```
 
-`LS01=2120` and `LE01=2120` carry the same loop identifier. The `NM1` between
+`LS01=2120` and `LE01=2120` contain the same loop identifier. The `NM1` between
 them identifies the related payer in this example. The applicable 271 guide
 determines whether this loop is used. The generic [LS](https://www.stedi.com/edi/x12-005010/segment/LS)
 and [LE](https://www.stedi.com/edi/x12-005010/segment/LE) references document
@@ -74,25 +74,28 @@ EB*F*IND*96*********Y~
 HSD*VS*5***34*6~
 ```
 
-In that guide, `HSD01=VS` means visits, `HSD02=5` supplies the quantity,
-`HSD05=34` identifies months, and `HSD06=6` supplies the number of periods.
-Together, the two segments describe a five-visit limit over six months. Those
-code meanings are stated for the UnitedHealthcare example; do not apply the
-entire pattern to another payer without checking its guide. See the generic
+The X12 code values give `HSD01=VS` as visits and `HSD05=34` as months.
+`HSD02=5` supplies the quantity and `HSD06=6` the number of periods.
+UnitedHealthcare's guide reads the two segments together as a five-visit limit
+over six months. Payers differ in when they send `HSD`, so check the payer's
+guide before applying this pattern elsewhere. See the generic
 [HSD field reference](https://www.stedi.com/edi/x12-005010/segment/HSD) and the
 [UnitedHealthcare companion guide](https://www.uhcprovider.com/content/dam/provider/docs/public/resources/edi/EDI-270-271-Companion-Guide-005010X279A1.pdf).
 
 ## REF example
 
-`REF` carries an identifier whose meaning depends on its qualifier and loop:
+`REF` contains an identifier whose meaning depends on its qualifier and loop:
 
 ```text
 REF*6P*RB12345~
 ```
 
 `REF01=6P` is the qualifier, and `REF02=RB12345` is the example identifier.
-The segment alone does not establish what that identifier means. Read it with
-its loop and the applicable payer or intermediary guide. See the public
+In a 2110C or 2110D benefit loop, X279A1 defines `6P` as Group Number. A route
+can put other data in the field: for Medicare Secondary Payer benefits, CMS
+HETS returns either the group number or a value starting with `DOL` (date of
+loss) in `REF02`. Read the identifier with its loop and the applicable payer or
+intermediary guide. See the public
 [REF field reference](https://www.stedi.com/edi/x12-005010/segment/REF).
 
 ## MSG example

@@ -36,8 +36,8 @@ to implementation work.
 | `IEA` | Interchange Control Trailer; it closes an `ISA` interchange and declares the group count and interchange control number. |
 | `ISA` | Interchange Control Header; it opens an outer interchange and establishes fixed-position control and delimiter values. |
 | `JSON` | JavaScript Object Notation; an API can map X12 data into JSON response fields. |
-| `LE` | Loop Trailer; it closes the additional-information loop opened by a matching `LS`. |
-| `LS` | Loop Header; it starts an additional-information loop that `LE` closes. |
+| `LE` | Loop Trailer; it closes the 2120 benefit-related entity loop opened by a matching `LS`. |
+| `LS` | Loop Header; it starts the 2120C or 2120D benefit-related entity loop that `LE` closes. |
 | `MSG` | A Message Text segment used for explanatory text in a profile-scoped context. |
 | `NM1` | The Individual or Organizational Name segment that identifies a party. |
 | Payer | The organization that administers or pays for coverage. |
@@ -45,13 +45,13 @@ to implementation work.
 | Route | The operational path, connectivity method, intermediary, and payer endpoint used for a transaction. |
 | Segment | A record beginning with an identifier such as `ST`, `HL`, or `EB` and ending at the segment terminator. |
 | `SE` | Transaction Set Trailer; it closes an `ST` transaction and declares its segment count and control number. |
-| `SOAP` | Simple Object Access Protocol, which can carry an X12 message for routes that use it. |
 | `ST` | Transaction Set Header; it opens one transaction set and identifies its type and control number. |
 | Submitter | The organization or system sending an eligibility inquiry or response through a route. |
 | `TA1` | An interchange-level acknowledgment outcome, separate from a 271 application response. |
-| Transaction set | The `ST` through `SE` container carrying one business transaction. |
+| `TRN` | Trace segment; in a 271 subscriber or dependent loop it returns the trace numbers sent in the 270, so a response can be matched to its request. |
+| Transaction set | The `ST` through `SE` container for one business transaction. |
 | `999` | A functional acknowledgment that reports named structural or implementation errors; it is separate from a 271. |
-| `2120` | The entity-information loop context associated with the current hierarchy; its exact use remains profile-scoped. |
+| `2120` | The benefit-related entity loop inside a 2110C or 2110D benefit loop; it names a party, such as another payer, for the preceding `EB`. |
 | `RFI` | Request for Interpretation; an X12 interpretation of a specifically published question, with scope limited to that question. See the [X12 RFI catalog](https://x12.org/resources/requests-for-interpretation). |
 | X279 / X279A1 | The X12 implementation convention for the 270/271 health care eligibility transaction pair used in the public examples. |
 

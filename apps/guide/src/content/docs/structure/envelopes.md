@@ -13,7 +13,7 @@ contains transaction sets.
 [single-benefit response](/examples/single-eb):
 
 ```text
-ISA*00*          *00*          *ZZ*CEDARVALLEYHP  *ZZ*OAKSTMEDGROUP  *990101*1201*^*00501*000000101*0*P*:~
+ISA*00*          *00*          *ZZ*CEDARVALLEYHP  *ZZ*OAKSTMEDGROUP  *990101*1201*^*00501*000000101*0*T*:~
 ...
 IEA*1*000000101~
 ```
@@ -22,9 +22,9 @@ IEA*1*000000101~
   or security information. The spaces still fill fixed-width positions.
 - `ISA05`/`ISA06` identify the sender, and `ISA07`/`ISA08` identify the
   receiver. Both use `ZZ`, the mutually defined qualifier.
-- `ISA09` and `ISA10` carry the interchange date and time. `ISA11`, `ISA12`,
+- `ISA09` and `ISA10` contain the interchange date and time. `ISA11`, `ISA12`,
   and `ISA16` establish the repetition separator, control version, and
-  component separator.
+  component separator. `ISA15=T` marks the interchange as test data.
 - `ISA13` is the interchange control number. The same value appears in
   `IEA02`.
 - `IEA01=1` reports one functional group in this interchange.
@@ -44,8 +44,8 @@ GE*1*101~
 
 - `GS01=HB` identifies the functional group as eligibility, coverage, or
   benefit information.
-- `GS02` and `GS03` carry the application sender and receiver codes.
-- `GS04` and `GS05` carry the group date and time.
+- `GS02` and `GS03` contain the application sender and receiver codes.
+- `GS04` and `GS05` contain the group date and time.
 - `GS06=101` is the group control number. It matches `GE02`.
 - `GS07=X` identifies X12 as the responsible agency, while
   `GS08=005010X279A1` identifies the implementation convention used here.

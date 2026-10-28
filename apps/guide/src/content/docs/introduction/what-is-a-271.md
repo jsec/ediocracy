@@ -37,7 +37,7 @@ surrounding hierarchy and related segments.
 
 Transport failures, a TA1 interchange acknowledgment, and a 999 functional
 acknowledgment are separate outcomes. They describe delivery or structural
-processing. A 271 carries the eligibility and benefit response. A payer or
+processing. A 271 contains the eligibility and benefit response. A payer or
 clearinghouse can also apply route-specific rules documented in its companion
 guide.
 

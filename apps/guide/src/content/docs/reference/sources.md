@@ -39,7 +39,7 @@ complete grammar and situational requirements.
 | [CMS-ELIGIBILITY](https://www.cms.gov/priorities/key-initiatives/burden-reduction/administrative-simplification/transactions/health-plan-eligibility-benefit-inquiry-response) | Program-level description of the HIPAA 270/271 transaction. |
 | [CMS-MSP](https://www.cms.gov/medicare/coordination-benefits-recovery/overview/secondary-payer) | Program-level Medicare Secondary Payer and coordination concepts. |
 | [CMS-MA](https://www.cms.gov/medicare/enrollment-renewal/health-plans) | Program-level Medicare Advantage context. |
-| [CMS-HETS-GUIDE](https://www.cms.gov/files/document/current-hets-270/271-companion-guide.pdf) | CMS HETS-specific operational and trading-partner requirements. |
+| [CMS-HETS-GUIDE](https://www.cms.gov/files/document/current-hets-270-271-companion-guide.pdf) | CMS HETS-specific operational and trading-partner requirements. |
 | [CMS-HETS-EXAMPLE](https://www.cms.gov/files/document/hets2024-4-271-response-example.pdf) | A CMS-authored illustrative HETS 271 response and its exercised segment families. |
 
 ## Route and profile documents
@@ -47,7 +47,7 @@ complete grammar and situational requirements.
 | Source | Use in this guide |
 | --- | --- |
 | [UHC-270271](https://www.uhcprovider.com/content/dam/provider/docs/public/resources/edi/EDI-270-271-Companion-Guide-005010X279A1.pdf) | UnitedHealthcare's instructions for the products and routes named in the guide. |
-| [UHC-EDI](https://www.uhcprovider.com/en/resource-library/edi/edi-transactions) | UnitedHealthcare EDI entry point and connectivity methods. |
+| [UHC-EDI](https://www.uhcprovider.com/en/resource-library/edi/edi-transactions.html) | UnitedHealthcare EDI entry point and connectivity methods. |
 | [STEDI-SEND](https://www.stedi.com/docs/healthcare/send-eligibility-checks) | Stedi submission modes and test-data or enrollment warnings. |
 | [STEDI-RAW](https://www.stedi.com/docs/healthcare/api-reference/post-healthcare-eligibility-raw-x12) | Stedi's contract for its raw-X12 endpoint. |
 

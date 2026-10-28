@@ -28,7 +28,14 @@ BHT*0022*11*ELIG1010001*20990101*1201~
 - `BHT03=ELIG1010001` is the reference value in this example.
 - `BHT04=20990101` and `BHT05=1201` record the transaction date and time.
 
-The reference value can help correlate messages, but route documentation
-defines whether and how it is returned. Do not assume that it remains unchanged
-through every intermediary. See the public
+X279A1 allows a 271 to return `BHT03` only when the transaction is used in
+batch mode; a real-time 271 does not use it. This example includes it for
+illustration. Do not assume that it remains unchanged through every
+intermediary. See the public
 [BHT field reference](https://www.stedi.com/edi/x12-005010/segment/BHT).
+
+To match a 271 to its 270, X279A1 uses `TRN` in the subscriber or dependent
+loop (2000C or 2000D). The response returns each `TRN` sent in the inquiry,
+with `TRN01=2` (referenced transaction trace numbers). The examples in this
+guide do not include `TRN`. See the public
+[TRN field reference](https://www.stedi.com/edi/x12-005010/segment/TRN).

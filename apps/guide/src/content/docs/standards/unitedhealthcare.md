@@ -23,7 +23,7 @@ Keep the acknowledgment and application layers distinct:
 
 - TA1 concerns interchange acknowledgment.
 - 999 concerns functional validation and acknowledgment.
-- 271 carries the eligibility or benefit response.
+- 271 contains the eligibility or benefit response.
 - `AAA` supplies request-level response-error context inside the applicable
   transaction.
 

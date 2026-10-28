@@ -90,6 +90,11 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
       ['Entity Type Qualifier', 'Identifies whether the party is an individual or organization.'],
       ['Name Last or Organization Name', 'Supplies the party name used in this response.'],
       ['Name First', 'Supplies the person’s first name when present.'],
+      ['Name Middle', 'Supplies the person’s middle name when present.'],
+      ['Name Prefix', 'Supplies a name prefix when present.'],
+      ['Name Suffix', 'Supplies a name suffix when present.'],
+      ['Identification Code Qualifier', 'Identifies the type of identifier in NM109.'],
+      ['Identification Code', 'Supplies the party identifier of the type named in NM108.'],
     ],
   },
   EB: {
@@ -198,7 +203,7 @@ const CODE_EXPLANATIONS = Object.freeze({
   ISA05: { ZZ: 'ZZ is the mutually defined sender identifier qualifier.' },
   ISA07: { ZZ: 'ZZ is the mutually defined receiver identifier qualifier.' },
   ISA14: { '0': 'The value 0 means no interchange acknowledgment is requested.' },
-  ISA15: { P: 'The value P is the code for production data.' },
+  ISA15: { T: 'The value T is the code for test data.' },
   GS01: { HB: 'The value HB means Eligibility, Coverage or Benefit Information.' },
   GS07: { X: 'The value X identifies the responsible agency as X12.' },
   ST01: { '271': 'The value 271 identifies an eligibility, coverage, or benefit response.' },
@@ -221,6 +226,10 @@ const CODE_EXPLANATIONS = Object.freeze({
   NM102: {
     '1': 'The value 1 identifies an individual person.',
     '2': 'The value 2 identifies an organization.',
+  },
+  NM108: {
+    PI: 'The value PI means Payor Identification.',
+    XX: 'The value XX means Centers for Medicare and Medicaid Services National Provider Identifier.',
   },
   EB01: { '1': 'The value 1 means Active Coverage.' },
   EB03: { '30': 'The value 30 identifies health benefit plan coverage as the service type.' },
