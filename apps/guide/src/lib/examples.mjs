@@ -1,19 +1,22 @@
+import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** @type {readonly ['single-eb.edi', 'medicare-secondary-payer.edi', 'medicare-primary-commercial-secondary.edi', 'medicare-advantage.edi', 'multiple-interchanges.edi']} */
-export const EXAMPLE_FILENAMES = [
+export const EXAMPLE_FILENAMES = /** @type {const} */ ([
   'single-eb.edi',
   'medicare-secondary-payer.edi',
   'medicare-primary-commercial-secondary.edi',
   'medicare-advantage.edi',
   'multiple-interchanges.edi',
-];
+]);
 
+const MODULE_DIRECTORY = dirname(fileURLToPath(import.meta.url));
+// The first path works from src/lib. During `astro build` this module is bundled
+// into dist/.prerender/chunks, where the copied public files are at dist/examples.
 const EXAMPLE_DIRECTORIES = [
-  resolve(dirname(fileURLToPath(import.meta.url)), '../../public/examples'),
-  resolve(dirname(fileURLToPath(import.meta.url)), '../../examples'),
+  resolve(MODULE_DIRECTORY, '../../public/examples'),
+  resolve(MODULE_DIRECTORY, '../../examples'),
 ];
 
 /**
@@ -26,13 +29,9 @@ export async function loadExample(file) {
   }
 
   for (const directory of EXAMPLE_DIRECTORIES) {
-    try {
-      return await readFile(resolve(directory, file), 'utf8');
-    } catch (error) {
-      const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
-      if (code !== 'ENOENT') {
-        throw error;
-      }
+    const path = resolve(directory, file);
+    if (existsSync(path)) {
+      return readFile(path, 'utf8');
     }
   }
 

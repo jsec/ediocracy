@@ -45,34 +45,23 @@ function makeBaseline() {
 }
 
 function assertErrorCode(source, code) {
-  const result = validateExample(source);
-
-  assert.deepEqual(result.errors.map(({ code: actualCode }) => actualCode), [code]);
+  assert.deepEqual(validateExample(source).errors.map((error) => error.code), [code]);
 }
 
 test('rejects an input with no ISA', () => {
-  const result = validateExample('GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP~');
-
-  assert.deepEqual(result.errors.map(({ code }) => code), ['missing-isa']);
+  assertErrorCode('GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP~', 'missing-isa');
 });
 
 test('rejects an ISA shorter than 106 characters through its terminator', () => {
-  const result = validateExample(makeBaseline().slice(0, 105));
-
-  assert.deepEqual(result.errors.map(({ code }) => code), ['short-isa']);
+  assertErrorCode(makeBaseline().slice(0, 105), 'short-isa');
 });
 
 test('rejects an ISA whose delimiters collide', () => {
-  const malformed = `${makeBaseline().slice(0, 82)}*${makeBaseline().slice(83)}`;
-  const result = validateExample(malformed);
-
-  assert.deepEqual(result.errors.map(({ code }) => code), ['delimiter-collision']);
+  assertErrorCode(`${makeBaseline().slice(0, 82)}*${makeBaseline().slice(83)}`, 'delimiter-collision');
 });
 
 test('rejects an interchange without IEA', () => {
-  const result = validateExample(makeBaseline().replace(/IEA\*1\*000000001~$/, ''));
-
-  assert.deepEqual(result.errors.map(({ code }) => code), ['missing-iea']);
+  assertErrorCode(makeBaseline().replace(/IEA\*1\*000000001~$/, ''), 'missing-iea');
 });
 
 test('rejects a transaction with ST but no SE', () => {
@@ -144,9 +133,7 @@ test('validates each concatenated interchange with its own delimiters', () => {
     .replaceAll('~', '!')
     .replace('GE|1|1!', 'GE|2|1!');
 
-  const result = validateExample(`${first}${second}`);
-
-  assert.deepEqual(result.errors.map(({ code }) => code), ['gs-ge-transaction-count-mismatch']);
+  assertErrorCode(`${first}${second}`, 'gs-ge-transaction-count-mismatch');
 });
 
 test('accepts every canonical example without validator errors', () => {

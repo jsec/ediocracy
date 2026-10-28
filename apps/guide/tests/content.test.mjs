@@ -4,7 +4,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { checkDocument, checkSidebarSlugs } from '../scripts/check-content.mjs';
+import { BANNED_PHRASES, checkDocument, checkSidebarSlugs } from '../scripts/check-content.mjs';
+import { EXAMPLE_FILENAMES, loadExample } from '../src/lib/examples.mjs';
 
 const pages = [
   ['src/content/docs/index.mdx', /271|eligibility/i],
@@ -44,8 +45,6 @@ const examplePages = [
   ['src/content/docs/examples/multiple-interchanges.mdx', 'multiple-interchanges.edi'],
 ];
 
-const bannedPhrase = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
-
 function withoutCodeAndUrls(source) {
   return source
     .replace(/```[\s\S]*?```/g, '')
@@ -66,7 +65,7 @@ function pageParts(source) {
 }
 
 function headingLevels(body) {
-  return [...body.matchAll(/^(#{1,6})\s+\S/mg)].map(([heading]) => heading.match(/^#+/)[0].length);
+  return [...body.matchAll(/^(#{1,6})\s+\S/mg)].map((match) => match[1].length);
 }
 
 for (const [relativePath, firstParagraphPattern] of pages) {
@@ -78,7 +77,7 @@ for (const [relativePath, firstParagraphPattern] of pages) {
     assert.doesNotMatch(body, /^#\s+/m, 'Starlight supplies the page H1');
     assert.ok(firstParagraph, 'page must begin with a nonempty paragraph');
     assert.match(firstParagraph, firstParagraphPattern, 'first paragraph must define the page topic or outcome');
-    assert.doesNotMatch(withoutCodeAndUrls(source), bannedPhrase, 'page contains a banned phrase');
+    assert.doesNotMatch(withoutCodeAndUrls(source), BANNED_PHRASES, 'page contains a banned phrase');
 
     const levels = headingLevels(body);
     for (let index = 1; index < levels.length; index += 1) {
@@ -94,10 +93,6 @@ for (const { path, scope, links } of profilePages) {
     assert.match(source, scope);
     assert.match(source, links, 'profile must link its primary source');
   });
-}
-
-async function loadExamplesModule() {
-  return import('../src/lib/examples.mjs');
 }
 
 test('example pages use the walkthrough renderer and concise sections', () => {
@@ -140,18 +135,10 @@ test('example scope disclosure is consolidated in the example index', () => {
 
 test('reader pages avoid repeated editorial jargon', () => {
   const docsRoot = new URL('../src/content/docs/', import.meta.url);
-  const pending = [docsRoot];
   const sources = [];
-
-  while (pending.length > 0) {
-    const directory = pending.pop();
-    for (const entry of readdirSync(directory, { withFileTypes: true })) {
-      const url = new URL(entry.name, directory);
-      if (entry.isDirectory()) {
-        pending.push(new URL(`${entry.name}/`, directory));
-      } else if (/\.mdx?$/.test(entry.name)) {
-        sources.push(withoutCodeAndUrls(readFileSync(url, 'utf8')));
-      }
+  for (const entry of readdirSync(docsRoot, { recursive: true, withFileTypes: true })) {
+    if (!entry.isDirectory() && /\.mdx?$/.test(entry.name)) {
+      sources.push(withoutCodeAndUrls(readFileSync(`${entry.parentPath}/${entry.name}`, 'utf8')));
     }
   }
 
@@ -224,8 +211,6 @@ test('walkthrough segments have unique headings and per-interchange jump navigat
 });
 
 test('loadExample returns exact bytes for every allowlisted file', async () => {
-  const { EXAMPLE_FILENAMES, loadExample } = await loadExamplesModule();
-
   for (const filename of EXAMPLE_FILENAMES) {
     const expected = readFileSync(new URL(`../public/examples/${filename}`, import.meta.url), 'utf8');
 
@@ -234,8 +219,6 @@ test('loadExample returns exact bytes for every allowlisted file', async () => {
 });
 
 test('loadExample rejects a filename outside the closed allowlist at runtime', async () => {
-  const { loadExample } = await loadExamplesModule();
-
   await assert.rejects(
     loadExample('../package.json'),
     /Unsupported example file/,

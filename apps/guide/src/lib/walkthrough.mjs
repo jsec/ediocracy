@@ -5,8 +5,6 @@ import { validateExample } from '../../scripts/lib/validate-example.mjs';
 const STEDI_SEGMENT_URL = 'https://www.stedi.com/edi/x12-005010/segment';
 
 /** @typedef {{ purpose: string, reference: string, fields: Array<[string, string]> }} SegmentDefinition */
-/** @typedef {{ raw: string, fields: string[] }} ParsedSegment */
-/** @typedef {{ raw: string, elementSeparator: string, segmentTerminator: string }} SourceInterchange */
 /** @typedef {{ position: string, rawValue: string, displayValue: string, name: string, explanation: string }} WalkthroughField */
 
 /**
@@ -150,50 +148,33 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
 });
 
-/** @param {string} raw @param {string} elementSeparator @param {string} segmentTerminator @returns {string[]} */
-function segmentFields(raw, elementSeparator, segmentTerminator) {
-  return raw.slice(0, -segmentTerminator.length).split(elementSeparator);
-}
+/** @param {SegmentDefinition} definition @param {string[]} fields @returns {string} */
+function segmentExplanation(definition, fields) {
+  const purpose = definition.purpose;
+  switch (fields[0]) {
+    case 'ISA':
+      return `${purpose} Its control number is ${fields[13]}.`;
+    case 'IEA':
+      return `${purpose} It closes the interchange with control number ${fields[2]}.`;
+    case 'GS':
+      return `${purpose} Its group control number is ${fields[6]}.`;
+    case 'GE':
+      return `${purpose} It closes group ${fields[2]}.`;
+    case 'ST':
+      return `${purpose} This transaction is ${fields[1]} with control number ${fields[2]}.`;
+    case 'SE':
+      return `${purpose} It closes transaction ${fields[2]}.`;
+    case 'HL':
+      if (fields[2]) {
+        return `${purpose} This level is ${fields[1]} under parent ${fields[2]}.`;
+      }
 
-/** @param {string} interchange @param {string} elementSeparator @param {string} segmentTerminator @returns {ParsedSegment[]} */
-function splitInterchangeSegments(interchange, elementSeparator, segmentTerminator) {
-  return interchange
-    .slice(0, -segmentTerminator.length)
-    .split(segmentTerminator)
-    .filter(Boolean)
-    .map((segment) => `${segment}${segmentTerminator}`)
-    .map((raw) => ({ raw, fields: segmentFields(raw, elementSeparator, segmentTerminator) }));
-}
-
-/** @param {string} source @returns {SourceInterchange[]} */
-function sourceInterchanges(source) {
-  const result = validateExample(source);
-  if (result.errors.length > 0) {
-    const codes = result.errors.map(({ code }) => code).join(', ');
-    throw new Error(`Cannot build walkthrough: ${codes}`);
+      return `${purpose} This level is ${fields[1]} at the top of the hierarchy.`;
+    case 'EB':
+      return `${purpose} Its status is ${fields[1]} and its service type is ${fields[3] || '(empty)'}.`;
+    default:
+      return purpose;
   }
-
-  return result.interchanges.map((raw) => ({
-    raw,
-    elementSeparator: raw[3],
-    segmentTerminator: raw[105],
-  }));
-}
-
-/** @param {string} name @param {string[]} fields @returns {string} */
-function segmentExplanation(name, fields) {
-  const definition = SEGMENT_DEFINITIONS[name];
-  if (!definition) throw new Error(`Unsupported segment name: ${name}`);
-
-  if (name === 'ISA') return `${definition.purpose} Its control number is ${fields[13]}.`;
-  if (name === 'IEA') return `${definition.purpose} It closes the interchange with control number ${fields[2]}.`;
-  if (name === 'GS') return `${definition.purpose} Its group control number is ${fields[6]}.`;
-  if (name === 'GE') return `${definition.purpose} It closes group ${fields[2]}.`;
-  if (name === 'ST') return `${definition.purpose} This transaction is ${fields[1]} with control number ${fields[2]}.`;
-  if (name === 'SE') return `${definition.purpose} It closes transaction ${fields[2]}.`;
-  if (name === 'HL') return `${definition.purpose} This level is ${fields[1]}${fields[2] ? ` under parent ${fields[2]}` : ' at the top of the hierarchy'}.`;
-  if (name === 'EB') return `${definition.purpose} Its status is ${fields[1]} and its service type is ${fields[3] || '(empty)'}.`;
-  return definition.purpose;
 }
 
 /** @type {Readonly<Record<string, Record<string, string>>>} */
@@ -237,27 +218,29 @@ const CODE_EXPLANATIONS = Object.freeze({
   DTP02: { D8: 'The value D8 identifies a single date in CCYYMMDD format.' },
 });
 
-/** @param {string} name @param {string[]} fields @returns {WalkthroughField[]} */
-function fieldsForSegment(name, fields) {
-  const definition = SEGMENT_DEFINITIONS[name];
-  if (!definition) throw new Error(`Unsupported segment name: ${name}`);
+/** @param {SegmentDefinition} definition @param {string[]} fields @returns {WalkthroughField[]} */
+function fieldsForSegment(definition, fields) {
   return fields.slice(1).map((rawValue, index) => {
-    const position = `${name}${String(index + 1).padStart(2, '0')}`;
+    const position = `${fields[0]}${String(index + 1).padStart(2, '0')}`;
     const field = definition.fields[index];
-    if (!field) throw new Error(`Unsupported field position: ${position}`);
+    if (!field) {
+      throw new Error(`Unsupported field position: ${position}`);
+    }
+
+    let displayValue = rawValue;
+    if (rawValue === '') {
+      displayValue = '(empty)';
+    } else if (rawValue.trim() === '') {
+      displayValue = `(blank: ${rawValue.length} spaces)`;
+    }
+
+    const codeExplanation = CODE_EXPLANATIONS[position]?.[rawValue.trim()];
     return {
       position,
       rawValue,
-      displayValue: rawValue === ''
-        ? '(empty)'
-        : rawValue.trim() === ''
-          ? `(blank: ${rawValue.length} spaces)`
-          : rawValue,
+      displayValue,
       name: field[0],
-      explanation: [
-        field[1],
-        CODE_EXPLANATIONS[position]?.[rawValue.trim()],
-      ].filter(Boolean).join(' '),
+      explanation: codeExplanation ? `${field[1]} ${codeExplanation}` : field[1],
     };
   });
 }
@@ -267,30 +250,36 @@ function fieldsForSegment(name, fields) {
  * This is intentionally limited to source segment and field views.
  *
  * @param {string} source
- * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, reference: string | undefined, fields: Array<{ position: string, rawValue: string, displayValue: string, name: string, explanation: string }> }> }> }}
+ * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, reference: string, fields: WalkthroughField[] }> }> }}
  */
 export function buildWalkthrough(source) {
-  const interchanges = sourceInterchanges(source).map((interchange, interchangeIndex) => {
-    const parsedSegments = splitInterchangeSegments(
-      interchange.raw,
-      interchange.elementSeparator,
-      interchange.segmentTerminator,
-    );
-    return {
-      ordinal: interchangeIndex + 1,
-      raw: interchange.raw,
-      segments: parsedSegments.map(({ raw, fields }, segmentIndex) => {
-        const name = fields[0];
-        return {
-          ordinal: segmentIndex + 1,
-          name,
-          raw,
-          explanation: segmentExplanation(name, fields),
-          reference: SEGMENT_DEFINITIONS[name].reference,
-          fields: fieldsForSegment(name, fields),
-        };
-      }),
-    };
+  const validation = validateExample(source);
+  if (validation.errors.length > 0) {
+    const codes = validation.errors.map(({ code }) => code).join(', ');
+    throw new Error(`Cannot build walkthrough: ${codes}`);
+  }
+
+  const interchanges = validation.interchanges.map((raw, interchangeIndex) => {
+    const elementSeparator = raw[3];
+    const segmentTerminator = raw[105];
+    const segments = raw.split(segmentTerminator).filter(Boolean).map((segment, segmentIndex) => {
+      const fields = segment.split(elementSeparator);
+      const name = fields[0];
+      const definition = SEGMENT_DEFINITIONS[name];
+      if (!definition) {
+        throw new Error(`Unsupported segment name: ${name}`);
+      }
+
+      return {
+        ordinal: segmentIndex + 1,
+        name,
+        raw: `${segment}${segmentTerminator}`,
+        explanation: segmentExplanation(definition, fields),
+        reference: definition.reference,
+        fields: fieldsForSegment(definition, fields),
+      };
+    });
+    return { ordinal: interchangeIndex + 1, raw, segments };
   });
 
   return {

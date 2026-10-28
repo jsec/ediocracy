@@ -14,17 +14,6 @@ function error(code, message) {
   return { code, message };
 }
 
-/** @param {string} interchange @param {string} segmentTerminator @returns {string[]} */
-function segmentsFor(interchange, segmentTerminator) {
-  const body = interchange.slice(0, -1);
-  return body.split(segmentTerminator);
-}
-
-/** @param {string} segment @param {string} elementSeparator @returns {string[]} */
-function fieldsFor(segment, elementSeparator) {
-  return segment.split(elementSeparator);
-}
-
 /** @param {string[]} segment @param {number} index @returns {number | null} */
 function declaredCount(segment, index) {
   const value = segment[index];
@@ -35,47 +24,42 @@ function declaredCount(segment, index) {
   return Number(value);
 }
 
-/** @param {string} source @param {number} start @returns {string[]} */
-function delimiterValues(source, start) {
-  return [
-    source[start + ISA_ELEMENT_SEPARATOR_OFFSET],
-    source[start + ISA_REPETITION_SEPARATOR_OFFSET],
-    source[start + ISA_COMPONENT_SEPARATOR_OFFSET],
-    source[start + ISA_SEGMENT_TERMINATOR_OFFSET],
-  ];
+/** @param {string} source @param {number} isaStart @returns {boolean} */
+function delimitersCollide(source, isaStart) {
+  const delimiters = new Set([
+    source[isaStart + ISA_ELEMENT_SEPARATOR_OFFSET],
+    source[isaStart + ISA_REPETITION_SEPARATOR_OFFSET],
+    source[isaStart + ISA_COMPONENT_SEPARATOR_OFFSET],
+    source[isaStart + ISA_SEGMENT_TERMINATOR_OFFSET],
+  ]);
+  return delimiters.size !== 4;
 }
 
-/** @param {string[]} delimiters @returns {boolean} */
-function delimitersCollide(delimiters) {
-  return new Set(delimiters).size !== delimiters.length;
-}
-
-/** @param {string} interchange @param {number} interchangeIndex @param {string} elementSeparator @param {string} segmentTerminator @returns {ValidationError[]} */
-function validateEnvelope(interchange, interchangeIndex, elementSeparator, segmentTerminator) {
+/** @param {string} interchange @param {number} interchangeIndex @returns {ValidationError[]} */
+function validateEnvelope(interchange, interchangeIndex) {
   const errors = [];
-  const segments = segmentsFor(interchange, segmentTerminator);
-  const isa = fieldsFor(segments[0], elementSeparator);
+  const elementSeparator = interchange[ISA_ELEMENT_SEPARATOR_OFFSET];
+  const segments = interchange.slice(0, -1).split(interchange[ISA_SEGMENT_TERMINATOR_OFFSET]);
   let groupCount = 0;
 
   for (let index = 0; index < segments.length; index += 1) {
-    const segment = fieldsFor(segments[index], elementSeparator);
+    const segment = segments[index].split(elementSeparator);
     if (segment[0] === 'GS') {
       groupCount += 1;
-      const groupStart = index;
       const groupControlNumber = segment[6];
       let transactionCount = 0;
       let transactionStart = -1;
       let groupClosed = false;
 
-      for (let groupIndex = groupStart + 1; groupIndex < segments.length; groupIndex += 1) {
-        const groupSegment = fieldsFor(segments[groupIndex], elementSeparator);
+      for (let groupIndex = index + 1; groupIndex < segments.length; groupIndex += 1) {
+        const groupSegment = segments[groupIndex].split(elementSeparator);
         if (groupSegment[0] === 'ST') {
           transactionStart = groupIndex;
         }
 
         if (groupSegment[0] === 'SE' && transactionStart >= 0) {
           transactionCount += 1;
-          const transactionHeader = fieldsFor(segments[transactionStart], elementSeparator);
+          const transactionHeader = segments[transactionStart].split(elementSeparator);
           if (transactionHeader[2] !== groupSegment[2]) {
             errors.push(error('st-se-control-mismatch', `Interchange ${interchangeIndex + 1} has an ST/SE control-number mismatch.`));
           }
@@ -114,8 +98,8 @@ function validateEnvelope(interchange, interchangeIndex, elementSeparator, segme
     }
   }
 
-  const ieaIndex = segments.length - 1;
-  const iea = fieldsFor(segments[ieaIndex], elementSeparator);
+  const isa = segments[0].split(elementSeparator);
+  const iea = segments[segments.length - 1].split(elementSeparator);
   if (isa[13] !== iea[2]) {
     errors.push(error('isa-iea-control-mismatch', `Interchange ${interchangeIndex + 1} has an ISA/IEA control-number mismatch.`));
   }
@@ -174,8 +158,7 @@ export function validateExample(source) {
     return { interchanges: [], errors: [error('short-isa', 'ISA segment is shorter than 106 characters through its terminator.')] };
   }
 
-  const [elementSeparator, repetitionSeparator, componentSeparator, segmentTerminator] = delimiterValues(source, isaStart);
-  if (delimitersCollide([elementSeparator, repetitionSeparator, componentSeparator, segmentTerminator])) {
+  if (delimitersCollide(source, isaStart)) {
     return { interchanges: [], errors: [error('delimiter-collision', 'ISA delimiters must be distinct.')] };
   }
 
@@ -198,37 +181,22 @@ export function validateExample(source) {
     sourcePosition = interchangeStart + interchange.length;
   }
 
-  let trailing = source.slice(sourcePosition);
-  if (trailing === '\n' || trailing === '\r\n') {
-    trailing = '';
-  } else if (trailing.startsWith('\r\n')) {
-    trailing = trailing.slice(2);
-  } else if (trailing.startsWith('\n')) {
-    trailing = trailing.slice(1);
-  }
-
+  const trailing = source.slice(sourcePosition).replace(/^\r?\n/, '');
   if (!hasUnconsumedInput && trailing.length > 0) {
-    const code = trailing.startsWith('ISA') ? 'truncated-isa' : 'unconsumed-input';
-    const message = code === 'truncated-isa'
-      ? 'Input ends with a truncated ISA interchange.'
-      : 'Input contains bytes outside its complete interchanges.';
-    errors.push(error(code, message));
+    if (trailing.startsWith('ISA')) {
+      errors.push(error('truncated-isa', 'Input ends with a truncated ISA interchange.'));
+    } else {
+      errors.push(error('unconsumed-input', 'Input contains bytes outside its complete interchanges.'));
+    }
   }
 
   for (let index = 0; index < interchanges.length; index += 1) {
-    const interchange = interchanges[index];
-    const [interchangeElementSeparator, interchangeRepetitionSeparator, interchangeComponentSeparator, interchangeSegmentTerminator] = delimiterValues(interchange, 0);
-    if (delimitersCollide([
-      interchangeElementSeparator,
-      interchangeRepetitionSeparator,
-      interchangeComponentSeparator,
-      interchangeSegmentTerminator,
-    ])) {
+    if (delimitersCollide(interchanges[index], 0)) {
       errors.push(error('delimiter-collision', `Interchange ${index + 1} has colliding ISA delimiters.`));
       continue;
     }
 
-    errors.push(...validateEnvelope(interchange, index, interchangeElementSeparator, interchangeSegmentTerminator));
+    errors.push(...validateEnvelope(interchanges[index], index));
   }
 
   return { interchanges, errors };

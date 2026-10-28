@@ -1,14 +1,13 @@
 ---
-import { loadExample, type ExampleFilename } from '../lib/examples';
+import { loadExample } from '../lib/examples.mjs';
 import { buildWalkthrough } from '../lib/walkthrough.mjs';
 
 interface Props {
-  file: ExampleFilename;
+  file: Parameters<typeof loadExample>[0];
 }
 
 const { file } = Astro.props;
-const source = await loadExample(file);
-const walkthrough = buildWalkthrough(source);
+const walkthrough = buildWalkthrough(await loadExample(file));
 ---
 
 <p>

@@ -1,3 +1,5 @@
+// @ts-check
+
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,92 +9,54 @@ const PROJECT_ROOT = resolve(SCRIPT_DIRECTORY, '..');
 const CONTENT_ROOT = resolve(PROJECT_ROOT, 'src/content/docs');
 const PUBLIC_ROOT = resolve(PROJECT_ROOT, 'public');
 const CONTENT_PREFIX = 'src/content/docs/';
-const BANNED_PHRASES = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
+export const BANNED_PHRASES = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
 
+/** @typedef {{ path: string, line: number, code: string, message: string }} Finding */
+
+/** @param {string} path @param {number} line @param {string} code @param {string} message @returns {Finding} */
 function finding(path, line, code, message) {
   return { path, line, code, message };
 }
 
-function posixPath(path) {
-  return path.split('/').join('/');
-}
-
-function collectFiles(directory, predicate) {
-  const files = [];
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    const entryPath = join(directory, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...collectFiles(entryPath, predicate));
-    } else if (predicate(entryPath)) {
-      files.push(entryPath);
-    }
-  }
-  return files;
-}
-
+/** @param {string} relativePath @returns {string} */
 function routeForContentPath(relativePath) {
-  let route = posixPath(relativePath).slice(CONTENT_PREFIX.length);
-  route = route.slice(0, -extname(route).length);
-  if (route === 'index') {
-    return '';
-  }
-  if (route.endsWith('/index')) {
-    return route.slice(0, -'/index'.length);
-  }
-  return route;
+  return relativePath
+    .slice(CONTENT_PREFIX.length)
+    .replace(/\.mdx?$/, '')
+    .replace(/(^|\/)index$/, '');
 }
 
-function lineNumber(source, offset) {
-  return source.slice(0, offset).split('\n').length;
-}
-
-function decodeLocalTarget(target) {
-  const trimmed = target.trim().replace(/^<|>$/g, '');
-  if (/^(?:https?:|mailto:|tel:)/i.test(trimmed) || trimmed.startsWith('#')) {
-    return null;
-  }
-
-  const hashIndex = trimmed.search(/[?#]/);
-  const path = hashIndex < 0 ? trimmed : trimmed.slice(0, hashIndex);
-  try {
-    return decodeURIComponent(path);
-  } catch {
-    return { invalid: true };
-  }
-}
-
+/** @param {string} relativePath @param {string} target @returns {string} */
 function localTargetPath(relativePath, target) {
   if (target.startsWith('/')) {
-    return posixPath(target.slice(1).replace(/\/$/, ''));
+    return target.slice(1).replace(/\/$/, '');
   }
 
-  const sourcePath = posixPath(relativePath).slice(CONTENT_PREFIX.length);
-  const sourceDirectory = dirname(sourcePath) === '.' ? '' : dirname(sourcePath);
-  return posixPath(join(sourceDirectory, target).replace(/\\/g, '/').replace(/\/$/, ''));
+  const sourceDirectory = dirname(relativePath.slice(CONTENT_PREFIX.length));
+  return join(sourceDirectory, target).replace(/\\/g, '/').replace(/\/$/, '');
 }
 
+/** @param {string} source @param {string} relativePath @param {string[]} contentRoutes @param {string[]} publicFiles @returns {Finding[]} */
 function localLinkFindings(source, relativePath, contentRoutes, publicFiles) {
+  /** @type {Finding[]} */
   const findings = [];
   const knownRoutes = new Set(contentRoutes);
   const knownPublicFiles = new Set(publicFiles);
-  const links = [];
   const markdownLink = /\[[^\]]+\]\(([^)\s]+)(?:\s+[^)]*)?\)/g;
   const htmlLink = /\b(?:href|src)=['"]([^'"]+)['"]/g;
 
-  for (const match of source.matchAll(markdownLink)) {
-    links.push({ target: match[1], offset: match.index });
-  }
-  for (const match of source.matchAll(htmlLink)) {
-    links.push({ target: match[1], offset: match.index });
-  }
-
-  for (const { target, offset } of links) {
-    const decodedTarget = decodeLocalTarget(target);
-    if (decodedTarget === null) {
+  for (const match of [...source.matchAll(markdownLink), ...source.matchAll(htmlLink)]) {
+    const target = match[1];
+    const trimmed = target.trim().replace(/^<|>$/g, '');
+    if (/^(?:https?:|mailto:|tel:|#)/i.test(trimmed)) {
       continue;
     }
-    const line = lineNumber(source, offset);
-    if (decodedTarget.invalid) {
+
+    const line = source.slice(0, match.index).split('\n').length;
+    let decodedTarget;
+    try {
+      decodedTarget = decodeURIComponent(trimmed.split(/[?#]/)[0]);
+    } catch {
       findings.push(finding(relativePath, line, 'broken-link', `Invalid local link target: ${target}`));
       continue;
     }
@@ -106,26 +70,9 @@ function localLinkFindings(source, relativePath, contentRoutes, publicFiles) {
   return findings;
 }
 
-function editorialLines(source) {
-  const lines = source.split('\n');
-  const result = [];
-  let fenced = false;
-
-  for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index];
-    if (/^\s*```/.test(line)) {
-      fenced = !fenced;
-      continue;
-    }
-    if (!fenced) {
-      result.push({ line, number: index + 1 });
-    }
-  }
-
-  return result;
-}
-
+/** @param {string} source @param {string} relativePath @param {string[]} contentRoutes @param {string[]} publicFiles @returns {Finding[]} */
 export function checkDocument(source, relativePath, contentRoutes, publicFiles) {
+  /** @type {Finding[]} */
   const findings = [];
   const frontmatter = source.match(/^---\n([\s\S]*?)\n---(?:\n|$)/);
   const titleMatches = frontmatter?.[1].match(/^title:\s*(.*)$/gm) ?? [];
@@ -134,8 +81,20 @@ export function checkDocument(source, relativePath, contentRoutes, publicFiles) 
     findings.push(finding(relativePath, 1, 'missing-title', 'Page must have one nonempty frontmatter title.'));
   }
 
+  const lines = source.split('\n');
+  let fenced = false;
   let previousHeadingLevel = 1;
-  for (const { line, number } of editorialLines(source)) {
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const number = index + 1;
+    if (/^\s*```/.test(line)) {
+      fenced = !fenced;
+      continue;
+    }
+    if (fenced) {
+      continue;
+    }
+
     if (/^#\s+\S/.test(line)) {
       findings.push(finding(relativePath, number, 'duplicate-h1', 'Do not add a Markdown H1; Starlight renders the page title.'));
     }
@@ -158,13 +117,20 @@ export function checkDocument(source, relativePath, contentRoutes, publicFiles) 
   return findings;
 }
 
+/** @param {string[]} slugs @param {string[]} contentRoutes @returns {Finding[]} */
 export function checkSidebarSlugs(slugs, contentRoutes) {
   const knownRoutes = new Set(contentRoutes);
-  return slugs
-    .filter((slug) => !knownRoutes.has(slug))
-    .map((slug) => finding('astro.config.mjs', 1, 'missing-sidebar-target', `Sidebar target does not resolve: ${slug}`));
+  /** @type {Finding[]} */
+  const findings = [];
+  for (const slug of slugs) {
+    if (!knownRoutes.has(slug)) {
+      findings.push(finding('astro.config.mjs', 1, 'missing-sidebar-target', `Sidebar target does not resolve: ${slug}`));
+    }
+  }
+  return findings;
 }
 
+/** @param {string} source @returns {string[]} */
 function sidebarSlugs(source) {
   const slugs = [];
   const itemsPattern = /items:\s*\[([\s\S]*?)\]/g;
@@ -176,30 +142,36 @@ function sidebarSlugs(source) {
   return slugs;
 }
 
-function relativeProjectPath(path) {
-  return posixPath(relative(PROJECT_ROOT, path));
-}
-
+/** @returns {Finding[]} */
 export function runContentChecks() {
-  const contentFiles = collectFiles(CONTENT_ROOT, (path) => ['.md', '.mdx'].includes(extname(path)));
-  const contentPaths = contentFiles.map(relativeProjectPath);
+  const contentPaths = [];
+  for (const entry of readdirSync(CONTENT_ROOT, { recursive: true, withFileTypes: true })) {
+    if (!entry.isDirectory() && ['.md', '.mdx'].includes(extname(entry.name))) {
+      contentPaths.push(relative(PROJECT_ROOT, join(entry.parentPath, entry.name)));
+    }
+  }
   const contentRoutes = contentPaths.map(routeForContentPath);
-  const publicFiles = collectFiles(PUBLIC_ROOT, (path) => statSync(path).isFile())
-    .map(relativeProjectPath)
-    .map((path) => path.slice('public/'.length));
-  const findings = [];
 
-  for (const contentFile of contentFiles) {
-    const relativePath = relativeProjectPath(contentFile);
-    findings.push(...checkDocument(readFileSync(contentFile, 'utf8'), relativePath, contentRoutes, publicFiles));
+  const publicFiles = [];
+  for (const path of readdirSync(PUBLIC_ROOT, { recursive: true, encoding: 'utf8' })) {
+    if (statSync(join(PUBLIC_ROOT, path)).isFile()) {
+      publicFiles.push(path);
+    }
+  }
+
+  /** @type {Finding[]} */
+  const findings = [];
+  for (const contentPath of contentPaths) {
+    const source = readFileSync(resolve(PROJECT_ROOT, contentPath), 'utf8');
+    findings.push(...checkDocument(source, contentPath, contentRoutes, publicFiles));
   }
 
   const sidebarSource = readFileSync(resolve(PROJECT_ROOT, 'astro.config.mjs'), 'utf8');
   findings.push(...checkSidebarSlugs(sidebarSlugs(sidebarSource), contentRoutes));
 
   findings.sort((left, right) => left.path.localeCompare(right.path) || left.line - right.line || left.code.localeCompare(right.code));
-  for (const result of findings) {
-    console.error(`${result.path}:${result.line}: ${result.code}: ${result.message}`);
+  for (const { path, line, code, message } of findings) {
+    console.error(`${path}:${line}: ${code}: ${message}`);
   }
   return findings;
 }
