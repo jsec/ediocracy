@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
 
 interface FixtureRecord {
-  id: string;
   payload_path: string;
 }
 
@@ -14,14 +13,12 @@ interface FixtureManifest {
   fixtures: FixtureRecord[];
 }
 
-const testDirectory = dirname(fileURLToPath(import.meta.url));
-const fixtureDirectory = resolve(testDirectory, 'fixtures/generic-x12');
+const fixtureDirectory = resolve(dirname(fileURLToPath(import.meta.url)), 'fixtures/generic-x12');
 
 describe('generic X12 fixtures', () => {
   test('the manifest resolves every payload path', async () => {
-    const manifestPath = resolve(fixtureDirectory, 'fixtures.json');
     const manifest = JSON.parse(
-      await readFile(manifestPath, 'utf8'),
+      await readFile(resolve(fixtureDirectory, 'fixtures.json'), 'utf8'),
     ) as FixtureManifest;
 
     expect(manifest.schema).toBe('ediocracy.generic-x12.fixture/v1');
