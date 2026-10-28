@@ -26,7 +26,7 @@ describe('generic X12 fixtures', () => {
 
     expect(manifest.schema).toBe('ediocracy.generic-x12.fixture/v1');
     expect(manifest.suite).toBe('generic-x12');
-    expect(manifest.fixtures).toHaveLength(35);
+    expect(manifest.fixtures).toHaveLength(42);
 
     await Promise.all(
       manifest.fixtures.map(({ payload_path: payloadPath }) =>
