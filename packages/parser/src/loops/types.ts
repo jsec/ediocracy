@@ -4,7 +4,7 @@ import type { Finding } from '../reader/types.js';
 export type Grammar = {
     // Tags allowed before the first loop, e.g. ['BHT'].
     header: string[];
-    // HL03 level code → loop. Transaction sets without HL (999, TA1) need top-level loops added here.
+    // HL03 level code → loop. Sets without HL (999, TA1) would need top-level loops added here.
     hierarchy: Record<string, LoopSpec>;
 };
 

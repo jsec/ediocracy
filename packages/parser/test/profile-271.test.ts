@@ -8,7 +8,11 @@ describe('read271', () => {
         it('should read one subscriber and one benefit from GX12-022', () => {
             const response = only271(readFixture('x12/GX12-022-271-structural-witness.x12'));
             const [subscriber] = response.subscribers;
-            const benefits = subscriber?.benefits.map(({ messages, serviceTypes, status }) => ({ messages, serviceTypes, status }));
+            const benefits = subscriber?.benefits.map(benefit => ({
+                messages: benefit.messages,
+                serviceTypes: benefit.serviceTypes,
+                status: benefit.status,
+            }));
 
             expect(response.findings).toEqual([]);
             expect(response.subscribers).toHaveLength(1);
@@ -30,7 +34,7 @@ describe('read271', () => {
                 'unexpected-segment LS',
                 'unexpected-segment LE',
             ]);
-            // The entity NM1 inside LS is the first NM1 at this level, so it is read as the subscriber's name.
+            // The NM1 inside LS is the first NM1 at this level, so it is read as the subscriber.
             expect(subscriber?.id).toBe('1111111111');
             expect(statuses).toEqual(['C']);
             expect(entityLoopIds).toEqual(['2120C']);
@@ -163,7 +167,10 @@ describe('read271', () => {
             const body = 'ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~'
                 + 'HL*3*2*22*0~NM1*IL*1*A~EB*1~HL*4*2*22*0~NM1*IL*1*B~EB*1~EB*1~SE*14*0001~';
             const response = read271(firstTransaction(wrap(body)));
-            const subscribers = response.subscribers.map(({ benefits, name }) => [name?.element(3), benefits.length]);
+            const subscribers = response.subscribers.map(subscriber => [
+                subscriber.name?.element(3),
+                subscriber.benefits.length,
+            ]);
 
             expect(response.findings).toEqual([]);
             expect(subscribers).toEqual([['A', 1], ['B', 2]]);

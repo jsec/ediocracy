@@ -43,12 +43,13 @@ class LoopBuilder {
         return this.#tree;
     }
 
-    // Closes the open loop at `depth` in the stack and every loop inside it. Index 0 is the outermost loop.
+    // Closes the open loop at `depth` and every loop inside it. Depth 0 is the outermost loop.
     #closeLoopsFrom(depth: number): void {
         const closedLoops = this.#stack.splice(depth);
 
         for (const open of closedLoops.toReversed()) {
-            const isMissingEnd = open.spec.end !== undefined && open.loop.segments.at(-1)?.tag !== open.spec.end;
+            const lastTag = open.loop.segments.at(-1)?.tag;
+            const isMissingEnd = open.spec.end !== undefined && lastTag !== open.spec.end;
 
             if (isMissingEnd) {
                 this.#report('unclosed-loop', open.loop.segments[0], `Loop ${open.spec.id} has no ${open.spec.end}`);
@@ -56,7 +57,7 @@ class LoopBuilder {
         }
     }
 
-    // Keeps a reported segment the grammar does not accept: in the innermost open loop, or in the header when none is open.
+    // Keeps a rejected segment in the innermost open loop, or in the header when none is open.
     #keepUnexpectedSegment(segment: Segment): void {
         const innermost = this.#stack.at(-1);
 

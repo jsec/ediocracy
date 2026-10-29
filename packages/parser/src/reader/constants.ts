@@ -3,7 +3,9 @@ export const ISA_LENGTH = 106;
 export const ISA_ELEMENT_SEPARATOR_OFFSET = 3;
 
 // Offsets, from the start of `ISA`, of the element separators between its 16 elements.
-export const ISA_SEPARATOR_OFFSETS = [3, 6, 17, 20, 31, 34, 50, 53, 69, 76, 81, 83, 89, 99, 101, 103];
+export const ISA_SEPARATOR_OFFSETS = [
+    3, 6, 17, 20, 31, 34, 50, 53, 69, 76, 81, 83, 89, 99, 101, 103,
+];
 export const ISA_REPETITION_OFFSET = 82;
 export const ISA_VERSION_START = 84;
 export const ISA_VERSION_END = 89;

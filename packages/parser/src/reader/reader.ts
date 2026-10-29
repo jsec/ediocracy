@@ -48,7 +48,8 @@ class Reader {
 
         while (this.#offset < this.#text.length) {
             if (!this.#text.startsWith('ISA', this.#offset)) {
-                const found = this.#text.slice(this.#offset, this.#offset + UNEXPECTED_TEXT_PREVIEW_LENGTH);
+                const previewEnd = this.#offset + UNEXPECTED_TEXT_PREVIEW_LENGTH;
+                const found = this.#text.slice(this.#offset, previewEnd);
 
                 throw new X12SyntaxError('unexpected-data', this.#offset, `Expected an ISA segment, found "${found}"`);
             }
@@ -113,7 +114,7 @@ class Reader {
         return new X12SyntaxError('missing-iea', offset, `The interchange has no IEA before ${arriving}`);
     }
 
-    // Adds a segment to the open envelopes. Returns the finished interchange when the segment is its IEA.
+    // Adds a segment to the open envelopes. Returns the interchange when the segment is its IEA.
     #placeSegment(segment: Segment, open: OpenInterchange): Interchange | undefined {
         switch (segment.tag) {
             case 'GE': {
@@ -239,7 +240,9 @@ class Reader {
         }
 
         const element = this.#text.charAt(start + ISA_ELEMENT_SEPARATOR_OFFSET);
-        const hasSeparatorAtEveryOffset = ISA_SEPARATOR_OFFSETS.every(offset => this.#text[start + offset] === element);
+        const hasSeparatorAtEveryOffset = ISA_SEPARATOR_OFFSETS.every(
+            offset => this.#text[start + offset] === element,
+        );
 
         if (!hasSeparatorAtEveryOffset || LETTER_OR_DIGIT.test(element)) {
             throw new X12SyntaxError('invalid-isa', start, 'The ISA segment does not have an element separator at every fixed position');
@@ -247,14 +250,15 @@ class Reader {
 
         const version = this.#text.slice(start + ISA_VERSION_START, start + ISA_VERSION_END);
         const hasRepetitionSeparator = version >= FIRST_VERSION_WITH_REPETITION;
+        const repetitionCharacter = this.#text.charAt(start + ISA_REPETITION_OFFSET);
         const delimiters = {
             component: this.#text.charAt(start + ISA_COMPONENT_OFFSET),
             element,
-            repetition: hasRepetitionSeparator ? this.#text.charAt(start + ISA_REPETITION_OFFSET) : undefined,
+            repetition: hasRepetitionSeparator ? repetitionCharacter : undefined,
             segment: this.#text.charAt(start + ISA_TERMINATOR_OFFSET),
         };
 
-        const characters = [delimiters.element, delimiters.repetition, delimiters.component, delimiters.segment].filter(character => character !== undefined);
+        const characters = Object.values(delimiters).filter(character => character !== undefined);
         const hasRepeatedCharacter = new Set(characters).size !== characters.length;
         const hasLetterOrDigit = characters.some(character => LETTER_OR_DIGIT.test(character));
 
@@ -282,7 +286,7 @@ class Reader {
         this.#offset = start + ISA_LENGTH;
 
         while (true) {
-            // CR and LF between segments are line formatting, unless the terminator is itself CR or LF.
+            // CR and LF between segments are formatting, unless the terminator is CR or LF.
             while ((this.#text[this.#offset] === '\r' || this.#text[this.#offset] === '\n') && this.#text[this.#offset] !== delimiters.segment) {
                 this.#offset += 1;
             }
@@ -393,12 +397,13 @@ class Reader {
  * Reads X12 text into its interchanges, functional groups and transaction sets.
  *
  * Problems that leave the structure readable, such as a control number that does not match, are
- * returned as findings. Whitespace, Ctrl-Z and NUL around interchanges, and a byte order mark at the
- * start, are skipped.
+ * returned as findings. Whitespace, Ctrl-Z and NUL around interchanges, and a byte order mark at
+ * the start, are skipped.
  *
  * @param text - The whole X12 text, for example a clearinghouse response body.
  * @returns The interchanges in the order they appear, and the reader's findings.
- * @throws {X12SyntaxError} When the text cannot be read, for example when it has no ISA or an envelope has no trailer.
+ * @throws {X12SyntaxError} When the text cannot be read, for example when it has no ISA or an
+ *   envelope has no trailer.
  */
 export function readX12(text: string): X12Document {
     return new Reader(text).read();
@@ -406,9 +411,10 @@ export function readX12(text: string): X12Document {
 
 // Counts and N0 control numbers compare as integers when both are digits only.
 function isSameValue(first: string | undefined, second: string | undefined): boolean {
-    const isIntegerComparison = first !== undefined && second !== undefined && DIGITS_ONLY.test(first) && DIGITS_ONLY.test(second);
+    const isFirstDigitsOnly = first !== undefined && DIGITS_ONLY.test(first);
+    const isSecondDigitsOnly = second !== undefined && DIGITS_ONLY.test(second);
 
-    if (isIntegerComparison) {
+    if (isFirstDigitsOnly && isSecondDigitsOnly) {
         return Number(first) === Number(second);
     }
 

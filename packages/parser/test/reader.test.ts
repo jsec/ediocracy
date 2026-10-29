@@ -138,8 +138,8 @@ describe('readX12', () => {
         });
 
         it('should have an expected outcome for every fixture file', () => {
-            const fixtureNames = readdirSync(x12FixtureDirectory).toSorted((left, right) => left.localeCompare(right));
-            const expectedNames = [...Object.keys(accepted), ...Object.keys(rejected)].toSorted((left, right) => left.localeCompare(right));
+            const fixtureNames = new Set(readdirSync(x12FixtureDirectory));
+            const expectedNames = new Set([...Object.keys(accepted), ...Object.keys(rejected)]);
 
             expect(fixtureNames).toEqual(expectedNames);
         });
@@ -148,7 +148,8 @@ describe('readX12', () => {
     describe('envelope contents', () => {
         it('should leave the ST and SE out of the transaction segments', () => {
             const document = readX12(readFixture('x12/GX12-003-empty-and-trailing-elements.x12'));
-            const tags = document.interchanges[0]?.groups[0]?.transactions[0]?.segments.map(({ tag }) => tag);
+            const transaction = document.interchanges[0]?.groups[0]?.transactions[0];
+            const tags = transaction?.segments.map(({ tag }) => tag);
 
             expect(tags).toEqual(['N1', 'REF']);
         });
