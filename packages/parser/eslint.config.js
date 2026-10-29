@@ -7,6 +7,12 @@ export default defineConfig([
         extends: [myConfig],
     },
     {
+        rules: {
+            'unicorn/consistent-class-member-order': 'off',
+            'unicorn/no-break-in-nested-loop': 'off',
+        },
+    },
+    {
         files: ['package.json'],
         rules: {
             'package-json/dependency-version-range': 'off',
