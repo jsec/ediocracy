@@ -1,4 +1,4 @@
-export { read271, read271s } from './profiles/271.js';
+export { read271, read271s } from './profiles/271/reader.js';
 export type {
     Benefit,
     Party,
@@ -6,7 +6,7 @@ export type {
     RequestError,
     Response271,
     Response271FindingCode,
-} from './profiles/271.js';
+} from './profiles/271/types.js';
 export { X12SyntaxError } from './reader/errors.js';
 export { readX12 } from './reader/reader.js';
 export type { ReaderFindingCode, SyntaxErrorCode } from './reader/types.js';
