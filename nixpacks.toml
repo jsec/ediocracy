@@ -4,3 +4,6 @@ cmds = [
     "corepack enable",
     "pnpm install --frozen-lockfile",
 ]
+
+[variables]
+NIXPACKS_NODE_VERSION = "26"

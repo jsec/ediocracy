@@ -2,10 +2,8 @@
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = resolve(SCRIPT_DIRECTORY, '..');
+const PROJECT_ROOT = resolve(import.meta.dirname, '..');
 const CONTENT_ROOT = resolve(PROJECT_ROOT, 'src/content/docs');
 const PUBLIC_ROOT = resolve(PROJECT_ROOT, 'public');
 const CONTENT_PREFIX = 'src/content/docs/';
@@ -176,7 +174,6 @@ export function runContentChecks() {
   return findings;
 }
 
-const invokedScript = process.argv[1] && resolve(process.argv[1]);
-if (invokedScript === fileURLToPath(import.meta.url)) {
+if (import.meta.main) {
   process.exitCode = runContentChecks().length > 0 ? 1 : 0;
 }

@@ -7,7 +7,7 @@
     "build": "pnpm run check && astro build",
     "preview": "astro preview",
     "check": "pnpm run test && pnpm run check:js && astro check && pnpm run check:examples && pnpm run check:content",
-    "check:js": "tsc --ignoreConfig --noEmit --allowJs --checkJs --strict --module nodenext --target es2022 --types node src/lib/examples.mjs src/lib/walkthrough.mjs scripts/check-content.mjs",
+    "check:js": "tsc --ignoreConfig --noEmit --allowJs --checkJs --strict --module nodenext --target es2025 --types node src/lib/examples.mjs src/lib/walkthrough.mjs scripts/check-content.mjs",
     "check:examples": "node scripts/check-examples.mjs",
     "check:content": "node scripts/check-content.mjs",
     "test": "node --test tests/*.test.mjs"
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
-    "@types/node": "22.20.4",
+    "@types/node": "26.6.5",
     "typescript": "6.0.3"
   }
 }
