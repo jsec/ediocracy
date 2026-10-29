@@ -1,7 +1,10 @@
 import type { SyntaxErrorCode } from './types.js';
 
+/** Thrown by `readX12` when the text cannot be read as X12. */
 export class X12SyntaxError extends Error {
+    /** Why the text could not be read. */
     readonly code: SyntaxErrorCode;
+    /** The index in the text where the problem was found. */
     readonly offset: number;
 
     constructor(code: SyntaxErrorCode, offset: number, message: string) {

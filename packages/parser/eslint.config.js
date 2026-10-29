@@ -10,6 +10,7 @@ export default defineConfig([
         rules: {
             'unicorn/consistent-class-member-order': 'off',
             'unicorn/no-break-in-nested-loop': 'off',
+            'unicorn/single-line-block-comment-style': 'off',
         },
     },
     {

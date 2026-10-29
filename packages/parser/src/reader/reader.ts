@@ -389,6 +389,17 @@ class Reader {
     }
 }
 
+/**
+ * Reads X12 text into its interchanges, functional groups and transaction sets.
+ *
+ * Problems that leave the structure readable, such as a control number that does not match, are
+ * returned as findings. Whitespace, Ctrl-Z and NUL around interchanges, and a byte order mark at the
+ * start, are skipped.
+ *
+ * @param text - The whole X12 text, for example a clearinghouse response body.
+ * @returns The interchanges in the order they appear, and the reader's findings.
+ * @throws {X12SyntaxError} When the text cannot be read, for example when it has no ISA or an envelope has no trailer.
+ */
 export function readX12(text: string): X12Document {
     return new Reader(text).read();
 }
