@@ -1,0 +1,73 @@
+ISA*00*          *00*          *ZZ*SENDER         *01*117151744      *261029*2256*^*00501*715075078*0*T*`~
+GS*HB*SENDER*117151744*20261029*225638*1*X*005010X279A1~
+ST*271*0001*005010X279A1~
+BHT*0022*11*01M64Y2BFYJBR4H4Z4MJMV01D8*20260325*0901~
+HL*1**20*1~
+NM1*PR*2*AETNA INC*****PI*953402799~
+HL*2*1*21*1~
+NM1*1P*2*MEDICAL PROVIDER*****XX*1999999984~
+HL*3*2*22*0~
+NM1*IL*1*DOE*JANE****MI*AETNA12345~
+REF*6P*111222333444555~
+REF*18*1122334~
+REF*6P*111222333444555*New Jersey Plan~
+REF*18*1122334~
+N3*101 MAIN ST~
+N4*TRENTON*NJ*08601~
+DMG*D8*20040404*F~
+DTP*346*D8*20240401~
+DTP*472*D8*20240917~
+EB*W***********W~
+LS*2120~
+NM1*PR*2*Aetna~
+N3*202 Main St~
+N4*El Paso*TX*79998~
+LE*2120~
+EB*1*EMP*30*PR*Gold Plan*******W~
+EB*C*IND*30***25*500*****Y~
+DTP*346*D8*20240401~
+EB*C*IND*30***29*500*****Y~
+EB*G*IND*30***25*7000*****Y~
+EB*G*IND*30***29*7000*****Y~
+EB*C*IND*30***25*1000*****N~
+DTP*346*D8*20240401~
+EB*C*IND*30***29*1000*****N~
+EB*G*IND*30***25*14000*****N~
+EB*G*IND*30***29*14000*****N~
+EB*1*EMP*1^33^47^48^50^86^98^UC^MH^AL*********W~
+EB*A*EMP*33^86^98^MH^UC*****0****Y~
+MSG*Chiropractic~
+MSG*Office Visits~
+MSG*Urgent Care~
+MSG*Walk in Clinic~
+MSG*Mental Health (outpatient)~
+EB*A*EMP*86*****.2****Y~
+MSG*Emergency Room~
+EB*A*EMP*48^50^MH*****.2****Y~
+MSG*IP Hospital Room and Board~
+MSG*IP Hospital Miscellaneous~
+MSG*OP Hospital Miscellaneous~
+MSG*Mental Health (inpatient)~
+EB*B*EMP*33****25*****Y~
+MSG*Chiropractic~
+EB*B*EMP*98^MH^UC****30*****Y~
+MSG*Office Visits~
+MSG*Walk in Clinic~
+MSG*Mental Health (outpatient)~
+EB*B*EMP*86^UC****40*****Y~
+MSG*Urgent Care~
+EB*A*EMP*33^48^50^86^98^MH^UC*****.5****N~
+MSG*Chiropractic~
+MSG*IP Hospital Room and Board~
+MSG*IP Hospital Miscellaneous~
+MSG*Office Visits~
+MSG*Urgent Care~
+MSG*Walk in Clinic~
+MSG*OP Hospital Miscellaneous~
+MSG*Mental Health (inpatient)~
+MSG*Mental Health (outpatient)~
+EB*A*EMP*86*****.2****N~
+MSG*Emergency Room~
+SE*69*0001~
+GE*1*1~
+IEA*1*715075078~

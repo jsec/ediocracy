@@ -1,0 +1,400 @@
+ISA*00*          *00*          *ZZ*SENDER         *01*117151744      *261029*2300*^*00501*875281102*0*T*`~
+GS*HB*SENDER*117151744*20261029*230042*1*X*005010X279A1~
+ST*271*0001*005010X279A1~
+BHT*0022*11*01M64Y9SW1N7N9J1FKBHD7MS3S*20260325*0901~
+HL*1**20*1~
+NM1*PR*2*KSRCN*****PI*100187~
+HL*2*1*21*1~
+NM1*1P*2*NEW YORK MEDICAL PROVIDER*****XX*1999999984~
+HL*3*2*22*0~
+NM1*IL*1*DOE*JANE*MID***MI*KAISER123456~
+REF*6P*3~
+REF*6P*3~
+N3*101 MAIN ST~
+N4*SACRAMENTO*CA*942030200~
+DMG*D8*20020202*F~
+EB*1**30**STATE OF CALIFORNIA*******W~
+REF*18*1122334~
+REF*6P*3~
+DTP*346*D8*20200101~
+MSG*HMO - HMO COMMERCIAL~
+LS*2120~
+NM1*PRP*2*KFHP 1000~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**SMALL BUSINESS*******W~
+REF*18*99887~
+REF*6P*998877~
+DTP*292*RD8*20080101-20080930~
+LS*2120~
+NM1*PR*2*KFHP 1000~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**STATE OF CALIFORNIA*******W~
+REF*18*4455667~
+REF*6P*3~
+DTP*292*RD8*20150101-20150831~
+MSG*HMO - HMO COMMERCIAL~
+LS*2120~
+NM1*PR*2*KFHP 1000~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*6677889~
+REF*6P*55000~
+DTP*292*RD8*20100101-20140228~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*3344556~
+REF*6P*55000~
+DTP*292*RD8*20150101-20150630~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*6677889~
+REF*6P*55000~
+DTP*292*RD8*20150101-20160531~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*6677889~
+REF*6P*55000~
+DTP*292*RD8*20150701-20150731~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*8899001~
+REF*6P*55000~
+DTP*292*RD8*20150601-20150630~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*6**30**MEDI-CAL SACRAMENTO*******W~
+REF*18*2233445~
+REF*6P*55000~
+DTP*292*RD8*20150801-20151130~
+MSG*MDC - MEDICAID~
+LS*2120~
+NM1*PR*2*KFHP 1001~
+N3*202 MAIN ST~
+N4*SACRAMENTO*CA*94203~
+LE*2120~
+EB*B**1^98****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Primary Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Primary Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Primary Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**1^98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Primary Care_In Network____ADJ LEVEL 2_MOOP~
+EB*B**1^98****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Specialty Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Specialty Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Specialty Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**1^98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Specialty Care_In Network____ADJ LEVEL 2_MOOP~
+EB*B**1^98****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**1^98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Primary)_In Network____ADJ LEVEL 2_MOOP~
+EB*B**1^98****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**1^98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Office Procedures/Services (Specialty)_In Network____ADJ LEVEL 2_MOOP~
+EB*B**1^98^UC****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Urgent Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98^UC****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Emergency Health Coverage_Urgent Care_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*1^98^UC***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Emergency Health Coverage_Urgent Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**1^98^UC****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Urgent Care_In Network____ADJ LEVEL 2_MOOP~
+EB*I**33********U*Y~
+DTP*346*D8*20200101~
+MSG*Therapy/Rehab_Musculoskeletal Therapy_In Network____ADJ LEVEL 1_~
+EB*B**47****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Hospitalization Services_Hospital Inpatient Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**47****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Hospitalization Services_Bariatric Surgery (Inpatient)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**47****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Hospitalization Services_Hospital Inpatient Care Transgender_In Network____ADJ LEVEL 1_MOOP~
+EB*B**47****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Hospitalization Services_Hospitalization  Abortion & Abortion-Related Services per SB 245_In Network____ADJ LEVEL 1_MOOP~
+EB*B**47****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Abortion & Abortion-Related Services per Senate Bill (SB) 245_Hospitalization  Abortion & Abortion-Related Services per SB 245_In Network____ADJ LEVEL 1_MOOP~
+EB*B**86****50****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Emergency Care (Copay waived if admitted)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*86***32*50****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Emergency Care (Copay waived if admitted)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*86***33*50****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Emergency Care (Copay waived if admitted)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**86****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Emergency Care (Copay waived if admitted)_In Network____ADJ LEVEL 2_MOOP~
+EB*B**86****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Observation_In Network____ADJ LEVEL 1_MOOP~
+EB*B**86****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Emergency Health Coverage_Emergency Department   Abortion & Abortion-Related Services per SB 245_In Network____ADJ LEVEL 1_MOOP~
+EB*B**86****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Abortion & Abortion-Related Services per Senate Bill (SB) 245_Emergency Department   Abortion & Abortion-Related Services per SB 245_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Provider Visits  Abortion & Abortion-Related Services per SB 245 & Vasectomy per SB 523_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Clinic Administered Drugs for Treatment_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Clinic Administered adjunct related drugs_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Transgender Services Outpatient Procedures (Related Hair Removal)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*98****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Transgender Services Outpatient Procedures (Related Hair Removal)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*98***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Transgender Services Outpatient Procedures (Related Hair Removal)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Transgender Services Outpatient Procedures (Related Hair Removal)_In Network____ADJ LEVEL 2_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Provider Visits  Abortion & Abortion-Related Services per SB 245 & Vasectomy per SB 523_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Family Planning Services_Provider Visits  Abortion & Abortion-Related Services per SB 245 & Vasectomy per SB 523_In Network____ADJ LEVEL 1_MOOP~
+EB*B**98****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Abortion & Abortion-Related Services per Senate Bill (SB) 245_Provider Visits  Abortion & Abortion-Related Services per SB 245 & Vasectomy per SB 523_In Network____ADJ LEVEL 1_MOOP~
+EB*B**AL****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Routine Eye Exam and/or refraction_In Network____ADJ LEVEL 1_MOOP~
+EB*B**AL****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Routine Eye Exam and/or refraction up to 19 years old_In Network____ADJ LEVEL 1_MOOP~
+EB*B**AL****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Vision Service_Routine Eye Exam and/or refraction_In Network____ADJ LEVEL 1_MOOP~
+EB*B**AL****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Vision Service_Routine Eye Exam and/or refraction up to 19 years old_In Network____ADJ LEVEL 1_MOOP~
+EB*B**AL****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Vision Service_Post Cataract Surg. Lens; Frames; Contacts_In Network____ADJ LEVEL 1_~
+EB*B**MH****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Individual Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Individual Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Individual Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Individual Therapy_In Network____ADJ LEVEL 2_MOOP~
+EB*B**MH****7****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Group Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH****7****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Group Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH***29*7****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Group Therapy_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Group Therapy_In Network____ADJ LEVEL 2_MOOP~
+EB*B**MH****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Psychological Testing_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Psychological Testing_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*MH***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Mental Health Service_Psychological Testing_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Psychological Testing_In Network____ADJ LEVEL 2_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_MH Intensive Outpatient Program_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Partial Hospitalization Program_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_MH Residential Recovery Services (referred out)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**MH****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Mental Health Service_Individual or Group Therapy (Autism)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**76****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Dialysis Related Routine Office Visit_In Network____ADJ LEVEL 1_MOOP~
+EB*B**76****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Dialysis Clinic Administered_In Network____ADJ LEVEL 1_MOOP~
+EB*B**76****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Dialysis Self Administered_In Network____ADJ LEVEL 1_MOOP~
+EB*B**76****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Ancillary Services (Imaging, Laboratory and Special Procedures)_Routine Laboratory Services for Dialysis_In Network____ADJ LEVEL 1_MOOP~
+EB*B**3****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Telephone Visit- Primary Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**3****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Telephone Visit- Specialty Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**3****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Video Visit- Specialty Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**3****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Professional Services (Plan Provider Office Visits)_Video Visit- Primary Care_In Network____ADJ LEVEL 1_MOOP~
+EB*B**64****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Medically referred acupuncture (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*64****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Medically referred acupuncture (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*64***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Medically referred acupuncture (Primary)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**64****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Medically referred acupuncture (Primary)_In Network____ADJ LEVEL 2_MOOP~
+EB*B**64****15****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Medically referred acupuncture (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*64****15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Medically referred acupuncture (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*F*IND*64***29*15****U*Y~
+HSD*DY*1~
+DTP*291*D8*20240930~
+MSG*Outpatient Services_Medically referred acupuncture (Specialty)_In Network____ADJ LEVEL 1_MOOP~
+EB*B**64****0****U*Y~
+DTP*346*D8*20200101~
+MSG*Outpatient Services_Medically referred acupuncture (Specialty)_In Network____ADJ LEVEL 2_MOOP~
+EB*L***********W~
+DTP*295*D8*20150222~
+LS*2120~
+NM1*P3*1*John Doe*John*MID***XX*1234567890~
+N3*303 MAIN ST~
+N4*SACRAMENTO*CA*942030200~
+LE*2120~
+EB*G*FAM*30***23*5000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*CA COMMON MOOP CAL-X~
+EB*G*FAM*30***29*3000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*CA COMMON MOOP CAL-X~
+EB*G*IND*30***23*2000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*CA COMMON MOOP CAL-X~
+EB*G*IND*30***29*1000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*CA COMMON MOOP CAL-X~
+EB*G*FAM*30***23*15000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*DRUG MOOP CAL-X~
+EB*G*FAM*30***29*14000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*DRUG MOOP CAL-X~
+EB*G*IND*30***23*7000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*DRUG MOOP CAL-X~
+EB*G*IND*30***29*6000*****W~
+DTP*291*RD8*20240101-20241231~
+MSG*DRUG MOOP CAL-X~
+SE*396*0001~
+GE*1*1~
+IEA*1*875281102~

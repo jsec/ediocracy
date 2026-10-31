@@ -71,8 +71,8 @@ describe('read271', () => {
     });
 
     describe('producer and X12 examples', () => {
-        it('should read three benefits from the pVerify sample despite its count mismatch', () => {
-            const document = readX12(readFixture('271/pverify-sample.x12'));
+        it('should read three benefits from the count mismatch sample despite its count mismatch', () => {
+            const document = readX12(readFixture('271/count-mismatch-sample.x12'));
             const [result] = read271s(document);
             const [subscriber] = result?.response.subscribers ?? [];
             const documentCodes = document.findings.map(({ code }) => code);
@@ -83,6 +83,102 @@ describe('read271', () => {
             expect(subscriber?.id).toBe('123SFADFAF');
             expect(statuses).toEqual(['1', 'C', 'C']);
             expect(subscriber?.benefits[1]).toMatchObject({ amount: '500', timePeriod: '27' });
+        });
+
+        it('should read the dependent benefits from the dependent sample', () => {
+            const document = readX12(readFixture('271/dependent-sample.x12'));
+            const [result] = read271s(document);
+            const [subscriber] = result?.response.subscribers ?? [];
+            const [dependent] = subscriber?.dependents ?? [];
+            const benefits = dependent?.benefits ?? [];
+            const coinsurance = benefits.filter(({ status }) => status === 'A');
+
+            expect(document.interchanges[0]?.delimiters.component).toBe('`');
+            expect(document.findings).toEqual([]);
+            expect(result?.response.findings).toEqual([]);
+            expect(result?.response.sources[0]).toMatchObject({ id: '87726', idQualifier: 'PI' });
+            expect(subscriber).toMatchObject({ id: 'UHC202649', idQualifier: 'MI' });
+            expect(subscriber?.benefits).toEqual([]);
+            expect(dependent?.name?.element(4)).toBe('Jane');
+            expect(benefits).toHaveLength(41);
+            expect(benefits[0]).toMatchObject({
+                insuranceType: 'C1',
+                planDescription: 'CHOICE PLUS',
+                serviceTypes: ['30'],
+                status: '1',
+            });
+            expect(benefits[0]?.relatedEntities[0]?.segments[0].element(3)).toBe('UNITEDHEALTHCARE');
+            expect(coinsurance.map(({ percent }) => percent)).toEqual(['.4', '.2', '.2', '.2', '0']);
+        });
+
+        it('should read a Medicare Advantage subscriber from the sandbox sample', () => {
+            const document = readX12(readFixture('271/sandbox-medicare-advantage.x12'));
+            const [result] = read271s(document);
+            const [subscriber] = result?.response.subscribers ?? [];
+            const benefits = subscriber?.benefits ?? [];
+            const primaryCare = benefits.find(({ status }) => status === 'L');
+            const nonCovered = benefits.find(({ status }) => status === 'I');
+            const copays = benefits.filter(({ status }) => status === 'B').map(({ amount }) => amount);
+
+            expect(document.findings).toEqual([]);
+            expect(result?.response.findings).toEqual([]);
+            expect(subscriber).toMatchObject({ id: '3456789012', idQualifier: 'MI' });
+            expect(subscriber?.traces[0]?.element(2)).toBe('TESTTRACE0000000000000003');
+            expect(subscriber?.dependents).toEqual([]);
+            expect(benefits).toHaveLength(49);
+            expect(benefits[1]?.references[0]?.element(2)).toBe('H0001-000-000');
+            expect(primaryCare?.relatedEntities[0]?.segments.map(({ tag }) => tag)).toEqual([
+                'NM1',
+                'N3',
+                'N4',
+                'PER',
+                'PRV',
+            ]);
+            expect(nonCovered?.serviceTypes).toEqual(['BB', 'CF', 'CE', 'RT', 'CH', 'CG', 'CJ', 'CI']);
+            expect(copays).toEqual(['5', '10', '500', '10', '10', '500', '500', '10', '0']);
+        });
+
+        it.each([
+            {
+                benefitCount: 19,
+                file: 'sandbox-aetna.x12',
+                memberId: 'AETNA12345',
+                sourceId: '953402799',
+            },
+            {
+                benefitCount: 58,
+                file: 'sandbox-anthem.x12',
+                memberId: '12345678A',
+                sourceId: '303',
+            },
+            {
+                benefitCount: 10,
+                file: 'sandbox-cms-mbi-lookup.x12',
+                memberId: '1AA2CC3DD45',
+                sourceId: 'CMS',
+            },
+            {
+                benefitCount: 80,
+                file: 'sandbox-humana.x12',
+                memberId: 'HUMANA123',
+                sourceId: '61101',
+            },
+            {
+                benefitCount: 98,
+                file: 'sandbox-kaiser.x12',
+                memberId: 'KAISER123456',
+                sourceId: '100187',
+            },
+        ])('should read every benefit in $file with no findings', (expected) => {
+            const document = readX12(readFixture(`271/${expected.file}`));
+            const [result] = read271s(document);
+            const [subscriber] = result?.response.subscribers ?? [];
+
+            expect(document.findings).toEqual([]);
+            expect(result?.response.findings).toEqual([]);
+            expect(result?.response.sources[0]?.id).toBe(expected.sourceId);
+            expect(subscriber?.id).toBe(expected.memberId);
+            expect(subscriber?.benefits).toHaveLength(expected.benefitCount);
         });
 
         // https://x12.org/examples/005010x279/example-1b-response-generic-request-clinic-patients-subscriber-eligibility, retrieved 2026-10-28.

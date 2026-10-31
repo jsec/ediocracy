@@ -43,7 +43,7 @@ function subscriberOrDependentLevel(letter: 'C' | 'D'): LoopSpec {
     };
 }
 
-// Member lists follow the public Stedi-hosted X279A1 guide.
+// Member lists follow the X279A1 loop structure.
 const eligibilityResponseGrammar: Grammar = {
     header: ['BHT'],
     hierarchy: {

@@ -200,7 +200,7 @@ describe('readX12', () => {
     });
 
     describe('errors', () => {
-        it('should reject a pVerify error body as unexpected data', () => {
+        it('should reject a JSON error body as unexpected data', () => {
             const error = thrown('{"Message": "No EDI271 Found"}');
 
             expect(error).toMatchObject({ code: 'unexpected-data', offset: 0 });
