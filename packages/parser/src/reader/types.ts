@@ -1,30 +1,51 @@
 import type { Segment } from './segment.js';
 
+/** The separator characters an interchange declares in its ISA segment. */
 export type Delimiters = {
+    /** Separates the components of a composite element (ISA16). */
     component: string;
+    /** Separates elements within a segment (the character after `ISA`). */
     element: string;
-    // Undefined before ISA version 00501, which has no repetition separator.
+    /**
+     * Separates repeated values of one element (ISA11). Undefined before ISA version 00501, which
+     * has no repetition separator.
+     */
     repetition: string | undefined;
+    /** Ends each segment (the character after ISA16). */
     segment: string;
 };
 
+/** A problem found in text that could still be read. `Code` lists the possible problems. */
 export type Finding<Code extends string> = {
+    /** Which problem was found. */
     code: Code;
+    /** A description of the problem that names the elements involved. */
     message: string;
+    /** The segment where the problem was found. */
     segment: Segment;
 };
 
+/** A functional group: a GS segment, its transaction sets, and its GE segment. */
 export type FunctionalGroup = {
+    /** The GS segment. */
     header: Segment;
+    /** The GE segment. */
     trailer: Segment;
+    /** The transaction sets in the group, in the order they appear. */
     transactions: Transaction[];
 };
 
+/** An interchange: an ISA segment, its functional groups, and its IEA segment. */
 export type Interchange = {
+    /** The separators declared in the ISA segment. */
     delimiters: Delimiters;
+    /** The functional groups in the interchange, in the order they appear. */
     groups: FunctionalGroup[];
+    /** The ISA segment. */
     header: Segment;
+    /** TA1 segments that appear directly inside the interchange, outside any group. */
     segments: Segment[];
+    /** The IEA segment. */
     trailer: Segment;
 };
 
@@ -73,10 +94,20 @@ export type SyntaxErrorCode
         | 'unexpected-data'
         | 'unterminated-segment';
 
+/** A transaction set: an ST segment, its content, and its SE segment. */
 export type Transaction = {
+    /** The ST segment. */
     header: Segment;
+    /** The segments between ST and SE, in the order they appear. */
     segments: Segment[];
+    /** The SE segment. */
     trailer: Segment;
 };
 
-export type X12Document = { findings: Finding<ReaderFindingCode>[]; interchanges: Interchange[] };
+/** The result of {@link readX12}. */
+export type X12Document = {
+    /** Problems found in text that could still be read. */
+    findings: Finding<ReaderFindingCode>[];
+    /** The interchanges in the text, in the order they appear. */
+    interchanges: Interchange[];
+};

@@ -1,12 +1,15 @@
 // @ts-check
 
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { dirname, extname, join, relative, resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { extname, join, relative, resolve } from 'node:path';
+
+import { guideSidebar } from '../.vitepress/sidebar-guide.mjs';
 
 const PROJECT_ROOT = resolve(import.meta.dirname, '..');
-const CONTENT_ROOT = resolve(PROJECT_ROOT, 'src/content/docs');
+const CONTENT_ROOT = resolve(PROJECT_ROOT, 'guide');
+const CONTENT_PREFIX = 'guide/';
+const PARSER_ROOT = resolve(PROJECT_ROOT, 'parser');
 const PUBLIC_ROOT = resolve(PROJECT_ROOT, 'public');
-const CONTENT_PREFIX = 'src/content/docs/';
 export const BANNED_PHRASES = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
 
 /** @typedef {{ path: string, line: number, code: string, message: string }} Finding */
@@ -24,52 +27,8 @@ function routeForContentPath(relativePath) {
     .replace(/(^|\/)index$/, '');
 }
 
-/** @param {string} relativePath @param {string} target @returns {string} */
-function localTargetPath(relativePath, target) {
-  if (target.startsWith('/')) {
-    return target.slice(1).replace(/\/$/, '');
-  }
-
-  const sourceDirectory = dirname(relativePath.slice(CONTENT_PREFIX.length));
-  return join(sourceDirectory, target).replace(/\\/g, '/').replace(/\/$/, '');
-}
-
-/** @param {string} source @param {string} relativePath @param {string[]} contentRoutes @param {string[]} publicFiles @returns {Finding[]} */
-function localLinkFindings(source, relativePath, contentRoutes, publicFiles) {
-  /** @type {Finding[]} */
-  const findings = [];
-  const knownRoutes = new Set(contentRoutes);
-  const knownPublicFiles = new Set(publicFiles);
-  const markdownLink = /\[[^\]]+\]\(([^)\s]+)(?:\s+[^)]*)?\)/g;
-  const htmlLink = /\b(?:href|src)=['"]([^'"]+)['"]/g;
-
-  for (const match of [...source.matchAll(markdownLink), ...source.matchAll(htmlLink)]) {
-    const target = match[1];
-    const trimmed = target.trim().replace(/^<|>$/g, '');
-    if (/^(?:https?:|mailto:|tel:|#)/i.test(trimmed)) {
-      continue;
-    }
-
-    const line = source.slice(0, match.index).split('\n').length;
-    let decodedTarget;
-    try {
-      decodedTarget = decodeURIComponent(trimmed.split(/[?#]/)[0]);
-    } catch {
-      findings.push(finding(relativePath, line, 'broken-link', `Invalid local link target: ${target}`));
-      continue;
-    }
-
-    const targetPath = localTargetPath(relativePath, decodedTarget);
-    if (!knownRoutes.has(targetPath) && !knownPublicFiles.has(targetPath)) {
-      findings.push(finding(relativePath, line, 'broken-link', `Local link target does not exist: ${target}`));
-    }
-  }
-
-  return findings;
-}
-
-/** @param {string} source @param {string} relativePath @param {string[]} contentRoutes @param {string[]} publicFiles @returns {Finding[]} */
-export function checkDocument(source, relativePath, contentRoutes, publicFiles) {
+/** @param {string} source @param {string} relativePath @returns {Finding[]} */
+export function checkDocument(source, relativePath) {
   /** @type {Finding[]} */
   const findings = [];
   const frontmatter = source.match(/^---\n([\s\S]*?)\n---(?:\n|$)/);
@@ -94,7 +53,7 @@ export function checkDocument(source, relativePath, contentRoutes, publicFiles) 
     }
 
     if (/^#\s+\S/.test(line)) {
-      findings.push(finding(relativePath, number, 'duplicate-h1', 'Do not add a Markdown H1; Starlight renders the page title.'));
+      findings.push(finding(relativePath, number, 'duplicate-h1', 'Do not add a Markdown H1; the theme renders the page title.'));
     }
 
     const heading = line.match(/^(#{1,6})\s+\S/);
@@ -111,7 +70,21 @@ export function checkDocument(source, relativePath, contentRoutes, publicFiles) 
     }
   }
 
-  findings.push(...localLinkFindings(source, relativePath, contentRoutes, publicFiles));
+  return findings;
+}
+
+// VitePress treats .edi links as assets (VITE_EXTRA_EXTENSIONS in .vitepress/config.ts) and does not
+// check that they exist, so this check does.
+/** @param {string} source @param {string} relativePath @param {string[]} publicFiles @returns {Finding[]} */
+export function checkDownloadLinks(source, relativePath, publicFiles) {
+  /** @type {Finding[]} */
+  const findings = [];
+  for (const match of source.matchAll(/\]\(\/([^)\s]+\.edi)\)/g)) {
+    if (!publicFiles.includes(match[1])) {
+      const line = source.slice(0, match.index).split('\n').length;
+      findings.push(finding(relativePath, line, 'missing-download', `Download link target is not in public/: /${match[1]}`));
+    }
+  }
   return findings;
 }
 
@@ -122,22 +95,10 @@ export function checkSidebarSlugs(slugs, contentRoutes) {
   const findings = [];
   for (const slug of slugs) {
     if (!knownRoutes.has(slug)) {
-      findings.push(finding('astro.config.mjs', 1, 'missing-sidebar-target', `Sidebar target does not resolve: ${slug}`));
+      findings.push(finding('.vitepress/sidebar-guide.mjs', 1, 'missing-sidebar-target', `Sidebar target does not resolve: ${slug}`));
     }
   }
   return findings;
-}
-
-/** @param {string} source @returns {string[]} */
-function sidebarSlugs(source) {
-  const slugs = [];
-  const itemsPattern = /items:\s*\[([\s\S]*?)\]/g;
-  for (const match of source.matchAll(itemsPattern)) {
-    for (const slug of match[1].matchAll(/['"]([^'"]*)['"]/g)) {
-      slugs.push(slug[1]);
-    }
-  }
-  return slugs;
 }
 
 /** @returns {Finding[]} */
@@ -150,22 +111,32 @@ export function runContentChecks() {
   }
   const contentRoutes = contentPaths.map(routeForContentPath);
 
-  const publicFiles = [];
-  for (const path of readdirSync(PUBLIC_ROOT, { recursive: true, encoding: 'utf8' })) {
-    if (statSync(join(PUBLIC_ROOT, path)).isFile()) {
-      publicFiles.push(path);
-    }
-  }
-
   /** @type {Finding[]} */
   const findings = [];
   for (const contentPath of contentPaths) {
     const source = readFileSync(resolve(PROJECT_ROOT, contentPath), 'utf8');
-    findings.push(...checkDocument(source, contentPath, contentRoutes, publicFiles));
+    findings.push(...checkDocument(source, contentPath));
   }
 
-  const sidebarSource = readFileSync(resolve(PROJECT_ROOT, 'astro.config.mjs'), 'utf8');
-  findings.push(...checkSidebarSlugs(sidebarSlugs(sidebarSource), contentRoutes));
+  const publicFiles = readdirSync(PUBLIC_ROOT, { recursive: true, encoding: 'utf8' });
+  const pagePaths = [...contentPaths];
+  for (const entry of readdirSync(PARSER_ROOT, { recursive: true, withFileTypes: true })) {
+    const path = relative(PROJECT_ROOT, join(entry.parentPath, entry.name));
+    if (!entry.isDirectory() && extname(entry.name) === '.md' && !path.startsWith('parser/api/')) {
+      pagePaths.push(path);
+    }
+  }
+  for (const pagePath of pagePaths) {
+    findings.push(...checkDownloadLinks(readFileSync(resolve(PROJECT_ROOT, pagePath), 'utf8'), pagePath, publicFiles));
+  }
+
+  const sidebarSlugs = [];
+  for (const group of guideSidebar) {
+    for (const item of group.items ?? []) {
+      sidebarSlugs.push((item.link ?? '').replace(/^\/guide\//, '').replace(/\/$/, ''));
+    }
+  }
+  findings.push(...checkSidebarSlugs(sidebarSlugs, contentRoutes));
 
   findings.sort((left, right) => left.path.localeCompare(right.path) || left.line - right.line || left.code.localeCompare(right.code));
   for (const { path, line, code, message } of findings) {

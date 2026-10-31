@@ -8,13 +8,20 @@ export type Grammar = {
     hierarchy: Record<string, LoopSpec>;
 };
 
-// segments[0] is the segment that opened the loop: its trigger, its HL, or its bracket opener.
+/** A loop from the implementation guide, such as 2120C, and the segments and loops inside it. */
 export type Loop = {
+    /** The loop ID from the implementation guide, such as `2120C`. */
     id: string;
+    /** The loops nested inside this one, in the order they appear. */
     loops: Loop[];
+    /**
+     * The loop's own segments, in the order they appear. The first is the segment that opened the
+     * loop: its HL, its first segment (such as NM1), or the LS that starts a list.
+     */
     segments: [Segment, ...Segment[]];
 };
 
+/** A problem found while grouping segments into loops; see {@link Response271FindingCode}. */
 export type LoopFindingCode = 'duplicate-hl-id' | 'missing-hl-parent' | 'unclosed-loop' | 'unexpected-segment' | 'unknown-hl-level';
 
 export type LoopSpec = {

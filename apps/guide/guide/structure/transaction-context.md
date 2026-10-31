@@ -12,7 +12,7 @@ business event is correlated. In a 271, `ST` opens the transaction set and
 `ST01` identifies the transaction set as `271`. `ST02` is the transaction
 control number, and `ST03` identifies the implementation convention used in
 the example. `SE` closes the set with a segment count and the matching control
-number. The [interchange, group, and transaction page](/structure/envelopes/#transaction-set-st-and-se)
+number. The [interchange, group, and transaction page](/guide/structure/envelopes#transaction-set-st-and-se)
 shows the complete pair.
 
 ## BHT and correlation

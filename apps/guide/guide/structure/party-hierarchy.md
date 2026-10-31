@@ -9,7 +9,7 @@ refers to. `HL` supplies a hierarchical level and optional parent identifier;
 
 ## HL parent-child relationships
 
-The [single-benefit response](/examples/single-eb) contains three levels:
+The [single-benefit response](/guide/examples/single-eb) contains three levels:
 
 ```text
 HL*1**20*1~

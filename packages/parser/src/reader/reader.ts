@@ -404,6 +404,16 @@ class Reader {
  * @returns The interchanges in the order they appear, and the reader's findings.
  * @throws {X12SyntaxError} When the text cannot be read, for example when it has no ISA or an
  *   envelope has no trailer.
+ *
+ * @example
+ * ```ts
+ * import { readX12 } from '@ediocracy/parser';
+ *
+ * const document = readX12(text);
+ * for (const interchange of document.interchanges) {
+ *     console.log(interchange.header.element(13), interchange.groups.length);
+ * }
+ * ```
  */
 export function readX12(text: string): X12Document {
     return new Reader(text).read();

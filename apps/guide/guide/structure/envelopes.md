@@ -10,7 +10,7 @@ contains transaction sets.
 ## Interchange: ISA and IEA
 
 `ISA` starts the interchange, and `IEA` ends it. This pair comes from the
-[single-benefit response](/examples/single-eb):
+[single-benefit response](/guide/examples/single-eb):
 
 ```text
 ISA*00*          *00*          *ZZ*CEDARVALLEYHP  *ZZ*OAKSTMEDGROUP  *990101*1201*^*00501*000000101*0*T*:~

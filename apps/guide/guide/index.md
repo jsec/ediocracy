@@ -10,8 +10,8 @@ Its purpose is to explain what a 271 response represents and how to read its
 interchange, transaction, hierarchy, and benefit details. It separates X12
 material from clearinghouse and payer rules.
 
-Start with [what a 271 is](/introduction/what-is-a-271), then follow the
-[message structure](/structure/x12-syntax) pages in order. The examples use
+Start with [what a 271 is](/guide/introduction/what-is-a-271), then follow the
+[message structure](/guide/structure/x12-syntax) pages in order. The examples use
 invented values. You can download the [`single-eb.edi`](/examples/single-eb.edi)
 file and follow it through the guide.
 

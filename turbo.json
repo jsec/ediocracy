@@ -12,6 +12,7 @@
       "outputs": []
     },
     "check": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "dev": {

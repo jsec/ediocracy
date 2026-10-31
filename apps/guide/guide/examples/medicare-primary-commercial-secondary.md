@@ -3,8 +3,6 @@ title: Medicare primary and commercial secondary context
 description: A complete example response for a Medicare-primary and commercial-secondary scenario.
 ---
 
-import X12Example from '../../../components/X12Example.astro';
-
 ## Scenario
 
 This example follows a subscriber with Medicare-primary and commercial-secondary

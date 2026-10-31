@@ -3,8 +3,6 @@ title: Single benefit statement
 description: A complete 271 response with one benefit statement.
 ---
 
-import X12Example from '../../../components/X12Example.astro';
-
 ## Scenario
 
 This example shows one eligibility or benefit statement for a subscriber. The

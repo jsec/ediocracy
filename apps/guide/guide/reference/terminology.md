@@ -4,7 +4,7 @@ description: Definitions for the domain and X12 terms used throughout this guide
 ---
 
 Use this page as a glossary while reading the structure and complete-example
-pages. The [sources page](/reference/sources) explains which documents apply
+pages. The [sources page](/guide/reference/sources) explains which documents apply
 to implementation work.
 
 ## Terms

@@ -3,8 +3,6 @@ title: Multiple interchanges in one payload
 description: A complete payload containing two independent X12 interchanges.
 ---
 
-import X12Example from '../../../components/X12Example.astro';
-
 ## Scenario
 
 This file contains two complete interchanges: the single-benefit example

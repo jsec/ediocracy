@@ -1,0 +1,63 @@
+.vp-doc pre {
+  max-inline-size: 100%;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+.vp-doc .x12-complete-response {
+  overflow-x: visible;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.vp-doc table {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.vp-doc .x12-field-table-wrap {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.vp-doc .x12-field-table {
+  display: table;
+  inline-size: 100%;
+  min-inline-size: 48rem;
+  table-layout: fixed;
+}
+
+.vp-doc .x12-position-column {
+  inline-size: 7rem;
+}
+
+.vp-doc .x12-value-column {
+  inline-size: 10rem;
+}
+
+.vp-doc .x12-name-column {
+  inline-size: 15rem;
+}
+
+.vp-doc .x12-field-table th,
+.vp-doc .x12-field-table td {
+  vertical-align: top;
+}
+
+.vp-doc .x12-field-table th:nth-child(-n + 3),
+.vp-doc .x12-field-table td:nth-child(-n + 2) {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.vp-doc p,
+.vp-doc li {
+  max-inline-size: 76ch;
+}
+
+.vp-doc .synthetic-callout,
+.vp-doc .source-boundary {
+  border-inline-start: 0.25rem solid var(--vp-c-brand-1);
+  padding: 0.75rem 1rem;
+}

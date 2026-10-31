@@ -3,8 +3,6 @@ title: Medicare Advantage context
 description: A complete response illustrating Medicare Advantage program context.
 ---
 
-import X12Example from '../../../components/X12Example.astro';
-
 ## Scenario
 
 This example places an `EB` statement, a `DTP` date, and `MSG` text under one

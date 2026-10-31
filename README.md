@@ -5,7 +5,7 @@ supporting X12 271 guide.
 
 ## Workspaces
 
-- `apps/guide`: Astro Starlight documentation site.
+- `apps/guide`: VitePress site: the X12 271 guide and the parser documentation.
 - `packages/parser`: Private reusable parser library.
 
 ## Commands

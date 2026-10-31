@@ -34,7 +34,12 @@ export type Benefit = {
     /** Plan coverage description (EB05). */
     planDescription: string | undefined;
     /** Quantity qualifier (EB09) and quantity (EB10). */
-    quantity: { qualifier: string | undefined; value: string | undefined };
+    quantity: {
+        /** What the quantity counts, such as visits or days (EB09). */
+        qualifier: string | undefined;
+        /** The quantity (EB10). */
+        value: string | undefined;
+    };
     /** Reference numbers for the benefit (REF segments). */
     references: Segment[];
     /**

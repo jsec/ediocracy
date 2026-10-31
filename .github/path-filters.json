@@ -1,6 +1,7 @@
 {
   "guide": [
     "apps/guide/**",
+    "packages/parser/src/**",
     "package.json",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",

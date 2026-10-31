@@ -3,8 +3,6 @@ title: Medicare Secondary Payer context
 description: A complete response illustrating a Medicare Secondary Payer scenario.
 ---
 
-import X12Example from '../../../components/X12Example.astro';
-
 ## Scenario
 
 This example uses a Medicare Secondary Payer scenario with a subscriber,

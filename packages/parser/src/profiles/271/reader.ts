@@ -162,6 +162,17 @@ class EligibilityResponseReader {
  * @param transaction - A transaction set from `readX12`, such as
  *   `document.interchanges[0].groups[0].transactions[0]`.
  * @returns The response, with findings for anything that does not follow the guide.
+ *
+ * @example
+ * ```ts
+ * import { read271, readX12 } from '@ediocracy/parser';
+ *
+ * const transaction = readX12(text).interchanges[0]?.groups[0]?.transactions[0];
+ * if (transaction) {
+ *     const response = read271(transaction);
+ *     console.log(response.sources.map((source) => source.name?.element(3)));
+ * }
+ * ```
  */
 export function read271(transaction: Transaction): Response271 {
     return new EligibilityResponseReader(transaction).read();
@@ -172,10 +183,22 @@ export function read271(transaction: Transaction): Response271 {
  *
  * @param document - The result of `readX12`.
  * @returns Each response with the interchange and functional group it came from.
+ *
+ * @example
+ * ```ts
+ * import { read271s, readX12 } from '@ediocracy/parser';
+ *
+ * for (const { response } of read271s(readX12(text))) {
+ *     console.log(response.subscribers.length, response.findings.length);
+ * }
+ * ```
  */
 export function read271s(document: X12Document): {
+    /** The functional group the response came from. */
     group: FunctionalGroup;
+    /** The interchange the response came from. */
     interchange: Interchange;
+    /** The response. */
     response: Response271;
 }[] {
     const responses = [];
