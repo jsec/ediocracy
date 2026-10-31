@@ -12,7 +12,7 @@
     "check:content": "node scripts/check-content.mjs",
     "check:snippets": "tsc -p parser/snippets && node scripts/run-snippets.mjs",
     "docs:api": "typedoc",
-    "test": "node --test tests/*.test.mjs"
+    "test": "vitest run"
   },
   "dependencies": {
     "@catppuccin/vitepress": "0.1.4",
@@ -26,6 +26,7 @@
     "typedoc-plugin-markdown": "4.14.1",
     "typedoc-vitepress-theme": "1.1.4",
     "typescript": "6.0.3",
+    "vitest": "catalog:",
     "vue-tsc": "3.3.14"
   }
 }

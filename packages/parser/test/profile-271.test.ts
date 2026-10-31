@@ -25,8 +25,8 @@ describe('read271', () => {
             const response = only271(readFixture('x12/GX12-023-271-repeated-benefit-and-entities.x12'));
             const [subscriber] = response.subscribers;
             const findings = response.findings.map(({ code, segment }) => `${code} ${segment.tag}`);
-            const statuses = subscriber?.benefits.map(({ status }) => status);
-            const entityLoopIds = subscriber?.benefits[0]?.relatedEntities.map(({ id }) => id);
+            const statuses = subscriber?.benefits.map(benefit => benefit.status);
+            const entityLoopIds = subscriber?.benefits[0]?.relatedEntities.map(loop => loop.id);
 
             expect(findings).toEqual([
                 'unexpected-segment EB',
@@ -43,7 +43,7 @@ describe('read271', () => {
         it('should report the AAA and MSG when GX12-024 has no receiver NM1', () => {
             const response = only271(readFixture('x12/GX12-024-271-aaa-local-context.x12'));
             const findings = response.findings.map(({ code, segment }) => `${code} ${segment.tag}`);
-            const receiverErrors = response.receivers.map(({ errors }) => errors);
+            const receiverErrors = response.receivers.map(receiver => receiver.errors);
 
             expect(findings).toEqual(['unexpected-segment AAA', 'unexpected-segment MSG']);
             expect(receiverErrors).toEqual([[]]);
@@ -63,7 +63,7 @@ describe('read271', () => {
         it('should report an unexpected ST03 and still read the transaction', () => {
             const text = readFixture('x12/GX12-022-271-structural-witness.x12').replace('ST*271*0023*005010X279A1~', 'ST*271*0023*005010X279~');
             const response = only271(text);
-            const codes = response.findings.map(({ code }) => code);
+            const codes = response.findings.map(finding => finding.code);
 
             expect(codes).toEqual(['unexpected-version']);
             expect(response.subscribers).toHaveLength(1);
@@ -75,8 +75,8 @@ describe('read271', () => {
             const document = readX12(readFixture('271/count-mismatch-sample.x12'));
             const [result] = read271s(document);
             const [subscriber] = result?.response.subscribers ?? [];
-            const documentCodes = document.findings.map(({ code }) => code);
-            const statuses = subscriber?.benefits.map(({ status }) => status);
+            const documentCodes = document.findings.map(finding => finding.code);
+            const statuses = subscriber?.benefits.map(benefit => benefit.status);
 
             expect(documentCodes).toEqual(['st-se-segment-count-mismatch']);
             expect(result?.response.findings).toEqual([]);
@@ -91,7 +91,7 @@ describe('read271', () => {
             const [subscriber] = result?.response.subscribers ?? [];
             const [dependent] = subscriber?.dependents ?? [];
             const benefits = dependent?.benefits ?? [];
-            const coinsurance = benefits.filter(({ status }) => status === 'A');
+            const coinsurance = benefits.filter(benefit => benefit.status === 'A');
 
             expect(document.interchanges[0]?.delimiters.component).toBe('`');
             expect(document.findings).toEqual([]);
@@ -108,7 +108,7 @@ describe('read271', () => {
                 status: '1',
             });
             expect(benefits[0]?.relatedEntities[0]?.segments[0].element(3)).toBe('UNITEDHEALTHCARE');
-            expect(coinsurance.map(({ percent }) => percent)).toEqual(['.4', '.2', '.2', '.2', '0']);
+            expect(coinsurance.map(benefit => benefit.percent)).toEqual(['.4', '.2', '.2', '.2', '0']);
         });
 
         it('should read a Medicare Advantage subscriber from the sandbox sample', () => {
@@ -116,9 +116,9 @@ describe('read271', () => {
             const [result] = read271s(document);
             const [subscriber] = result?.response.subscribers ?? [];
             const benefits = subscriber?.benefits ?? [];
-            const primaryCare = benefits.find(({ status }) => status === 'L');
-            const nonCovered = benefits.find(({ status }) => status === 'I');
-            const copays = benefits.filter(({ status }) => status === 'B').map(({ amount }) => amount);
+            const primaryCare = benefits.find(benefit => benefit.status === 'L');
+            const nonCovered = benefits.find(benefit => benefit.status === 'I');
+            const copays = benefits.filter(benefit => benefit.status === 'B').map(benefit => benefit.amount);
 
             expect(document.findings).toEqual([]);
             expect(result?.response.findings).toEqual([]);
@@ -127,7 +127,7 @@ describe('read271', () => {
             expect(subscriber?.dependents).toEqual([]);
             expect(benefits).toHaveLength(49);
             expect(benefits[1]?.references[0]?.element(2)).toBe('H0001-000-000');
-            expect(primaryCare?.relatedEntities[0]?.segments.map(({ tag }) => tag)).toEqual([
+            expect(primaryCare?.relatedEntities[0]?.segments.map(segment => segment.tag)).toEqual([
                 'NM1',
                 'N3',
                 'N4',
@@ -186,10 +186,10 @@ describe('read271', () => {
             const response = only271(wrap(readFixture('271/x12-example-1b.x12'), '>'));
             const [subscriber] = response.subscribers;
             const benefits = subscriber?.benefits ?? [];
-            const sourceIds = response.sources.map(({ id }) => id);
-            const receiverIds = response.receivers.map(({ id }) => id);
-            const statuses = benefits.map(({ status }) => status);
-            const entityLoopIds = benefits[4]?.relatedEntities.map(({ id }) => id);
+            const sourceIds = response.sources.map(source => source.id);
+            const receiverIds = response.receivers.map(receiver => receiver.id);
+            const statuses = benefits.map(benefit => benefit.status);
+            const entityLoopIds = benefits[4]?.relatedEntities.map(loop => loop.id);
 
             expect(response.findings).toEqual([]);
             expect(sourceIds).toEqual(['842610001']);
@@ -223,7 +223,7 @@ describe('read271', () => {
             const response = only271(wrap(readFixture('271/x12-example-2b.x12'), '>'));
             const [subscriber] = response.subscribers;
             const [dependent] = subscriber?.dependents ?? [];
-            const entityLoopIds = dependent?.benefits[4]?.relatedEntities.map(({ id }) => id);
+            const entityLoopIds = dependent?.benefits[4]?.relatedEntities.map(loop => loop.id);
 
             expect(response.findings).toEqual([]);
             expect(subscriber?.benefits).toEqual([]);
@@ -248,7 +248,7 @@ describe('read271', () => {
             expect(subscriberReferences).toEqual(['6P 186084', '18 UVdQAC5j6f']);
             expect(subscriberDates).toEqual(['20240101-20241231']);
             expect(subscriber?.demographics?.element(2)).toBe('19760214');
-            expect(subscriber?.address.map(({ tag }) => tag)).toEqual(['N3', 'N4']);
+            expect(subscriber?.address.map(segment => segment.tag)).toEqual(['N3', 'N4']);
             expect(subscriber?.relationship).toBeUndefined();
             expect(dependent?.relationship?.element(2)).toBe('01');
             expect(dependent?.demographics?.element(3)).toBe('F');
@@ -269,7 +269,7 @@ describe('read271', () => {
                 + 'HL*3*2*22*0~NM1*IL*1*A~EB*1~EB*B**30~NM1*P3*1*DOC~EB*C**30~EB*A**30~SE*14*0001~';
             const response = read271(firstTransaction(wrap(body)));
             const [subscriber] = response.subscribers;
-            const statuses = subscriber?.benefits.map(({ status }) => status);
+            const statuses = subscriber?.benefits.map(benefit => benefit.status);
             const findings = response.findings.map(({ code, segment }) => `${code} ${segment.tag} ${segment.element(3) ?? ''}`);
 
             expect(subscriber?.name?.element(3)).toBe('A');
@@ -305,7 +305,7 @@ describe('read271', () => {
 describe('read271s', () => {
     it('should read only the 271 transaction set in GX12-026', () => {
         const results = read271s(readX12(readFixture('x12/GX12-026-270-271-mixed-transaction-sets.x12')));
-        const groupControlNumbers = results.map(({ group }) => group.header.element(6));
+        const groupControlNumbers = results.map(result => result.group.header.element(6));
 
         expect(groupControlNumbers).toEqual(['27']);
         expect(results).toHaveLength(1);

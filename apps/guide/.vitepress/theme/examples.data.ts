@@ -8,9 +8,13 @@ export declare const data: Record<string, Walkthrough>;
 export default {
   async load() {
     const walkthroughs: Record<string, Walkthrough> = {};
+
     for (const file of EXAMPLE_FILENAMES) {
-      walkthroughs[file] = buildWalkthrough(await loadExample(file));
+      const source = await loadExample(file);
+
+      walkthroughs[file] = buildWalkthrough(source);
     }
+
     return walkthroughs;
   },
 };

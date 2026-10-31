@@ -95,7 +95,7 @@ class EligibilityResponseReader {
         return {
             findings: this.#findings,
             receivers: this.#receivers,
-            reference: tree.header.find(({ tag }) => tag === 'BHT')?.element(3),
+            reference: tree.header.find(segment => segment.tag === 'BHT')?.element(3),
             sources: this.#sources,
             subscribers: this.#subscribers,
         };
@@ -121,13 +121,13 @@ class EligibilityResponseReader {
 
         return {
             ...readParty(level, nameLoops[0]),
-            address: nameSegments.filter(({ tag }) => tag === 'N3' || tag === 'N4'),
+            address: nameSegments.filter(segment => segment.tag === 'N3' || segment.tag === 'N4'),
             benefits,
-            dates: nameSegments.filter(({ tag }) => tag === 'DTP'),
-            demographics: nameSegments.find(({ tag }) => tag === 'DMG'),
+            dates: nameSegments.filter(segment => segment.tag === 'DTP'),
+            demographics: nameSegments.find(segment => segment.tag === 'DMG'),
             dependents,
-            references: nameSegments.filter(({ tag }) => tag === 'REF'),
-            relationship: nameSegments.find(({ tag }) => tag === 'INS'),
+            references: nameSegments.filter(segment => segment.tag === 'REF'),
+            relationship: nameSegments.find(segment => segment.tag === 'INS'),
             traces: segmentsWithTag(level, 'TRN'),
         };
     }

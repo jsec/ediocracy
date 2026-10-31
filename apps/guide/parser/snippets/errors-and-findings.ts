@@ -9,13 +9,17 @@ try {
     if (!(error instanceof X12SyntaxError)) {
         throw error;
     }
+
     console.log('Cannot read:', error.code, 'at offset', error.offset);
 }
 
-const document = readX12(await readFile('response.x12', 'utf8'));
+const text = await readFile('response.x12', 'utf8');
+const document = readX12(text);
+
 for (const finding of document.findings) {
     console.log('Envelope:', finding.code, finding.message);
 }
+
 for (const { response } of read271s(document)) {
     for (const finding of response.findings) {
         console.log('271:', finding.code, finding.message);

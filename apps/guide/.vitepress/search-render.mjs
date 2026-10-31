@@ -11,8 +11,12 @@
  */
 export function renderForSearch(src, env, md) {
   const html = md.render(src, env);
+
   if (env.frontmatter?.title) {
-    return md.render(`# ${env.frontmatter.title}`) + html;
+    const titleHtml = md.render(`# ${env.frontmatter.title}`);
+
+    return titleHtml + html;
   }
+
   return html;
 }

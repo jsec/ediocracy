@@ -34,7 +34,7 @@ export function envelopeLines(document: X12Document): string[] {
 }
 
 export function findingCodes(body: string, grammar: Grammar): string[] {
-    return buildLoops(transactionOf(body), grammar).findings.map(({ code }) => code);
+    return buildLoops(transactionOf(body), grammar).findings.map(finding => finding.code);
 }
 
 export function firstTransaction(text: string): Transaction {
@@ -76,7 +76,7 @@ export function summarize(loop: Loop): LoopSummary {
     return {
         id: loop.id,
         loops: loop.loops.map(child => summarize(child)),
-        tags: loop.segments.map(({ tag }) => tag),
+        tags: loop.segments.map(segment => segment.tag),
     };
 }
 

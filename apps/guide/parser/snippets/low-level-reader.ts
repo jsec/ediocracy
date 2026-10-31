@@ -3,7 +3,8 @@ import { readFile } from 'node:fs/promises';
 
 import { readX12 } from '@ediocracy/parser';
 
-const document = readX12(await readFile('response.x12', 'utf8'));
+const text = await readFile('response.x12', 'utf8');
+const document = readX12(text);
 
 for (const interchange of document.interchanges) {
     console.log('Interchange', interchange.header.element(13));

@@ -139,7 +139,7 @@ class LoopBuilder {
                 return true;
             }
 
-            const child = open.spec.loops?.find(({ trigger }) => trigger === segment.tag);
+            const child = open.spec.loops?.find(spec => spec.trigger === segment.tag);
 
             if (child) {
                 this.#closeLoopsFrom(depth + 1);

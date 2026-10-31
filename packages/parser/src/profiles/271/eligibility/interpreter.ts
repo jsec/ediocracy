@@ -77,8 +77,9 @@ class EligibilityInterpreter {
         const isKnownFormat = format === 'D8' || (format === 'RD8' && texts.length === 2);
         const start = toPlainDate(texts[0]);
         const end = toPlainDate(texts.at(-1));
+        const isOrderedRange = start && end && Temporal.PlainDate.compare(start, end) <= 0;
 
-        if (!isKnownFormat || !start || !end || Temporal.PlainDate.compare(start, end) > 0) {
+        if (!isKnownFormat || !isOrderedRange) {
             const message = `DTP02 "${format ?? ''}" and DTP03 "${value}" are not a valid date`;
 
             this.#report('invalid-date', segment, message);
@@ -286,8 +287,8 @@ function isOneOf<Code extends string>(
 
 // The N3 lines (N301, N302) and the N4 city, state and postal code (N401–N403).
 function readAddress(segments: Segment[]): Address | undefined {
-    const street = segments.find(({ tag }) => tag === 'N3');
-    const place = segments.find(({ tag }) => tag === 'N4');
+    const street = segments.find(segment => segment.tag === 'N3');
+    const place = segments.find(segment => segment.tag === 'N4');
 
     if (!street && !place) {
         return undefined;
@@ -321,12 +322,12 @@ function readReference(segment: Segment): ReferenceEntry {
 function readRelatedParty(loop: Loop): RelatedParty {
     const [name] = loop.segments;
     const contacts = loop.segments
-        .filter(({ tag }) => tag === 'PER')
+        .filter(segment => segment.tag === 'PER')
         .flatMap(segment => CONTACT_QUALIFIER_POSITIONS.map(position => ({
             number: segment.element(position + 1),
             qualifier: segment.element(position),
         })))
-        .filter(({ qualifier }) => qualifier !== undefined && qualifier !== '');
+        .filter(contact => contact.qualifier !== undefined && contact.qualifier !== '');
 
     return {
         address: readAddress(loop.segments),
@@ -335,7 +336,7 @@ function readRelatedParty(loop: Loop): RelatedParty {
         id: name.element(9),
         idQualifier: name.element(8),
         lastName: name.element(3),
-        providerTaxonomy: loop.segments.find(({ tag }) => tag === 'PRV')?.element(3),
+        providerTaxonomy: loop.segments.find(segment => segment.tag === 'PRV')?.element(3),
         role: name.element(1),
     };
 }

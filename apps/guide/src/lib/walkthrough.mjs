@@ -179,6 +179,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
 /** @param {SegmentDefinition} definition @param {string[]} fields @returns {string} */
 function segmentExplanation(definition, fields) {
   const purpose = definition.purpose;
+
   switch (fields[0]) {
     case 'ISA':
       return `${purpose} Its control number is ${fields[13]}.`;
@@ -251,18 +252,16 @@ function fieldsForSegment(definition, fields) {
   return fields.slice(1).map((rawValue, index) => {
     const position = `${fields[0]}${String(index + 1).padStart(2, '0')}`;
     const field = definition.fields[index];
+
     if (!field) {
       throw new Error(`Unsupported field position: ${position}`);
     }
 
-    let displayValue = rawValue;
-    if (rawValue === '') {
-      displayValue = '(empty)';
-    } else if (rawValue.trim() === '') {
-      displayValue = `(blank: ${rawValue.length} spaces)`;
-    }
-
+    const isBlank = rawValue.trim() === '';
+    const blankLabel = rawValue === '' ? '(empty)' : `(blank: ${rawValue.length} spaces)`;
+    const displayValue = isBlank ? blankLabel : rawValue;
     const codeExplanation = CODE_EXPLANATIONS[position]?.[rawValue.trim()];
+
     return {
       position,
       rawValue,
@@ -282,8 +281,9 @@ function fieldsForSegment(definition, fields) {
  */
 export function buildWalkthrough(source) {
   const document = readX12(source);
+
   if (document.findings.length > 0) {
-    const codes = document.findings.map(({ code }) => code).join(', ');
+    const codes = document.findings.map((finding) => finding.code).join(', ');
     throw new Error(`Cannot build walkthrough: ${codes}`);
   }
 
@@ -298,6 +298,7 @@ export function buildWalkthrough(source) {
       const fields = segment.split(elementSeparator);
       const name = fields[0];
       const definition = SEGMENT_DEFINITIONS[name];
+
       if (!definition) {
         throw new Error(`Unsupported segment name: ${name}`);
       }
@@ -310,12 +311,17 @@ export function buildWalkthrough(source) {
         fields: fieldsForSegment(definition, fields),
       };
     });
-    return { ordinal: interchangeIndex + 1, raw, segments };
+
+    return {
+      ordinal: interchangeIndex + 1,
+      raw,
+      segments,
+    };
   });
 
   return {
     displaySource: interchanges
-      .flatMap(({ segments }) => segments.map(({ raw }) => raw))
+      .flatMap((interchange) => interchange.segments.map((segment) => segment.raw))
       .join('\n'),
     interchanges,
   };

@@ -18,7 +18,7 @@ describe('interpret271', () => {
             const eligibility = interpret271(only271(readFixture('271/dependent-sample.x12')));
             const [subscriber, dependent] = eligibility.members;
 
-            const roles = eligibility.members.map(({ role }) => role);
+            const roles = eligibility.members.map(member => member.role);
 
             expect(roles).toEqual(['subscriber', 'dependent']);
             expect(subscriber).toMatchObject({
@@ -64,11 +64,11 @@ describe('interpret271', () => {
         it('should read the eight Kaiser EB*6 rows as inactive with a 292 range', () => {
             const eligibility = interpret271(only271(readFixture('271/sandbox-kaiser.x12')));
             const coverage = eligibility.members[0]?.coverage ?? [];
-            const inactive = coverage.filter(({ status }) => status === '6');
+            const inactive = coverage.filter(entry => entry.status === '6');
 
             expect(inactive).toHaveLength(8);
-            expect(inactive.every(({ isActive }) => !isActive)).toBe(true);
-            const qualifiers = inactive.map(({ dates }) => dates[0]?.qualifier);
+            expect(inactive.every(entry => !entry.isActive)).toBe(true);
+            const qualifiers = inactive.map(entry => entry.dates[0]?.qualifier);
 
             expect(qualifiers).toEqual(Array.from({ length: 8 }, () => '292'));
             expect(inactive[0]?.dates[0]?.start.toString()).toBe('2008-01-01');
@@ -96,9 +96,9 @@ describe('interpret271', () => {
                 + 'HL*4*3*23*1~NM1*03*1*D1~EB*1**30~HL*5*4*23*0~NM1*03*1*D2~EB*1**30~AAA*Y**72*C~');
             const eligibility = interpret271(response);
 
-            expect(eligibility.members.map(({ name }) => name.last)).toEqual(['S', 'D1', 'D2']);
+            expect(eligibility.members.map(member => member.name.last)).toEqual(['S', 'D1', 'D2']);
             expect(eligibility.members[2]?.coverage).toHaveLength(1);
-            const reasons = eligibility.requestErrors.map(({ rejectReason }) => rejectReason);
+            const reasons = eligibility.requestErrors.map(error => error.rejectReason);
 
             expect(reasons).toEqual(['72']);
         });
@@ -112,7 +112,7 @@ describe('interpret271', () => {
                 .filter(entry => entry.kind === 'A'
                     && entry.network === 'Y'
                     && entry.serviceTypes.includes('A6'))
-                .map(({ percent }) => percent);
+                .map(entry => entry.percent);
 
             expect(coinsurance).toEqual([0.2, 0.2, 0.2, 0]);
         });
@@ -131,7 +131,7 @@ describe('interpret271', () => {
         it('should name the Humana primary care provider', () => {
             const eligibility = interpret271(only271(readFixture('271/sandbox-humana.x12')));
             const otherParties = eligibility.members[0]?.otherParties ?? [];
-            const primaryCare = otherParties.find(({ kind }) => kind === 'L');
+            const primaryCare = otherParties.find(party => party.kind === 'L');
 
             expect(primaryCare?.parties).toEqual([{
                 address: {
@@ -154,7 +154,7 @@ describe('interpret271', () => {
             const response = only271(readFixture('271/sandbox-cms-mbi-lookup.x12'));
             const eligibility = interpret271(response);
             const otherParties = eligibility.members[0]?.otherParties ?? [];
-            const [first, second] = otherParties.filter(({ kind }) => kind === 'R');
+            const [first, second] = otherParties.filter(party => party.kind === 'R');
 
             expect(first?.parties).toEqual([]);
             expect(first?.dates[0]?.qualifier).toBe('290');
@@ -205,10 +205,10 @@ describe('interpret271', () => {
                 + 'HL*2*1*21*1~NM1*1P*2*R~HL*3*2*22*0~NM1*IL*1*A*****MI*M1~');
             const eligibility = interpret271(response);
 
-            const reasons = eligibility.requestErrors.map(({ rejectReason }) => rejectReason);
+            const reasons = eligibility.requestErrors.map(error => error.rejectReason);
 
             expect(reasons).toEqual(['42', '79']);
-            expect(eligibility.requestErrors.every(({ level }) => level === 'source')).toBe(true);
+            expect(eligibility.requestErrors.every(error => error.level === 'source')).toBe(true);
         });
 
         it('should report no request errors for the dependent sample', () => {
@@ -242,7 +242,7 @@ describe('interpret271', () => {
                 const eligibility = interpret271(response);
 
                 expect(eligibility.members[0]?.costShares[0]?.amount).toBeUndefined();
-                expect(eligibility.findings.map(({ code }) => code)).toEqual(['invalid-number']);
+                expect(eligibility.findings.map(finding => finding.code)).toEqual(['invalid-number']);
             },
         );
     });
@@ -255,7 +255,7 @@ describe('interpret271', () => {
             const eligibility = interpret271(response);
 
             expect(eligibility.members[0]?.costShares[0]?.amount).toBeUndefined();
-            expect(eligibility.findings.map(({ code }) => code)).toEqual(['invalid-number']);
+            expect(eligibility.findings.map(finding => finding.code)).toEqual(['invalid-number']);
         });
     });
 
@@ -293,7 +293,7 @@ describe('interpret271', () => {
                 const eligibility = interpret271(response);
 
                 expect(eligibility.members[0]?.details.dates).toEqual([]);
-                expect(eligibility.findings.map(({ code }) => code)).toEqual(['invalid-date']);
+                expect(eligibility.findings.map(finding => finding.code)).toEqual(['invalid-date']);
             },
         );
 
@@ -303,7 +303,7 @@ describe('interpret271', () => {
             );
             const eligibility = interpret271(response);
 
-            expect(eligibility.findings.map(({ message }) => message)).toEqual([
+            expect(eligibility.findings.map(finding => finding.message)).toEqual([
                 'DTP02 "" and DTP03 "" are not a valid date',
             ]);
         });
@@ -331,8 +331,8 @@ describe('interpret271', () => {
             { file: 'x12-example-1b.x12', text: wrap(readFixture('271/x12-example-1b.x12'), '>') },
             { file: 'x12-example-1c.x12', text: wrap(readFixture('271/x12-example-1c.x12')) },
             { file: 'x12-example-2b.x12', text: wrap(readFixture('271/x12-example-2b.x12'), '>') },
-        ])('should place every benefit of $file in exactly one list', ({ text }) => {
-            const response = only271(text);
+        ])('should place every benefit of $file in exactly one list', (fixture) => {
+            const response = only271(fixture.text);
             const eligibility = interpret271(response);
             const people = response.subscribers.flatMap(subscriber => [
                 subscriber,

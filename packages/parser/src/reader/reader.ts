@@ -287,7 +287,15 @@ class Reader {
 
         while (true) {
             // CR and LF between segments are formatting, unless the terminator is CR or LF.
-            while ((this.#text[this.#offset] === '\r' || this.#text[this.#offset] === '\n') && this.#text[this.#offset] !== delimiters.segment) {
+            while (this.#offset < this.#text.length) {
+                const character = this.#text.charAt(this.#offset);
+                const isLineBreak = character === '\r' || character === '\n';
+                const isFormatting = isLineBreak && character !== delimiters.segment;
+
+                if (!isFormatting) {
+                    break;
+                }
+
                 this.#offset += 1;
             }
 

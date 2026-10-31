@@ -41,8 +41,8 @@ describe('buildLoops', () => {
     describe('header', () => {
         it('should put header segments before the first loop in the header', () => {
             const tree = buildLoops(transactionOf('BHT*1~HL*1**1~'), hierarchical);
-            const headerTags = tree.header.map(({ tag }) => tag);
-            const loopIds = tree.loops.map(({ id }) => id);
+            const headerTags = tree.header.map(segment => segment.tag);
+            const loopIds = tree.loops.map(loop => loop.id);
 
             expect(headerTags).toEqual(['BHT']);
             expect(loopIds).toEqual(['L1']);

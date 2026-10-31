@@ -125,7 +125,7 @@ describe('readX12', () => {
     describe('fixtures', () => {
         it.each(Object.entries(accepted))('should read %s', (name, expected) => {
             const document = readX12(readFixture(`x12/${name}`));
-            const findingCodes = document.findings.map(({ code }) => code);
+            const findingCodes = document.findings.map(finding => finding.code);
 
             expect(envelopeLines(document)).toEqual(expected.envelopes);
             expect(findingCodes).toEqual(expected.findings);
@@ -149,14 +149,14 @@ describe('readX12', () => {
         it('should leave the ST and SE out of the transaction segments', () => {
             const document = readX12(readFixture('x12/GX12-003-empty-and-trailing-elements.x12'));
             const transaction = document.interchanges[0]?.groups[0]?.transactions[0];
-            const tags = transaction?.segments.map(({ tag }) => tag);
+            const tags = transaction?.segments.map(segment => segment.tag);
 
             expect(tags).toEqual(['N1', 'REF']);
         });
 
         it('should keep a TA1 directly in its interchange', () => {
             const document = readX12(readFixture('x12/GX12-018-ta1-artifact.x12'));
-            const tags = document.interchanges[0]?.segments.map(({ tag }) => tag);
+            const tags = document.interchanges[0]?.segments.map(segment => segment.tag);
 
             expect(tags).toEqual(['TA1']);
         });
@@ -193,7 +193,7 @@ describe('readX12', () => {
             ['GX12-003-empty-and-trailing-elements.x12', 'REF'],
         ])('should link the finding in %s to the %s segment', (name, tag) => {
             const document = readX12(readFixture(`x12/${name}`));
-            const tags = document.findings.map(({ segment }) => segment.tag);
+            const tags = document.findings.map(finding => finding.segment.tag);
 
             expect(tags).toEqual([tag]);
         });

@@ -38,7 +38,11 @@ export default defineConfig({
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
         },
-        { text: 'API reference', link: '/parser/api/', items: typedocSidebar },
+        {
+          text: 'API reference',
+          link: '/parser/api/',
+          items: typedocSidebar,
+        },
       ],
     },
     search: {

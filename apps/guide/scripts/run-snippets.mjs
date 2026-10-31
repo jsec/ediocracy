@@ -10,6 +10,7 @@ const SNIPPETS_ROOT = resolve(PROJECT_ROOT, 'parser/snippets');
 
 // Each snippet reads response.x12 from its working directory, as the parser pages show.
 const workingDirectory = mkdtempSync(join(tmpdir(), 'parser-snippets-'));
+
 copyFileSync(resolve(PROJECT_ROOT, 'public/examples/single-eb.edi'), join(workingDirectory, 'response.x12'));
 
 for (const name of readdirSync(SNIPPETS_ROOT)) {
@@ -17,11 +18,12 @@ for (const name of readdirSync(SNIPPETS_ROOT)) {
     continue;
   }
 
-  const result = spawnSync(process.execPath, [join(SNIPPETS_ROOT, name)], { cwd: workingDirectory, encoding: 'utf8' });
-  if (result.status === 0) {
+  const snippetRun = spawnSync(process.execPath, [join(SNIPPETS_ROOT, name)], { cwd: workingDirectory, encoding: 'utf8' });
+
+  if (snippetRun.status === 0) {
     console.log(`${name}: ok`);
   } else {
-    console.error(`${name}: exit ${result.status}\n${result.stderr}`);
+    console.error(`${name}: exit ${snippetRun.status}\n${snippetRun.stderr}`);
     process.exitCode = 1;
   }
 }
