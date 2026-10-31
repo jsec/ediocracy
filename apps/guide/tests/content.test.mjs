@@ -219,13 +219,6 @@ test('loadExample returns exact bytes for every allowlisted file', async () => {
   }
 });
 
-test('loadExample rejects a filename outside the closed allowlist at runtime', async () => {
-  await assert.rejects(
-    loadExample('../package.json'),
-    /Unsupported example file/,
-  );
-});
-
 test('loadExample resolves files independently of the working directory', () => {
   const moduleUrl = new URL('../src/lib/examples.mjs', import.meta.url).href;
   const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));

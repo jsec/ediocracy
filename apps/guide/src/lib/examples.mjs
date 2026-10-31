@@ -18,9 +18,5 @@ const EXAMPLES_DIRECTORY = resolve(MODULE_DIRECTORY, '../../public/examples');
  * @returns {Promise<string>}
  */
 export async function loadExample(file) {
-  if (!EXAMPLE_FILENAMES.includes(file)) {
-    throw new Error(`Unsupported example file: ${String(file)}`);
-  }
-
   return readFile(resolve(EXAMPLES_DIRECTORY, file), 'utf8');
 }

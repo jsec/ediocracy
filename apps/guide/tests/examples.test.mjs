@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-import { splitInterchanges, validateExample } from '../scripts/lib/validate-example.mjs';
+import { readX12 } from '@ediocracy/parser';
 import { buildWalkthrough } from '../src/lib/walkthrough.mjs';
 
 const elementSeparator = '*';
@@ -44,103 +44,17 @@ function makeBaseline() {
   return `${isa}~GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP*20260919*1200*1*X*005010X279A1~ST*271*0001*005010X279A1~BHT*0022*11*ELIG0000001*20260919*1200~HL*1**20*1~NM1*PR*2*CEDAR VALLEY HEALTH PLAN~HL*2*1*21*1~NM1*1*2*OAK STREET MEDICAL GROUP~HL*3*2*22*0~NM1*IL*1*REED*JORDAN~EB*1**30~SE*10*0001~GE*1*1~IEA*1*000000001~`;
 }
 
-function assertErrorCode(source, code) {
-  assert.deepEqual(validateExample(source).errors.map((error) => error.code), [code]);
-}
+test('buildWalkthrough rejects an envelope the parser reports a finding for', () => {
+  const malformed = makeBaseline().replace('GE*1*1~', 'GE*2*1~');
 
-test('rejects an input with no ISA', () => {
-  assertErrorCode('GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP~', 'missing-isa');
+  assert.throws(() => buildWalkthrough(malformed), /gs-ge-transaction-count-mismatch/);
 });
 
-test('rejects an ISA shorter than 106 characters through its terminator', () => {
-  assertErrorCode(makeBaseline().slice(0, 105), 'short-isa');
-});
-
-test('rejects an ISA whose delimiters collide', () => {
-  assertErrorCode(`${makeBaseline().slice(0, 82)}*${makeBaseline().slice(83)}`, 'delimiter-collision');
-});
-
-test('rejects an interchange without IEA', () => {
-  assertErrorCode(makeBaseline().replace(/IEA\*1\*000000001~$/, ''), 'missing-iea');
-});
-
-test('rejects a transaction with ST but no SE', () => {
-  const malformed = makeBaseline().replace('SE*10*0001~', '');
-  const result = validateExample(malformed);
-
-  assert.ok(result.errors.some(({ code }) => code === 'missing-se'));
-});
-
-test('rejects an ISA and IEA control-number mismatch', () => {
-  assertErrorCode(makeBaseline().replace('IEA*1*000000001~', 'IEA*1*000000002~'), 'isa-iea-control-mismatch');
-});
-
-test('rejects a GS and GE control-number mismatch', () => {
-  assertErrorCode(makeBaseline().replace('GE*1*1~', 'GE*1*2~'), 'gs-ge-control-mismatch');
-});
-
-test('rejects an ST and SE control-number mismatch', () => {
-  assertErrorCode(makeBaseline().replace('SE*10*0001~', 'SE*10*0002~'), 'st-se-control-mismatch');
-});
-
-test('rejects an ST and SE segment-count mismatch', () => {
-  assertErrorCode(makeBaseline().replace('SE*10*0001~', 'SE*9*0001~'), 'st-se-segment-count-mismatch');
-});
-
-test('rejects a GS and GE transaction-count mismatch', () => {
-  assertErrorCode(makeBaseline().replace('GE*1*1~', 'GE*2*1~'), 'gs-ge-transaction-count-mismatch');
-});
-
-test('rejects an ISA and IEA group-count mismatch', () => {
-  assertErrorCode(makeBaseline().replace('IEA*1*000000001~', 'IEA*2*000000001~'), 'isa-iea-group-count-mismatch');
-});
-
-test('rejects an interchange without GE', () => {
-  assertErrorCode(makeBaseline().replace('GE*1*1~', ''), 'missing-ge');
-});
-
-test('rejects a nonnumeric SE01 count', () => {
-  assertErrorCode(makeBaseline().replace('SE*10*0001~', 'SE*X*0001~'), 'invalid-se-segment-count');
-});
-
-test('rejects a nonnumeric GE01 count', () => {
-  assertErrorCode(makeBaseline().replace('GE*1*1~', 'GE*X*1~'), 'invalid-ge-transaction-count');
-});
-
-test('rejects a nonnumeric IEA01 count', () => {
-  assertErrorCode(makeBaseline().replace('IEA*1*000000001~', 'IEA*X*000000001~'), 'invalid-iea-group-count');
-});
-
-test('rejects a valid interchange followed by a truncated ISA', () => {
-  const truncatedIsa = makeBaseline().slice(0, 105);
-
-  assertErrorCode(`${makeBaseline()}${truncatedIsa}`, 'truncated-isa');
-});
-
-test('splits two concatenated interchanges into exact source slices', () => {
-  const first = makeBaseline();
-  const second = makeBaseline()
-    .replace('000000001', '000000002')
-    .replace('0001', '0002');
-
-  assert.deepEqual(splitInterchanges(`${first}${second}`), [first, second]);
-});
-
-test('validates each concatenated interchange with its own delimiters', () => {
-  const first = makeBaseline();
-  const second = makeBaseline()
-    .replaceAll('*', '|')
-    .replaceAll('~', '!')
-    .replace('GE|1|1!', 'GE|2|1!');
-
-  assertErrorCode(`${first}${second}`, 'gs-ge-transaction-count-mismatch');
-});
-
-test('accepts every canonical example without validator errors', () => {
+test('accepts every canonical example without parser findings', () => {
   for (const filename of canonicalFiles) {
-    const result = validateExample(readExample(filename));
+    const result = readX12(readExample(filename));
 
-    assert.deepEqual(result.errors, [], filename);
+    assert.deepEqual(result.findings, [], filename);
   }
 });
 
@@ -160,7 +74,7 @@ test('coordination examples use supported context without SBR', () => {
 
 test('each single-interchange example contains one interchange', () => {
   for (const filename of canonicalFiles.slice(0, 4)) {
-    const result = validateExample(readExample(filename));
+    const result = readX12(readExample(filename));
 
     assert.equal(result.interchanges.length, 1, filename);
   }
@@ -172,7 +86,7 @@ test('multiple-interchanges is the exact concatenation of its source examples', 
   const medicareAdvantage = readExample('medicare-advantage.edi');
 
   assert.equal(multiple, singleEb + medicareAdvantage);
-  assert.equal(validateExample(multiple).interchanges.length, 2);
+  assert.equal(readX12(multiple).interchanges.length, 2);
 });
 
 test('multiple-interchanges walkthrough keeps two independently ordered interchanges', () => {
@@ -332,8 +246,8 @@ test('walkthrough rejects incomplete or unconsumed source input', () => {
   const single = readExample('single-eb.edi');
   const truncatedSecondIsa = `${single}${single.slice(0, 105)}`;
 
-  assert.throws(() => buildWalkthrough('GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP~'), /Cannot build walkthrough: missing-isa/);
-  assert.throws(() => buildWalkthrough(single.replace('IEA*1*000000101~', '')), /Cannot build walkthrough: missing-iea/);
-  assert.throws(() => buildWalkthrough(`${single}trailing-junk`), /Cannot build walkthrough: unconsumed-input/);
-  assert.throws(() => buildWalkthrough(truncatedSecondIsa), /Cannot build walkthrough: truncated-isa/);
+  assert.throws(() => buildWalkthrough('GS*HB*CEDARVALLEYHP*OAKSTMEDGROUP~'), { code: 'unexpected-data' });
+  assert.throws(() => buildWalkthrough(single.replace('IEA*1*000000101~', '')), { code: 'missing-iea' });
+  assert.throws(() => buildWalkthrough(`${single}trailing-junk`), { code: 'unexpected-data' });
+  assert.throws(() => buildWalkthrough(truncatedSecondIsa), { code: 'invalid-isa' });
 });

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { validateExample } from '../../scripts/lib/validate-example.mjs';
+import { readX12 } from '@ediocracy/parser';
 
 /** @typedef {{ purpose: string, fields: Array<[string, string]> }} SegmentDefinition */
 /** @typedef {{ position: string, rawValue: string, displayValue: string, name: string, explanation: string }} WalkthroughField */
@@ -281,15 +281,19 @@ function fieldsForSegment(definition, fields) {
  * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, fields: WalkthroughField[] }> }> }}
  */
 export function buildWalkthrough(source) {
-  const validation = validateExample(source);
-  if (validation.errors.length > 0) {
-    const codes = validation.errors.map(({ code }) => code).join(', ');
+  const document = readX12(source);
+  if (document.findings.length > 0) {
+    const codes = document.findings.map(({ code }) => code).join(', ');
     throw new Error(`Cannot build walkthrough: ${codes}`);
   }
 
-  const interchanges = validation.interchanges.map((raw, interchangeIndex) => {
-    const elementSeparator = raw[3];
-    const segmentTerminator = raw[105];
+  const interchanges = document.interchanges.map((interchange, interchangeIndex) => {
+    const elementSeparator = interchange.delimiters.element;
+    const segmentTerminator = interchange.delimiters.segment;
+    const raw = source.slice(
+      interchange.header.offset,
+      source.indexOf(segmentTerminator, interchange.trailer.offset) + 1,
+    );
     const segments = raw.split(segmentTerminator).filter(Boolean).map((segment, segmentIndex) => {
       const fields = segment.split(elementSeparator);
       const name = fields[0];
