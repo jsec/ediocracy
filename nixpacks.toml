@@ -1,9 +1,0 @@
-[phases.install]
-cmds = [
-    "npm install -g corepack@latest",
-    "corepack enable",
-    "pnpm install --frozen-lockfile",
-]
-
-[variables]
-NIXPACKS_NODE_VERSION = "26"
