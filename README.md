@@ -18,6 +18,5 @@ pnpm build
 pnpm check
 pnpm test
 pnpm typecheck
-pnpm commit
 pnpm hooks:validate
 ```
