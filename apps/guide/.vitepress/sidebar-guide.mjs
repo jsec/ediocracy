@@ -32,11 +32,10 @@ export const guideSidebar = [
     ],
   },
   {
-    text: 'Understand standards and profiles',
+    text: 'Standards and local rules',
     items: [
       { text: 'Public X12 sources', link: '/guide/standards/public-x12-sources' },
-      { text: 'Stedi as a clearinghouse example', link: '/guide/standards/stedi' },
-      { text: 'UnitedHealthcare companion guide', link: '/guide/standards/unitedhealthcare' },
+      { text: 'Clearinghouses and companion guides', link: '/guide/standards/clearinghouses-and-companion-guides' },
     ],
   },
   {

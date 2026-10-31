@@ -5,8 +5,8 @@ description: Segments, elements, separators, and control values in an X12 messag
 
 X12 syntax represents a message as segments separated by a terminator, with
 data elements separated by an element separator and composite components
-separated by a component separator. The [Stedi 005010 references](https://www.stedi.com/edi/x12-005010/segment/ISA)
-are useful for looking up fields. X279A1 defines the full grammar.
+separated by a component separator. The [segment reference](/guide/reference/segments)
+lists the fields used in this guide. X279A1 defines the full grammar.
 
 ## Segments and elements
 
@@ -60,6 +60,6 @@ Control values identify and count containers: `ISA13` pairs with `IEA02`,
 `GS06` with `GE02`, and `ST02` with `SE02`. Matching values tie each trailer
 to its header.
 
-The public examples and [Stedi's ISA reference](https://www.stedi.com/edi/x12-005010/segment/ISA)
+The public examples and the [ISA fields](/guide/reference/segments#isa)
 show the syntax used here. X279A1 and partner guides set the transaction and
 route rules.

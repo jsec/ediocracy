@@ -26,16 +26,6 @@ const profilePages = [
     scope: /licensed\s+005010X279A1\s+implementation guide contains the complete grammar/i,
     links: /https:\/\/x12\.org\/examples\/005010x279[\s\S]*https:\/\/x12\.org\/resources\/requests-for-interpretation\//i,
   },
-  {
-    path: 'guide/standards/stedi.md',
-    scope: /applies to Stedi\s+routes/i,
-    links: /https:\/\/www\.stedi\.com\/docs\/healthcare\/[\s\S]*https:\/\/www\.stedi\.com\/edi\/x12-005010\//i,
-  },
-  {
-    path: 'guide/standards/unitedhealthcare.md',
-    scope: /products\s+and routes named in that document/i,
-    links: /https:\/\/www\.uhcprovider\.com\/content\/dam\/provider\/docs\/public\/resources\/edi\/EDI-270-271-Companion-Guide-005010X279A1\.pdf/i,
-  },
 ];
 
 const examplePages = [

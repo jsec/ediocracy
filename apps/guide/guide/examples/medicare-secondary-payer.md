@@ -6,8 +6,8 @@ description: A complete response illustrating a Medicare Secondary Payer scenari
 ## Scenario
 
 This example uses a Medicare Secondary Payer scenario with a subscriber,
-benefit statement, and date. It illustrates Medicare Secondary Payer terms; it
-is not a CMS HETS response.
+benefit statement, and date. It illustrates Medicare Secondary Payer terms
+with values written for this guide.
 Scenario labels do not establish payer order. Use the actual response, payer or
 plan records, and applicable route rules when determining coverage order.
 
@@ -19,4 +19,4 @@ plan records, and applicable route rules when determining coverage order.
 
 - [CMS-MSP](https://www.cms.gov/medicare/coordination-benefits-recovery/overview/secondary-payer) supports Medicare Secondary Payer program context.
 - [X12-EXAMPLES-005010X279](https://x12.org/examples/005010x279) supports the public 271 pattern and hierarchy examples.
-- [STEDI-271-GUIDE](https://www.stedi.com/edi/hipaa/transaction-set/271-B1), [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-DTP](https://www.stedi.com/edi/x12-005010/segment/DTP), and [STEDI-NM1](https://www.stedi.com/edi/x12-005010/segment/NM1) provide public cross-references.
+- The [EB](/guide/reference/segments#eb), [DTP](/guide/reference/segments#dtp), and [NM1](/guide/reference/segments#nm1) field tables are in the segment reference.

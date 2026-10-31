@@ -292,7 +292,7 @@ test('coded field explanations use the public code meanings without markup punct
   );
 });
 
-test('all exercised fields use the exact Stedi 005010 labels', () => {
+test('all exercised fields use the exact X12 element names', () => {
   const expected = {
     ISA: ['Authorization Information Qualifier', 'Authorization Information', 'Security Information Qualifier', 'Security Information', 'Interchange ID Qualifier', 'Interchange Sender ID', 'Interchange ID Qualifier', 'Interchange Receiver ID', 'Interchange Date', 'Interchange Time', 'Repetition Separator', 'Interchange Control Version Number', 'Interchange Control Number', 'Acknowledgment Requested', 'Interchange Usage Indicator', 'Component Element Separator'],
     GS: ['Functional Identifier Code', "Application Sender's Code", "Application Receiver's Code", 'Date', 'Time', 'Group Control Number', 'Responsible Agency Code', 'Version / Release / Industry Identifier Code'],

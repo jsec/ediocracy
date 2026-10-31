@@ -19,4 +19,4 @@ plan records, and applicable route rules when determining coverage order.
 
 - [CMS-MSP](https://www.cms.gov/medicare/coordination-benefits-recovery/overview/secondary-payer) supports the program-level coordination context.
 - [X12-RFI-2628](https://x12.org/resources/requests-for-interpretation/rfi-2628-msg-segment-271) explains a published use of `MSG` in a 271.
-- [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-MSG](https://www.stedi.com/edi/x12-005010/segment/MSG), [STEDI-HL](https://www.stedi.com/edi/x12-005010/segment/HL), and [STEDI-NM1](https://www.stedi.com/edi/x12-005010/segment/NM1) provide public segment cross-references.
+- The [EB](/guide/reference/segments#eb), [MSG](/guide/reference/segments#msg), [HL](/guide/reference/segments#hl), and [NM1](/guide/reference/segments#nm1) field tables are in the segment reference.

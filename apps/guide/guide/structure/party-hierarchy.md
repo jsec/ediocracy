@@ -25,7 +25,7 @@ HL*3*2*22*0~
 - `HL04` indicates whether the level has children. The subscriber level uses
   `0` because it has no child level in this example.
 
-See the public [HL field reference](https://www.stedi.com/edi/x12-005010/segment/HL).
+See the [HL fields](/guide/reference/segments#hl).
 
 ## NM1 identifies the party
 
@@ -49,7 +49,7 @@ NM1*IL*1*REED*JORDAN~
   subscriber `NM1` (loop 2100C) leaves them out; X279A1 does not require them
   there.
 
-See the public [NM1 field reference](https://www.stedi.com/edi/x12-005010/segment/NM1).
+See the [NM1 fields](/guide/reference/segments#nm1).
 
 The sequence shows one hierarchy. Read `HL` and `NM1` together with the
 transaction profile and companion guide to determine which relationships and

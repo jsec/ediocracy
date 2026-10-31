@@ -29,7 +29,7 @@ to implementation work.
 | `GE` | Functional Group Trailer; it closes a `GS` group and declares its transaction count and control number. |
 | `GS` | Functional Group Header; it opens a functional group inside an interchange. |
 | `HL` | The Hierarchical Level segment that identifies a level and optional parent. |
-| `HSD` | Health Care Services Delivery segment; it conveys service-delivery quantities or measures when the applicable profile uses it. See the [public HSD reference](https://www.stedi.com/edi/x12-005010/segment/HSD). |
+| `HSD` | Health Care Services Delivery segment; it conveys service-delivery quantities or measures when the applicable profile uses it. See the [HSD fields](/guide/reference/segments#hsd). |
 | Implementation guide / TR3 | The licensed normative document that defines the complete transaction grammar and situational rules. |
 | Interchange | The outermost X12 container, from `ISA` through `IEA`. Multiple interchanges can appear next to one another in a file. |
 | Intermediary | A clearinghouse or other route participant between a submitter and payer. |

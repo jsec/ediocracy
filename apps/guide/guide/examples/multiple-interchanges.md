@@ -17,4 +17,4 @@ functional group, and transaction set.
 
 - [X12-RFI-1585](https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999) supports multiple interchanges in one physical file.
 - [X12-EXAMPLES-005010X279](https://x12.org/examples/005010x279) supports the public 271 interchange and hierarchy pattern.
-- [STEDI-ISA](https://www.stedi.com/edi/x12-005010/segment/ISA), [STEDI-IEA](https://www.stedi.com/edi/x12-005010/segment/IEA), [STEDI-GS](https://www.stedi.com/edi/x12-005010/segment/GS), [STEDI-GE](https://www.stedi.com/edi/x12-005010/segment/GE), [STEDI-ST](https://www.stedi.com/edi/x12-005010/segment/ST), [STEDI-SE](https://www.stedi.com/edi/x12-005010/segment/SE), and [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB) provide public field cross-references.
+- The [ISA](/guide/reference/segments#isa), [IEA](/guide/reference/segments#iea), [GS](/guide/reference/segments#gs), [GE](/guide/reference/segments#ge), [ST](/guide/reference/segments#st), [SE](/guide/reference/segments#se), and [EB](/guide/reference/segments#eb) field tables are in the segment reference.

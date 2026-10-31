@@ -2,21 +2,18 @@
 
 import { validateExample } from '../../scripts/lib/validate-example.mjs';
 
-const STEDI_SEGMENT_URL = 'https://www.stedi.com/edi/x12-005010/segment';
-
-/** @typedef {{ purpose: string, reference: string, fields: Array<[string, string]> }} SegmentDefinition */
+/** @typedef {{ purpose: string, fields: Array<[string, string]> }} SegmentDefinition */
 /** @typedef {{ position: string, rawValue: string, displayValue: string, name: string, explanation: string }} WalkthroughField */
 
 /**
- * Shared field definitions for the segments represented by the public examples.
- * The definitions describe public field references; X279A1 remains the source
- * for the complete transaction grammar and situational requirements.
+ * Shared field definitions for the segments explained in this guide. The
+ * segment reference page renders them as field tables. X279A1 remains the
+ * source for the complete transaction grammar and situational requirements.
  */
 /** @type {Readonly<Record<string, SegmentDefinition>>} */
 export const SEGMENT_DEFINITIONS = Object.freeze({
   ISA: {
     purpose: 'Opens an interchange and establishes its fixed control and delimiter positions.',
-    reference: `${STEDI_SEGMENT_URL}/ISA`,
     fields: [
       ['Authorization Information Qualifier', 'Identifies the format of the authorization information.'],
       ['Authorization Information', 'Carries the authorization value; this example leaves the fixed-width value blank.'],
@@ -38,7 +35,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   GS: {
     purpose: 'Opens a functional group inside the interchange.',
-    reference: `${STEDI_SEGMENT_URL}/GS`,
     fields: [
       ['Functional Identifier Code', 'Identifies a group of application-related transaction sets.'],
       ["Application Sender's Code", 'Identifies the party sending the transmission.'],
@@ -52,7 +48,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   ST: {
     purpose: 'Opens a transaction set inside the functional group.',
-    reference: `${STEDI_SEGMENT_URL}/ST`,
     fields: [
       ['Transaction Set Identifier Code', 'Identifies this response as transaction set 271.'],
       ['Transaction Set Control Number', 'Identifies this transaction and must match SE02.'],
@@ -61,7 +56,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   BHT: {
     purpose: 'Supplies beginning-of-hierarchical-transaction context.',
-    reference: `${STEDI_SEGMENT_URL}/BHT`,
     fields: [
       ['Hierarchical Structure Code', 'Identifies the hierarchical structure used by the transaction.'],
       ['Transaction Set Purpose Code', 'States the purpose of this transaction set.'],
@@ -72,7 +66,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   HL: {
     purpose: 'Establishes one hierarchical level and its optional parent relationship.',
-    reference: `${STEDI_SEGMENT_URL}/HL`,
     fields: [
       ['Hierarchical ID Number', 'Identifies this hierarchy level.'],
       ['Hierarchical Parent ID Number', 'Identifies the parent level. It is blank at the top level.'],
@@ -82,7 +75,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   NM1: {
     purpose: 'Identifies the party attached to the current hierarchy level.',
-    reference: `${STEDI_SEGMENT_URL}/NM1`,
     fields: [
       ['Entity Identifier Code', 'Identifies the party role represented by this name loop.'],
       ['Entity Type Qualifier', 'Identifies whether the party is an individual or organization.'],
@@ -95,9 +87,50 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
       ['Identification Code', 'Supplies the party identifier of the type named in NM108.'],
     ],
   },
+  TRN: {
+    purpose: 'Returns a trace number sent in the 270 so the response can be matched to its request.',
+    fields: [
+      ['Trace Type Code', 'Identifies the type of trace number.'],
+      ['Reference Identification', 'Supplies the trace number.'],
+      ['Originating Company Identifier', 'Identifies the company that assigned the trace number.'],
+      ['Reference Identification', 'Supplies an additional identifier for the originating company.'],
+    ],
+  },
+  LS: {
+    purpose: 'Opens a named loop inside the current benefit context.',
+    fields: [
+      ['Loop Identifier Code', 'Names the loop that opens here and must match LE01.'],
+    ],
+  },
+  LE: {
+    purpose: 'Closes the named loop opened by LS.',
+    fields: [
+      ['Loop Identifier Code', 'Names the loop that closes here and must match LS01.'],
+    ],
+  },
+  HSD: {
+    purpose: 'Supplies a quantity, unit, or period that limits the surrounding benefit.',
+    fields: [
+      ['Quantity Qualifier', 'Identifies what HSD02 counts.'],
+      ['Quantity', 'Supplies the quantity.'],
+      ['Unit or Basis for Measurement Code', 'Identifies the unit of the quantity.'],
+      ['Sample Selection Modulus', 'Supplies a frequency or interval value.'],
+      ['Time Period Qualifier', 'Identifies the time period that HSD06 counts.'],
+      ['Number of Periods', 'Supplies the number of time periods.'],
+      ['Ship/Delivery or Calendar Pattern Code', 'Identifies a delivery or calendar pattern.'],
+      ['Ship/Delivery Pattern Time Code', 'Identifies a delivery time pattern.'],
+    ],
+  },
+  REF: {
+    purpose: 'Supplies an identifier whose meaning depends on its qualifier and loop.',
+    fields: [
+      ['Reference Identification Qualifier', 'Identifies the type of identifier in REF02.'],
+      ['Reference Identification', 'Supplies the identifier.'],
+      ['Description', 'Supplies a description of the identifier when present.'],
+    ],
+  },
   EB: {
     purpose: 'Reports one qualified eligibility or benefit statement in the current subscriber context.',
-    reference: `${STEDI_SEGMENT_URL}/EB`,
     fields: [
       ['Eligibility or Benefit Information Code', 'States the eligibility or benefit status represented by this statement.'],
       ['Coverage Level Code', 'Identifies the coverage level when supplied.'],
@@ -108,7 +141,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   DTP: {
     purpose: 'Supplies a date or date period related to the current benefit context.',
-    reference: `${STEDI_SEGMENT_URL}/DTP`,
     fields: [
       ['Date/Time Qualifier', 'Identifies what the date represents.'],
       ['Date Time Period Format Qualifier', 'Identifies the format of the date value.'],
@@ -117,14 +149,12 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   MSG: {
     purpose: 'Carries explanatory text associated with the surrounding response context.',
-    reference: `${STEDI_SEGMENT_URL}/MSG`,
     fields: [
       ['Free-Form Message Text', 'Provides the explanatory text carried by this response.'],
     ],
   },
   SE: {
     purpose: 'Closes a transaction set and declares its segment count.',
-    reference: `${STEDI_SEGMENT_URL}/SE`,
     fields: [
       ['Number of Included Segments', 'Counts segments from ST through SE.'],
       ['Transaction Set Control Number', 'Matches ST02 for this transaction.'],
@@ -132,7 +162,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   GE: {
     purpose: 'Closes a functional group and declares its transaction count.',
-    reference: `${STEDI_SEGMENT_URL}/GE`,
     fields: [
       ['Number of Transaction Sets Included', 'Counts transaction sets in this functional group.'],
       ['Group Control Number', 'Matches GS06 for this functional group.'],
@@ -140,7 +169,6 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
   IEA: {
     purpose: 'Closes an interchange and declares its group count.',
-    reference: `${STEDI_SEGMENT_URL}/IEA`,
     fields: [
       ['Number of Included Functional Groups', 'Counts functional groups in this interchange.'],
       ['Interchange Control Number', 'Matches ISA13 for this interchange.'],
@@ -246,11 +274,11 @@ function fieldsForSegment(definition, fields) {
 }
 
 /**
- * Build the ordered, source-backed data used by the Astro walkthrough.
+ * Build the ordered, source-backed data used by the example walkthrough.
  * This is intentionally limited to source segment and field views.
  *
  * @param {string} source
- * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, reference: string, fields: WalkthroughField[] }> }> }}
+ * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, fields: WalkthroughField[] }> }> }}
  */
 export function buildWalkthrough(source) {
   const validation = validateExample(source);
@@ -275,7 +303,6 @@ export function buildWalkthrough(source) {
         name,
         raw: `${segment}${segmentTerminator}`,
         explanation: segmentExplanation(definition, fields),
-        reference: definition.reference,
         fields: fieldsForSegment(definition, fields),
       };
     });

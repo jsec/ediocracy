@@ -54,6 +54,5 @@ claim about a payer's behavior.
 ## Payer-specific behavior
 
 Payers and intermediaries can require enrollment, specific identifiers, date
-windows, or connectivity options. For example, the [CMS HETS companion guide](https://www.cms.gov/files/document/current-hets-270-271-companion-guide.pdf)
-defines HETS-specific operational requirements. Those requirements apply to
-HETS traffic only.
+windows, or connectivity options. Those requirements apply only to their own
+connection. See [Clearinghouses and companion guides](/guide/standards/clearinghouses-and-companion-guides).

@@ -22,19 +22,18 @@ relevant `HL` hierarchy and `NM1` party. Read each `EB` with its surrounding
 context.
 
 The [single-benefit example](/examples/single-eb.edi) uses invented values.
-The [X12 public examples](https://x12.org/examples/005010x279) and [Stedi 271
-cross-reference](https://www.stedi.com/edi/hipaa/transaction-set/271-B1) provide
-public orientation. Use the licensed X279A1 implementation guide when you need
+The [X12 public examples](https://x12.org/examples/005010x279) provide public
+orientation, and the [segment reference](/guide/reference/segments) lists the
+fields used in this guide. Use the licensed X279A1 implementation guide when you need
 the full transaction rules.
 
 ## Source types
 
-The guide keeps four evidence types separate:
+The guide keeps three evidence types separate:
 
 - Public X12 material supports named examples and published interpretations.
-- Stedi pages provide public segment and element cross-references.
-- CMS material describes Medicare HETS or program-level context.
-- Payer and clearinghouse documents describe their own route requirements.
+- CMS material describes Medicare program-level context.
+- The licensed X279A1 implementation guide defines the standard rules.
 
-Use X279A1 for the standard rules, then use the companion guide for the payer
-and route in use.
+Payers and clearinghouses add their own rules for each connection. See
+[Clearinghouses and companion guides](/guide/standards/clearinghouses-and-companion-guides).

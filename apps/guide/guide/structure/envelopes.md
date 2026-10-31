@@ -29,8 +29,8 @@ IEA*1*000000101~
   `IEA02`.
 - `IEA01=1` reports one functional group in this interchange.
 
-See the public [ISA](https://www.stedi.com/edi/x12-005010/segment/ISA) and
-[IEA](https://www.stedi.com/edi/x12-005010/segment/IEA) field references.
+See the [ISA](/guide/reference/segments#isa) and
+[IEA](/guide/reference/segments#iea) field tables.
 
 ## Functional group: GS and GE
 
@@ -51,8 +51,8 @@ GE*1*101~
   `GS08=005010X279A1` identifies the implementation convention used here.
 - `GE01=1` reports one transaction set in the group.
 
-See the public [GS](https://www.stedi.com/edi/x12-005010/segment/GS) and
-[GE](https://www.stedi.com/edi/x12-005010/segment/GE) field references.
+See the [GS](/guide/reference/segments#gs) and
+[GE](/guide/reference/segments#ge) field tables.
 
 ## Transaction set: ST and SE
 
@@ -70,8 +70,8 @@ SE*10*0101~
   transaction.
 - `SE01=10` counts every segment from `ST` through `SE`, including both.
 
-See the public [ST](https://www.stedi.com/edi/x12-005010/segment/ST) and
-[SE](https://www.stedi.com/edi/x12-005010/segment/SE) field references.
+See the [ST](/guide/reference/segments#st) and
+[SE](/guide/reference/segments#se) field tables.
 
 These pairs close in reverse order: `ST`/`SE`, then `GS`/`GE`, then
 `ISA`/`IEA`. A file can contain more than one interchange, as shown by

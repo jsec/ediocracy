@@ -15,9 +15,9 @@ const walkthrough = data[props.file];
     <h3 :id="`breakdown-${file}`">Segment breakdown</h3>
     <p>
       The entries below keep the source order. An empty present field appears as
-      <code>(empty)</code>; an absent field is not added. The Stedi links are field
-      references. Use the licensed X279A1 implementation guide for transaction
-      rules.
+      <code>(empty)</code>; an absent field is not added. Each segment links to its
+      field table in the segment reference. Use the licensed X279A1
+      implementation guide for transaction rules.
     </p>
 
     <section
@@ -65,8 +65,8 @@ const walkthrough = data[props.file];
               </tbody>
             </table>
           </div>
-          <p v-if="segment.reference" class="x12-reference">
-            Field reference: <a :href="segment.reference">Stedi {{ segment.name }} segment reference</a>.
+          <p class="x12-reference">
+            Field reference: <a :href="`/guide/reference/segments#${segment.name.toLowerCase()}`">{{ segment.name }} fields</a>.
           </p>
         </li>
       </ol>

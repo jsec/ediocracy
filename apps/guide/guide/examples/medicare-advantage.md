@@ -7,8 +7,7 @@ description: A complete response illustrating Medicare Advantage program context
 
 This example places an `EB` statement, a `DTP` date, and `MSG` text under one
 subscriber in a Medicare Advantage scenario. The values were written for this
-guide; it is not a CMS HETS response. CMS HETS reports a Medicare Advantage
-plan with `EB01=U` and an `EB04` insurance type, not `EB01=1`.
+guide.
 
 ## Complete response
 
@@ -18,4 +17,4 @@ plan with `EB01=U` and an `EB04` insurance type, not `EB01=1`.
 
 - [CMS-MA](https://www.cms.gov/medicare/enrollment-renewal/health-plans) supports program-level Medicare Advantage context.
 - [X12-RFI-2628](https://x12.org/resources/requests-for-interpretation/rfi-2628-msg-segment-271) explains the `MSG` case described on the page.
-- [STEDI-EB](https://www.stedi.com/edi/x12-005010/segment/EB), [STEDI-DTP](https://www.stedi.com/edi/x12-005010/segment/DTP), [STEDI-MSG](https://www.stedi.com/edi/x12-005010/segment/MSG), [STEDI-ISA](https://www.stedi.com/edi/x12-005010/segment/ISA), [STEDI-IEA](https://www.stedi.com/edi/x12-005010/segment/IEA), [STEDI-GS](https://www.stedi.com/edi/x12-005010/segment/GS), and [STEDI-GE](https://www.stedi.com/edi/x12-005010/segment/GE) provide public cross-references.
+- The [EB](/guide/reference/segments#eb), [DTP](/guide/reference/segments#dtp), [MSG](/guide/reference/segments#msg), [ISA](/guide/reference/segments#isa), [IEA](/guide/reference/segments#iea), [GS](/guide/reference/segments#gs), and [GE](/guide/reference/segments#ge) field tables are in the segment reference.
