@@ -1,6 +1,6 @@
 ---
 title: What a 271 response is
-description: The role of an X12 271 health care eligibility benefit response.
+description: Learn the role of an X12 271 health care eligibility benefit response.
 ---
 
 An X12 271 is a response transaction that reports the result of a health care
@@ -16,7 +16,7 @@ inquiry reaches the responding organization.
 
 A payer administers or pays for coverage. A clearinghouse can transport,
 validate, translate, or route transactions between a sender and payer.
-Companion guides add local trading-partner instructions; the licensed
+Companion guides add local trading-partner instructions. The licensed
 implementation guide defines the full transaction requirements. Public
 examples and cross-references, such as [X12's 005010 X279 examples](https://x12.org/examples/005010x279),
 help explain the format.
@@ -25,7 +25,7 @@ help explain the format.
 
 A 271 can contain eligibility and benefit information, such as an active
 coverage statement, a service type, or a qualified amount. It can also contain
-request-level error information. X12's [RFI 2821 interpretation](https://x12.org/resources/requests-for-interpretation/rfi-2821-eb01-code-use-aaa-270271)
+request-level error information. X12's [Request for Interpretation (RFI) 2821](https://x12.org/resources/requests-for-interpretation/rfi-2821-eb01-code-use-aaa-270271)
 explains when a response reports benefit information and when it reports a
 validation problem with `AAA`.
 

@@ -14,10 +14,10 @@ const walkthrough = data[props.file];
   <section class="x12-walkthrough" :aria-labelledby="`breakdown-${file}`">
     <h3 :id="`breakdown-${file}`">Segment breakdown</h3>
     <p>
-      The entries below keep the source order. An empty present field appears as
-      <code>(empty)</code>; an absent field is not added. Each segment links to its
-      field table in the segment reference. Use the licensed X279A1
-      implementation guide for transaction rules.
+      The following entries are in source order. A field that is present but
+      empty appears as <code>(empty)</code>. The breakdown doesn't add absent
+      fields. Each segment links to its field table in the segment reference.
+      For transaction rules, use the licensed X279A1 implementation guide.
     </p>
 
     <section

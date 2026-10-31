@@ -1,20 +1,20 @@
 ---
 title: Clearinghouses and companion guides
-description: How intermediaries and payer instructions change a 271, and how to tell standard behavior from local behavior.
+description: Learn how intermediaries and payer instructions change a 271, and how to tell standard behavior from local behavior.
 ---
 
 A 271 often passes through a clearinghouse, and each payer can publish a
 companion guide with its own instructions. Both can change what you receive
 without changing the X12 standard.
 
-## What a clearinghouse may do to a 271
+## What a clearinghouse can do to a 271
 
-A clearinghouse sits between the submitter and the payer. Depending on the
-connection, it may:
+A clearinghouse is an intermediary between the submitter and the payer.
+Depending on the connection, it can:
 
 - Pass the payer's X12 through unchanged.
 - Replace the `ISA` and `GS` sender and receiver IDs and
-  assign its own control numbers. The transaction set inside can stay the same.
+  assign its own control numbers. The transaction set itself can stay the same.
 - Translate the 271 into another format, such as JSON, and return the X12 only
   on request.
 - Reject the request before it reaches the payer. That outcome can arrive as a

@@ -16,9 +16,9 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     purpose: 'Opens an interchange and establishes its fixed control and delimiter positions.',
     fields: [
       ['Authorization Information Qualifier', 'Identifies the format of the authorization information.'],
-      ['Authorization Information', 'Carries the authorization value; this example leaves the fixed-width value blank.'],
+      ['Authorization Information', 'Contains the authorization value. This example leaves the fixed-width value blank.'],
       ['Security Information Qualifier', 'Identifies the format of the security information.'],
-      ['Security Information', 'Carries the security value; this example leaves the fixed-width value blank.'],
+      ['Security Information', 'Contains the security value. This example leaves the fixed-width value blank.'],
       ['Interchange ID Qualifier', 'Identifies the type of sender identifier.'],
       ['Interchange Sender ID', 'Identifies the sender of this interchange.'],
       ['Interchange ID Qualifier', 'Identifies the type of receiver identifier.'],
@@ -26,7 +26,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
       ['Interchange Date', 'Records the interchange date in YYMMDD format.'],
       ['Interchange Time', 'Records the interchange time in HHMM format.'],
       ['Repetition Separator', 'Separates repeated composite values in this interchange.'],
-      ['Interchange Control Version Number', 'Identifies the interchange control version, 00501 here.'],
+      ['Interchange Control Version Number', 'Identifies the interchange control version. This example uses 00501.'],
       ['Interchange Control Number', 'Identifies this interchange and must match IEA02.'],
       ['Acknowledgment Requested', 'Indicates whether an interchange acknowledgment is requested.'],
       ['Interchange Usage Indicator', 'Indicates whether the interchange is for test, production, or information data.'],
@@ -43,7 +43,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
       ['Time', 'Records the functional group time.'],
       ['Group Control Number', 'Identifies this group and must match GE02.'],
       ['Responsible Agency Code', 'Identifies the agency responsible for the implementation convention.'],
-      ['Version / Release / Industry Identifier Code', 'Identifies the implementation convention used by the group.'],
+      ['Version / Release / Industry Identifier Code', 'Identifies the implementation convention that the group uses.'],
     ],
   },
   ST: {
@@ -51,13 +51,13 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     fields: [
       ['Transaction Set Identifier Code', 'Identifies this response as transaction set 271.'],
       ['Transaction Set Control Number', 'Identifies this transaction and must match SE02.'],
-      ['Implementation Convention Reference', 'Identifies the implementation convention used by the transaction.'],
+      ['Implementation Convention Reference', 'Identifies the implementation convention that the transaction uses.'],
     ],
   },
   BHT: {
     purpose: 'Supplies beginning-of-hierarchical-transaction context.',
     fields: [
-      ['Hierarchical Structure Code', 'Identifies the hierarchical structure used by the transaction.'],
+      ['Hierarchical Structure Code', 'Identifies the hierarchical structure that the transaction uses.'],
       ['Transaction Set Purpose Code', 'States the purpose of this transaction set.'],
       ['Reference Identification', 'Provides the transaction reference used in this response.'],
       ['Date', 'Records the date the transaction was created in the business application.'],
@@ -74,9 +74,9 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     ],
   },
   NM1: {
-    purpose: 'Identifies the party attached to the current hierarchy level.',
+    purpose: 'Identifies the party for the current hierarchy level.',
     fields: [
-      ['Entity Identifier Code', 'Identifies the party role represented by this name loop.'],
+      ['Entity Identifier Code', 'Identifies the party role that this name loop represents.'],
       ['Entity Type Qualifier', 'Identifies whether the party is an individual or organization.'],
       ['Name Last or Organization Name', 'Supplies the party name used in this response.'],
       ['Name First', 'Supplies the person’s first name when present.'],
@@ -88,7 +88,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     ],
   },
   TRN: {
-    purpose: 'Returns a trace number sent in the 270 so the response can be matched to its request.',
+    purpose: 'Returns a trace number sent in the 270 so that you can match the response to its request.',
     fields: [
       ['Trace Type Code', 'Identifies the type of trace number.'],
       ['Reference Identification', 'Supplies the trace number.'],
@@ -97,7 +97,7 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     ],
   },
   LS: {
-    purpose: 'Opens a named loop inside the current benefit context.',
+    purpose: 'Opens a named loop in the current benefit context.',
     fields: [
       ['Loop Identifier Code', 'Names the loop that opens here and must match LE01.'],
     ],
@@ -132,9 +132,9 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   EB: {
     purpose: 'Reports one qualified eligibility or benefit statement in the current subscriber context.',
     fields: [
-      ['Eligibility or Benefit Information Code', 'States the eligibility or benefit status represented by this statement.'],
+      ['Eligibility or Benefit Information Code', 'States the eligibility or benefit status that this statement represents.'],
       ['Coverage Level Code', 'Identifies the coverage level when supplied.'],
-      ['Service Type Code', 'Identifies the service type covered by this statement.'],
+      ['Service Type Code', 'Identifies the service type that this statement covers.'],
       ['Insurance Type Code', 'Identifies the insurance type when supplied.'],
       ['Plan Coverage Description', 'Provides the plan or coverage description used in this response.'],
     ],
@@ -148,9 +148,9 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
     ],
   },
   MSG: {
-    purpose: 'Carries explanatory text associated with the surrounding response context.',
+    purpose: 'Contains explanatory text for the surrounding response context.',
     fields: [
-      ['Free-Form Message Text', 'Provides the explanatory text carried by this response.'],
+      ['Free-Form Message Text', 'Contains the explanatory text in this response.'],
     ],
   },
   SE: {

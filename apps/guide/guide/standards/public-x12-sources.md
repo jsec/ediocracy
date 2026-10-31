@@ -1,6 +1,6 @@
 ---
 title: Public X12 sources
-description: What the public X12 material explains and when to consult the licensed implementation guide.
+description: Learn what the public X12 material explains and when to consult the licensed implementation guide.
 ---
 
 Public X12 material can help you recognize the segment and container structure
@@ -13,14 +13,16 @@ identifies the 270/271 transaction pair and explains how to obtain the guide.
 
 The [005010 X279 examples](https://x12.org/examples/005010x279) include
 interchange, hierarchy, subscriber, dependent, and `AAA` cases. X12 Requests
-for Interpretation answer narrower questions. For example, [RFI 2821](https://x12.org/resources/requests-for-interpretation/rfi-2821-eb01-code-use-aaa-270271)
-discusses benefit information and request validation, while [RFI 1585](https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999)
+for Interpretation (RFIs) answer narrower questions. For example, [RFI 2821](https://x12.org/resources/requests-for-interpretation/rfi-2821-eb01-code-use-aaa-270271)
+discusses benefit information and request validation. [RFI 1585](https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999)
 discusses acknowledgment handling for multiple interchanges.
 
 Use those sources for the cases they describe. They omit many transaction
 rules and code choices.
 
 ## Which source answers which question
+
+Each source answers a different kind of question:
 
 - The local example files show the segments discussed in this guide.
 - Public X12 examples and RFIs explain specific published cases.

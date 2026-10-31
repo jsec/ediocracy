@@ -1,6 +1,6 @@
 ---
 title: How eligibility responses fit the workflow
-description: The request, routing, acknowledgment, and response stages around a 271.
+description: Learn the request, routing, acknowledgment, and response stages around a 271.
 ---
 
 An eligibility workflow moves a request from a submitter through a route to a
@@ -10,10 +10,10 @@ Transport status is not a benefit result.
 ## Request and route
 
 The submitter sends a 270 health care eligibility benefit inquiry. The route
-may include a clearinghouse, which can apply its own connectivity, validation,
+can include a clearinghouse, which can apply its own connectivity, validation,
 or translation behavior. The payer receives the inquiry only after the route's
 requirements are met. [CMS describes the HIPAA 270/271 transaction](https://www.cms.gov/priorities/key-initiatives/burden-reduction/administrative-simplification/transactions/health-plan-eligibility-benefit-inquiry-response)
-at the program level; a payer companion guide supplies local details.
+at the program level. A payer companion guide supplies local details.
 
 ## Acknowledgments and response
 
@@ -21,9 +21,9 @@ The route can produce outcomes at several layers:
 
 - A transport or connectivity error means the payload did not complete the
   intended exchange.
-- A TA1 reports an interchange-level acknowledgment.
-- A 999 reports functional-group or transaction-set syntax and implementation
-  errors. X12's [RFI 1498](https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999)
+- A TA1 interchange acknowledgment reports the result at the interchange level.
+- A 999 functional acknowledgment reports functional-group or transaction-set syntax and implementation
+  errors. X12's [Request for Interpretation (RFI) 1498](https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999)
   discusses named 999 error codes.
 - A 271 is the application response that can contain benefit information or a
   request-level `AAA` error.
@@ -55,4 +55,4 @@ claim about a payer's behavior.
 
 Payers and intermediaries can require enrollment, specific identifiers, date
 windows, or connectivity options. Those requirements apply only to their own
-connection. See [Clearinghouses and companion guides](/guide/standards/clearinghouses-and-companion-guides).
+connection. For more information, see [Clearinghouses and companion guides](/guide/standards/clearinghouses-and-companion-guides).

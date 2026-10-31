@@ -33,8 +33,8 @@ export default defineConfig({
         {
           text: 'Guides',
           items: [
-            { text: 'Reading 271 responses', link: '/parser/guides/reading-271s' },
-            { text: 'Reading X12 envelopes', link: '/parser/guides/low-level-reader' },
+            { text: 'Read 271 responses', link: '/parser/guides/reading-271s' },
+            { text: 'Read X12 envelopes', link: '/parser/guides/low-level-reader' },
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
         },

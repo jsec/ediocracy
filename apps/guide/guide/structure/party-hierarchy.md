@@ -1,10 +1,10 @@
 ---
 title: Party hierarchy
-description: How HL and NM1 segments relate people and organizations in a 271.
+description: Learn how HL and NM1 segments relate people and organizations in a 271.
 ---
 
 A party hierarchy describes which person or organization a response context
-refers to. `HL` supplies a hierarchical level and optional parent identifier;
+refers to. `HL` supplies a hierarchical level and an optional parent identifier.
 `NM1` identifies the party associated with that level.
 
 ## HL parent-child relationships
@@ -18,16 +18,16 @@ HL*3*2*22*0~
 ```
 
 - `HL01` numbers each level: `1`, `2`, and `3`.
-- `HL02` identifies the parent. It is empty at the top level, then points to
-  level `1` and level `2` in the following segments.
+- `HL02` identifies the parent. It is empty at the top level, then contains
+  `1` and `2` in the following segments.
 - `HL03` identifies the kind of level. The values shown are information source
   (`20`), information receiver (`21`), and subscriber (`22`).
 - `HL04` indicates whether the level has children. The subscriber level uses
   `0` because it has no child level in this example.
 
-See the [HL fields](/guide/reference/segments#hl).
+For field details, see the [HL fields](/guide/reference/segments#hl).
 
-## NM1 identifies the party
+## NM1 party identification
 
 An `NM1` segment identifies the party at the current level:
 
@@ -42,14 +42,15 @@ NM1*IL*1*REED*JORDAN~
 - `NM102=2` identifies the payer and provider as organizations. `NM102=1`
   identifies the subscriber as a person.
 - `NM103` contains an organization name or a person's family name. `NM104` contains the person's given name when present.
-- `NM108` names the identifier type and `NM109` holds the identifier. X279A1
-  requires both for the information source (loop 2100A) and the information
-  receiver (loop 2100B). Here `PI` marks a payer identifier and `XX` marks a
+- `NM108` contains the identifier type and `NM109` contains the identifier.
+  The 005010X279A1 implementation guide (X279A1) requires both for the
+  information source (loop `2100A`) and the information receiver (loop
+  `2100B`). Here `PI` marks a payer identifier and `XX` marks a
   National Provider Identifier. Both values were written for this guide. The
-  subscriber `NM1` (loop 2100C) leaves them out; X279A1 does not require them
+  subscriber `NM1` (loop `2100C`) leaves them out. X279A1 doesn't require them
   there.
 
-See the [NM1 fields](/guide/reference/segments#nm1).
+For field details, see the [NM1 fields](/guide/reference/segments#nm1).
 
 The sequence shows one hierarchy. Read `HL` and `NM1` together with the
 transaction profile and companion guide to determine which relationships and

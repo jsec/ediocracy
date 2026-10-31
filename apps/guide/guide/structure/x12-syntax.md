@@ -1,12 +1,13 @@
 ---
 title: X12 syntax in a 271
-description: Segments, elements, separators, and control values in an X12 message.
+description: Learn how segments, elements, separators, and control values form an X12 message.
 ---
 
 X12 syntax represents a message as segments separated by a terminator, with
 data elements separated by an element separator and composite components
 separated by a component separator. The [segment reference](/guide/reference/segments)
-lists the fields used in this guide. X279A1 defines the full grammar.
+lists the fields used in this guide. The 005010X279A1 implementation guide
+(X279A1) defines the full grammar.
 
 ## Segments and elements
 
@@ -38,26 +39,27 @@ REF*ZZ*VALUE*~
 The doubled separator in `N1` marks an empty `N102`, which X12 syntax allows.
 The separator before `~` in `REF` is different: X12 treats a separator
 directly before the segment terminator as incorrect usage. A receiver can
-report it in a 999 with `IK403=3` (Too Many Data Elements); see
-[RFI 1498](https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999).
-The fixture includes it so that a reader can be tested on keeping the raw
-position when a sender makes this error.
+report it in a 999 implementation acknowledgment with `IK403=3` (Too Many Data
+Elements). For details, see
+[X12 Request for Interpretation (RFI) 1498](https://x12.org/resources/requests-for-interpretation/rfi-1498-trailing-delimiters-and-999).
+The fixture includes it so that you can test whether an X12 reader keeps the
+raw position when a sender makes this error.
 
 ## Delimiters and control values
 
 The interchange header supplies delimiter characters at defined positions for
-that interchange. Read them from each `ISA`: trading partners can use
-different characters.
+that interchange. Read them from each `ISA`, because trading partners can
+use different characters.
 
 ### Alternate delimiters
 
 Parser fixture `GX12-002` uses `|` as its element separator and `` ` `` as its
 segment terminator. Its `ISA11` repetition separator is `!`, and its `ISA16`
-component separator is `;`. The fixture demonstrates that one interchange can
-use a different delimiter set; it is not an eligibility-benefit example.
+component separator is `;`. The fixture shows that one interchange can use a
+different delimiter set. It doesn't contain eligibility or benefit data.
 
 Control values identify and count containers: `ISA13` pairs with `IEA02`,
-`GS06` with `GE02`, and `ST02` with `SE02`. Matching values tie each trailer
+`GS06` with `GE02`, and `ST02` with `SE02`. Matching values link each trailer
 to its header.
 
 The public examples and the [ISA fields](/guide/reference/segments#isa)

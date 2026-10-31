@@ -2,16 +2,16 @@
 title: Parser
 ---
 
-`@ediocracy/parser` reads X12 text into typed interchanges, functional
-groups and transaction sets, and reads 271 eligibility responses into
-payers, providers, subscribers and benefits.
+The `@ediocracy/parser` package reads X12 text into typed interchanges,
+functional groups, and transaction sets. It also reads 271 eligibility
+responses into payers, providers, subscribers, and benefits.
 
 ::: info
-The package is not published to npm yet. The install command below is the
-one to use once it is.
+The package isn't published to npm yet. After it's published, install it
+with the command in the following section.
 :::
 
-## Install
+## Install the package
 
 ```sh
 pnpm add @ediocracy/parser
@@ -19,21 +19,27 @@ pnpm add @ediocracy/parser
 
 ## Requirements
 
-- Node.js 26 or later. The package is ESM only.
-- The 271 reader follows the 005010X279A1 implementation guide. Responses
-  under another version are read, and each one gets an `unexpected-version`
-  finding.
+The package has the following requirements:
 
-## What it provides
+- Node.js 26 or later. The package is ECMAScript modules (ESM) only.
+- The 005010X279A1 implementation guide. The 271 reader follows this guide.
+  It also reads responses that use another version, and adds an
+  `unexpected-version` finding to each one.
 
-- [`readX12`](/parser/api/functions/readX12) reads any X12 text into
-  interchanges, groups, transaction sets and segments. See
-  [Reading X12 envelopes](/parser/guides/low-level-reader).
-- [`read271`](/parser/api/functions/read271) and
-  [`read271s`](/parser/api/functions/read271s) read 271 transaction sets
-  into the `Response271` type. See [Reading 271 responses](/parser/guides/reading-271s).
-- [`X12SyntaxError`](/parser/api/classes/X12SyntaxError) is thrown for text
-  that cannot be read. Smaller problems are returned as findings. See
+## What the package provides
+
+The package provides the following functions and classes:
+
+- The [`readX12`](/parser/api/functions/readX12) function reads any X12 text
+  into interchanges, groups, transaction sets, and segments. For more
+  information, see [Read X12 envelopes](/parser/guides/low-level-reader).
+- The [`read271`](/parser/api/functions/read271) and
+  [`read271s`](/parser/api/functions/read271s) functions read 271
+  transaction sets into the `Response271` type. For more information, see
+  [Read 271 responses](/parser/guides/reading-271s).
+- The [`X12SyntaxError`](/parser/api/classes/X12SyntaxError) class is the
+  error that the parser throws for text that it can't read. The parser
+  returns smaller problems as findings. For more information, see
   [Errors and findings](/parser/guides/errors-and-findings).
 
-Start with the [quick start](/parser/quick-start).
+To get started, see the [quick start](/parser/quick-start).

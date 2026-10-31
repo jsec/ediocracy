@@ -1,28 +1,30 @@
 ---
 title: Example index
-description: Links to complete 271 examples and their EDI downloads.
+description: Links to the complete 271 examples and their EDI file downloads.
 ---
 
 Use these pages to read a segment in its full message context. Each page
-explains the scenario and links to the EDI file used by the site.
+explains the scenario and links to the electronic data interchange (EDI) file
+that the site uses.
 
 ## Complete examples
 
 | Example | Rendered explanation | Raw download | What to look for |
 | --- | --- | --- | --- |
-| Single benefit statement | [Read the rendered single-benefit response](/guide/examples/single-eb) | [Download `single-eb.edi`](/examples/single-eb.edi) | One `EB` in one subscriber context. |
-| Medicare Secondary Payer context | [Read the rendered Medicare Secondary Payer response](/guide/examples/medicare-secondary-payer) | [Download `medicare-secondary-payer.edi`](/examples/medicare-secondary-payer.edi) | A coordination scenario with subscriber hierarchy, `EB`, and `DTP`. The page explains where payer order must come from. |
-| Medicare primary and commercial secondary context | [Read the rendered primary/secondary response](/guide/examples/medicare-primary-commercial-secondary) | [Download `medicare-primary-commercial-secondary.edi`](/examples/medicare-primary-commercial-secondary.edi) | A coordination scenario with related `EB` and `MSG` values. The page explains where payer order must come from. |
-| Medicare Advantage context | [Read the rendered Medicare Advantage response](/guide/examples/medicare-advantage) | [Download `medicare-advantage.edi`](/examples/medicare-advantage.edi) | Program context with benefit, date, and message segments. |
-| Multiple interchanges | [Read the rendered two-interchange payload](/guide/examples/multiple-interchanges) | [Download `multiple-interchanges.edi`](/examples/multiple-interchanges.edi) | Two complete interchanges in one file. |
+| Single benefit statement | [Read the rendered single-benefit response](/guide/examples/single-eb) | [Download `single-eb.edi`](/examples/single-eb.edi) | One `EB` segment in one subscriber context |
+| Medicare Secondary Payer context | [Read the rendered Medicare Secondary Payer response](/guide/examples/medicare-secondary-payer) | [Download `medicare-secondary-payer.edi`](/examples/medicare-secondary-payer.edi) | A coordination scenario with subscriber hierarchy, `EB`, and `DTP`, and an explanation of where payer order must come from |
+| Medicare primary and commercial secondary context | [Read the rendered primary and secondary response](/guide/examples/medicare-primary-commercial-secondary) | [Download `medicare-primary-commercial-secondary.edi`](/examples/medicare-primary-commercial-secondary.edi) | A coordination scenario with related `EB` and `MSG` values, and an explanation of where payer order must come from |
+| Medicare Advantage context | [Read the rendered Medicare Advantage response](/guide/examples/medicare-advantage) | [Download `medicare-advantage.edi`](/examples/medicare-advantage.edi) | Program context with benefit, date, and message segments |
+| Multiple interchanges | [Read the rendered two-interchange payload](/guide/examples/multiple-interchanges) | [Download `multiple-interchanges.edi`](/examples/multiple-interchanges.edi) | Two complete interchanges in one file |
 
 ## Reading order
 
-Start with [the single-benefit response](/guide/examples/single-eb), then compare
-the coordination contexts. Finish with [the multiple-interchange payload](/guide/examples/multiple-interchanges)
-to see where one `ISA`/`IEA` interchange ends and the next begins.
+Start with [the single-benefit response](/guide/examples/single-eb), and then
+compare the coordination contexts. Finish with
+[the multiple-interchange payload](/guide/examples/multiple-interchanges) to
+see where one `ISA`/`IEA` interchange ends and the next begins.
 
 All names, identifiers, dates, plan descriptions, and control numbers in these
-files were written for this guide. No payer sent these messages. Validate an
+files were written for this guide. No payer sent these messages. Validate your
 implementation against the licensed 005010X279A1 guide and the applicable
 companion guide.

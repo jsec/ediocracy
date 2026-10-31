@@ -3,14 +3,14 @@ title: Understanding X12 271 responses
 description: A source-backed introduction to X12 271 eligibility responses.
 ---
 
-This guide is for readers who understand the insurance eligibility check
-process but do not yet know the X12 data format.
+This guide is for you if you understand the insurance eligibility check
+process but don't yet know the X12 data format.
 
-Its purpose is to explain what a 271 response represents and how to read its
+It explains what a 271 response represents and how to read its
 interchange, transaction, hierarchy, and benefit details. It separates X12
 material from clearinghouse and payer rules.
 
-Start with [what a 271 is](/guide/introduction/what-is-a-271), then follow the
+Start with [What a 271 response is](/guide/introduction/what-is-a-271), then follow the
 [message structure](/guide/structure/x12-syntax) pages in order. The examples use
 invented values. You can download the [`single-eb.edi`](/examples/single-eb.edi)
 file and follow it through the guide.

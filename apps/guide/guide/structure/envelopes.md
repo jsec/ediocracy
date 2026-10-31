@@ -1,6 +1,6 @@
 ---
 title: Interchanges, groups, and transactions
-description: How ISA, GS, and ST containers nest inside a 271 interchange.
+description: Learn how the ISA, GS, and ST headers and their trailers nest inside a 271 interchange.
 ---
 
 X12 documentation uses *envelope* for the header-and-trailer pairs that delimit
@@ -29,8 +29,8 @@ IEA*1*000000101~
   `IEA02`.
 - `IEA01=1` reports one functional group in this interchange.
 
-See the [ISA](/guide/reference/segments#isa) and
-[IEA](/guide/reference/segments#iea) field tables.
+For field details, see the [ISA field table](/guide/reference/segments#isa)
+and the [IEA field table](/guide/reference/segments#iea).
 
 ## Functional group: GS and GE
 
@@ -47,12 +47,12 @@ GE*1*101~
 - `GS02` and `GS03` contain the application sender and receiver codes.
 - `GS04` and `GS05` contain the group date and time.
 - `GS06=101` is the group control number. It matches `GE02`.
-- `GS07=X` identifies X12 as the responsible agency, while
+- `GS07=X` identifies X12 as the responsible agency.
   `GS08=005010X279A1` identifies the implementation convention used here.
 - `GE01=1` reports one transaction set in the group.
 
-See the [GS](/guide/reference/segments#gs) and
-[GE](/guide/reference/segments#ge) field tables.
+For field details, see the [GS field table](/guide/reference/segments#gs)
+and the [GE field table](/guide/reference/segments#ge).
 
 ## Transaction set: ST and SE
 
@@ -70,10 +70,10 @@ SE*10*0101~
   transaction.
 - `SE01=10` counts every segment from `ST` through `SE`, including both.
 
-See the [ST](/guide/reference/segments#st) and
-[SE](/guide/reference/segments#se) field tables.
+For field details, see the [ST field table](/guide/reference/segments#st)
+and the [SE field table](/guide/reference/segments#se).
 
 These pairs close in reverse order: `ST`/`SE`, then `GS`/`GE`, then
 `ISA`/`IEA`. A file can contain more than one interchange, as shown by
-[X12 RFI 1585](https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999).
+[X12 Request for Interpretation (RFI) 1585](https://x12.org/resources/requests-for-interpretation/rfi-1585-reporting-multi-isas-999).
 Each route can set its own file and batching rules.
