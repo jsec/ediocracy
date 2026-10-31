@@ -117,11 +117,17 @@ class EligibilityResponseReader {
             .filter(loop => loop.id.startsWith('2110'))
             .map(loop => readBenefit(loop));
         const dependents = level.loops.filter(loop => loop.id === '2000D').map(loop => this.#readPerson(loop));
+        const nameSegments = nameLoops[0]?.segments ?? [];
 
         return {
             ...readParty(level, nameLoops[0]),
+            address: nameSegments.filter(({ tag }) => tag === 'N3' || tag === 'N4'),
             benefits,
+            dates: nameSegments.filter(({ tag }) => tag === 'DTP'),
+            demographics: nameSegments.find(({ tag }) => tag === 'DMG'),
             dependents,
+            references: nameSegments.filter(({ tag }) => tag === 'REF'),
+            relationship: nameSegments.find(({ tag }) => tag === 'INS'),
             traces: segmentsWithTag(level, 'TRN'),
         };
     }

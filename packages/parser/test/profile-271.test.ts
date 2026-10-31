@@ -235,6 +235,34 @@ describe('read271', () => {
         });
     });
 
+    describe('member details', () => {
+        it('should read the subscriber and dependent details from the dependent sample', () => {
+            const response = only271(readFixture('271/dependent-sample.x12'));
+            const [subscriber] = response.subscribers;
+            const [dependent] = subscriber?.dependents ?? [];
+            const subscriberReferences = subscriber?.references.map(
+                segment => `${segment.element(1)} ${segment.element(2)}`,
+            );
+            const subscriberDates = subscriber?.dates.map(segment => segment.element(3));
+
+            expect(subscriberReferences).toEqual(['6P 186084', '18 UVdQAC5j6f']);
+            expect(subscriberDates).toEqual(['20240101-20241231']);
+            expect(subscriber?.demographics?.element(2)).toBe('19760214');
+            expect(subscriber?.address.map(({ tag }) => tag)).toEqual(['N3', 'N4']);
+            expect(subscriber?.relationship).toBeUndefined();
+            expect(dependent?.relationship?.element(2)).toBe('01');
+            expect(dependent?.demographics?.element(3)).toBe('F');
+        });
+
+        it('should keep both REF*6P segments from the Aetna sample', () => {
+            const response = only271(readFixture('271/sandbox-aetna.x12'));
+            const [subscriber] = response.subscribers;
+            const qualifiers = subscriber?.references.map(segment => segment.element(1));
+
+            expect(qualifiers).toEqual(['6P', '18', '6P', '18']);
+        });
+    });
+
     describe('unexpected structure', () => {
         it('should keep the later benefits and report the NM1 when an NM1 follows a benefit without LS', () => {
             const body = 'ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~'

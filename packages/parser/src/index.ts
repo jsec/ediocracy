@@ -1,4 +1,21 @@
 export type { Loop, LoopFindingCode } from './loops/types.js';
+export { interpret271 } from './profiles/271/eligibility/interpreter.js';
+export type {
+    Address,
+    BenefitFields,
+    CostShareEntry,
+    CoverageEntry,
+    DateEntry,
+    Eligibility,
+    EligibilityFindingCode,
+    LimitationEntry,
+    MemberDetails,
+    MemberEligibility,
+    OtherPartyEntry,
+    ReferenceEntry,
+    RelatedParty,
+    RequestErrorEntry,
+} from './profiles/271/eligibility/types.js';
 export { read271, read271s } from './profiles/271/reader.js';
 export type {
     Benefit,

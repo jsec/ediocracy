@@ -70,10 +70,20 @@ export type Party = {
 
 /** A subscriber or dependent. */
 export type Person = Party & {
+    /** The person's address (N3 and N4 segments). */
+    address: Segment[];
     /** The benefits reported for this person. */
     benefits: Benefit[];
+    /** Dates that apply to the person, such as plan dates (DTP segments). */
+    dates: Segment[];
+    /** Date of birth and gender (DMG segment). */
+    demographics: Segment | undefined;
     /** The dependents listed under this person. */
     dependents: Person[];
+    /** Reference numbers, such as the group number (REF segments). */
+    references: Segment[];
+    /** The dependent's relationship to the subscriber (INS segment). */
+    relationship: Segment | undefined;
     /** Trace numbers (TRN segments). */
     traces: Segment[];
 };
