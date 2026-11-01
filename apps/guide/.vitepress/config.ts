@@ -3,7 +3,6 @@ import { defineConfig } from 'vitepress';
 import typedocSidebar from '../parser/api/typedoc-sidebar.json';
 import { ediocracyMarkdown } from './markdown';
 import { renderForSearch } from './search-render.mjs';
-import { shikiTheme } from './shiki-theme';
 import { guideSidebar } from './sidebar-guide.mjs';
 
 // Links to .edi files in public/ are downloads. Without this, VitePress treats them as
@@ -22,9 +21,9 @@ export default defineConfig({
     'A source-backed introduction to X12 271 eligibility responses for readers who understand the insurance eligibility check process but do not know the X12 data format.',
   outDir: 'dist',
   srcExclude: ['README.md', 'tests/**', 'scripts/**', 'src/**'],
-  appearance: 'force-dark',
+  appearance: 'dark',
   markdown: {
-    theme: shikiTheme,
+    theme: { light: 'github-light', dark: 'github-dark' },
     lineNumbers: true,
     config: ediocracyMarkdown,
   },

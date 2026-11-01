@@ -1,26 +1,25 @@
+:root {
+  --edi-bg: #ffffff;
+  --edi-bg-soft: #f6f8fa;
+  --edi-bg-code: #f6f8fa;
+  --edi-bg-mute: #eff2f5;
+  --edi-divider: #d8dee4;
+  --edi-border: #d1d9e0;
+  --edi-text-1: #1f2328;
+  --edi-text-2: #25292e;
+  --edi-text-3: #393f46;
+  --edi-text-4: #59636e;
+  --edi-text-5: #818b98;
+  --edi-text-number: #818b98;
+  --edi-accent: #9a6700;
+  --edi-accent-hover: #7d4e00;
+  --edi-accent-wash: #fff8c5;
+  --edi-on-fill: #ffffff;
 
-:root,
-.dark {
-  --edi-bg: #0a0a0a;
-  --edi-bg-soft: #111111;
-  --edi-bg-code: #050505;
-  --edi-bg-mute: #1a1a1a;
-  --edi-divider: #262626;
-  --edi-border: #3a3a3a;
-  --edi-text-1: #fafafa;
-  --edi-text-2: #d0d0d0;
-  --edi-text-3: #b5b5b5;
-  --edi-text-4: #8a8a8a;
-  --edi-text-5: #5c5c5c;
-  --edi-text-number: #6e6e6e;
-  --edi-accent: #ffd23f;
-  --edi-accent-hover: #ffe580;
-  --edi-accent-wash: #1f1a08;
-
-  --edi-role-env: #5cc8ff;
-  --edi-role-ctx: #7df9c8;
-  --edi-role-hier: #ff8fab;
-  --edi-role-ben: #b6f36b;
+  --edi-role-env: #0969da;
+  --edi-role-ctx: #bc4c00;
+  --edi-role-hier: #8250df;
+  --edi-role-ben: #1a7f37;
 
   --edi-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --edi-transition: color 120ms, background-color 120ms, border-color 120ms;
@@ -43,8 +42,8 @@
   --vp-c-brand-3: var(--edi-accent);
   --vp-c-brand-soft: var(--edi-accent-wash);
   --vp-c-default-soft: var(--edi-bg-mute);
-  --vp-button-brand-text: #000000;
-  --vp-button-brand-hover-text: #000000;
+  --vp-button-brand-text: var(--edi-on-fill);
+  --vp-button-brand-hover-text: var(--edi-on-fill);
   --vp-code-bg: var(--edi-bg-mute);
   --vp-code-color: var(--edi-text-1);
   --vp-code-block-bg: var(--edi-bg-code);
@@ -61,11 +60,35 @@
   --vp-local-search-bg: var(--edi-bg);
   --vp-local-search-result-bg: var(--edi-bg-soft);
   --vp-local-search-highlight-bg: var(--edi-accent);
-  --vp-local-search-highlight-text: #000000;
+  --vp-local-search-highlight-text: var(--edi-on-fill);
   --vp-custom-block-info-bg: var(--edi-bg-soft);
   --vp-custom-block-info-border: var(--edi-divider);
   --vp-custom-block-tip-bg: var(--edi-bg-soft);
   --vp-custom-block-tip-border: var(--edi-divider);
+}
+
+.dark {
+  --edi-bg: #0d1117;
+  --edi-bg-soft: #151b23;
+  --edi-bg-code: #151b23;
+  --edi-bg-mute: #212830;
+  --edi-divider: #262c36;
+  --edi-border: #3d444d;
+  --edi-text-1: #f0f6fc;
+  --edi-text-2: #d1d7e0;
+  --edi-text-3: #b7bdc8;
+  --edi-text-4: #9198a1;
+  --edi-text-5: #656c76;
+  --edi-text-number: #656c76;
+  --edi-accent: #d29922;
+  --edi-accent-hover: #e3b341;
+  --edi-accent-wash: #272115;
+  --edi-on-fill: #0d1117;
+
+  --edi-role-env: #58a6ff;
+  --edi-role-ctx: #f0883e;
+  --edi-role-hier: #d2a8ff;
+  --edi-role-ben: #3fb950;
 }
 
 body {
@@ -539,7 +562,7 @@ body {
 .edi-button-primary {
   border-color: var(--edi-accent);
   background: var(--edi-accent);
-  color: #000000;
+  color: var(--edi-on-fill);
 }
 
 .edi-button-primary:hover {
@@ -587,7 +610,7 @@ body {
 .edi-x12-element.is-selected {
   background: var(--edi-role, var(--edi-accent));
   font-weight: 600;
-  color: #000000;
+  color: var(--edi-on-fill);
 }
 
 /* Margin notes: `::: aside Label` in Markdown */
@@ -691,7 +714,7 @@ body {
 
 .edi-annotated-field.is-selected .edi-chip {
   background: var(--edi-role);
-  color: #000000;
+  color: var(--edi-on-fill);
 }
 
 .edi-annotated-value {
@@ -722,26 +745,20 @@ body {
 }
 
 .edi-inspector {
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 720px;
   overflow: hidden;
   border: 1px solid var(--edi-divider);
   border-radius: 12px;
-}
-
-.edi-inspector-source {
-  display: flex;
-  flex: 1 1 320px;
-  flex-direction: column;
-  min-width: 0;
-  max-width: 100%;
-  border-right: 1px solid var(--edi-divider);
   background: var(--edi-bg-code);
   font-family: var(--edi-mono);
 }
 
 .edi-inspector-list {
+  overflow-x: auto;
+}
+
+.edi-inspector-rows {
+  min-width: 100%;
+  width: max-content;
   padding: 8px 0;
 }
 
@@ -756,7 +773,7 @@ body {
 
 .edi-inspector-row {
   display: grid;
-  grid-template-columns: 24px 44px minmax(0, 1fr);
+  grid-template-columns: 24px 44px max-content;
   gap: 10px;
   align-items: center;
   width: 100%;
@@ -784,10 +801,8 @@ body {
 }
 
 .edi-inspector-rest {
-  overflow: hidden;
   font-size: 13px;
   white-space: pre;
-  text-overflow: ellipsis;
   color: var(--edi-text-4);
 }
 
@@ -795,55 +810,94 @@ body {
   color: var(--edi-text-1);
 }
 
-.edi-inspector-detail {
+.edi-drawer {
+  position: fixed;
+  top: var(--vp-nav-height);
+  right: 0;
+  bottom: 0;
+  z-index: 25;
   display: flex;
-  flex: 2 1 440px;
   flex-direction: column;
-  gap: 22px;
-  min-width: 0;
-  padding: 28px clamp(18px, 3vw, 32px);
+  width: min(480px, 100vw);
+  border-left: 1px solid var(--edi-divider);
   background: var(--edi-bg);
+  box-shadow: -16px 0 40px rgb(0 0 0 / 0.25);
 }
 
-.edi-inspector-nav {
+@media (max-width: 959px) {
+  .edi-drawer {
+    top: 0;
+    z-index: 100;
+  }
+}
+
+.edi-drawer-enter-active,
+.edi-drawer-leave-active {
+  transition: transform 200ms ease;
+}
+
+.edi-drawer-enter-from,
+.edi-drawer-leave-to {
+  transform: translateX(100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edi-drawer-enter-active,
+  .edi-drawer-leave-active {
+    transition: none;
+  }
+}
+
+.edi-drawer-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--edi-divider);
+  padding: 12px 20px;
   font-family: var(--edi-mono);
   font-size: 12px;
   color: var(--edi-text-4);
 }
 
-.edi-inspector-nav > div {
+.edi-drawer-bar > div {
   display: flex;
   gap: 8px;
   font-family: var(--vp-font-family-base);
 }
 
-.edi-inspector-heading > div {
+.edi-drawer-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 24px 20px 32px;
+}
+
+.edi-drawer-heading {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.vp-doc .edi-inspector-heading p {
-  margin: 8px 0 0;
-  max-width: 60ch;
-  line-height: 1.6;
-}
-
-.edi-inspector-name {
+.edi-drawer-name {
   font-family: var(--edi-mono);
-  font-size: 44px;
+  font-size: 36px;
   font-weight: 600;
   line-height: 1;
   color: var(--edi-role);
 }
 
-.edi-inspector-role {
+.edi-drawer-role {
   padding: 3px 10px;
   font-size: 12px;
   color: var(--edi-role);
+}
+
+.vp-doc .edi-drawer-explanation {
+  margin: 0;
+  line-height: 1.6;
 }
 
 .edi-inspector-raw {
@@ -922,7 +976,7 @@ body {
   color: var(--edi-text-3);
 }
 
-.vp-doc .edi-inspector-detail > a {
+.vp-doc .edi-drawer-body > a {
   font-size: 14px;
 }
 
@@ -957,7 +1011,7 @@ body {
 .edi-filter.is-selected {
   border-color: var(--edi-accent);
   background: var(--edi-accent);
-  color: #000000;
+  color: var(--edi-on-fill);
 }
 
 .edi-filter-dot {
