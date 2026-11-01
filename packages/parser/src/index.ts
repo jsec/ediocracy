@@ -17,6 +17,22 @@ export type {
     RequestErrorEntry,
 } from './profiles/271/eligibility/types.js';
 export { read271, read271s } from './profiles/271/reader.js';
+export { interpretRoute } from './profiles/271/routes/engine.js';
+export { hetsProfile } from './profiles/271/routes/hets/profile.js';
+export type {
+    HetsFindingCode,
+    MedicarePlanEntry,
+    MedicareView,
+    MspEntry,
+} from './profiles/271/routes/hets/types.js';
+export type {
+    RouteEligibility,
+    RouteEntry,
+    RouteErrorCondition,
+    RouteErrorEntry,
+    RouteFindingCode,
+    RouteProfile,
+} from './profiles/271/routes/types.js';
 export type {
     Benefit,
     Party,

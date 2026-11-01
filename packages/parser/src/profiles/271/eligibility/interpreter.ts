@@ -246,6 +246,10 @@ class EligibilityInterpreter {
     }
 }
 
+export function allDependents(person: Person): Person[] {
+    return person.dependents.flatMap(dependent => [dependent, ...allDependents(dependent)]);
+}
+
 /**
  * Sorts the benefit rows of a 271 into lists a caller can filter, and reads their numbers and
  * dates. Codes are returned as they appear, without names. Values that cannot be read are
@@ -272,11 +276,7 @@ export function interpret271(response: Response271): Eligibility {
     return new EligibilityInterpreter(response).interpret();
 }
 
-function allDependents(person: Person): Person[] {
-    return person.dependents.flatMap(dependent => [dependent, ...allDependents(dependent)]);
-}
-
-function isOneOf<Code extends string>(
+export function isOneOf<Code extends string>(
     codes: readonly Code[],
     value: string | undefined,
 ): value is Code {
