@@ -1,11 +1,24 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["../../packages/parser/src/index.ts"],
+  "entryPoints": [
+    "../../packages/parser/src/index.ts"
+  ],
   "tsconfig": "../../packages/parser/tsconfig.json",
-  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-vitepress-theme"
+  ],
   "out": "./parser/api",
   "docsRoot": "./",
   "readme": "none",
-  "validation": { "notDocumented": true },
-  "treatWarningsAsErrors": true
+  "validation": {
+    "notDocumented": true
+  },
+  "treatWarningsAsErrors": true,
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "pageTitleTemplates": {
+    "member": "{name}"
+  },
+  "parametersFormat": "table"
 }

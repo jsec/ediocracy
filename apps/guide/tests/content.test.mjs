@@ -2,13 +2,15 @@ import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
+import { createMarkdownRenderer } from 'vitepress';
 import { describe, expect, it } from 'vitest';
 
+import { ediocracyMarkdown } from '../.vitepress/markdown.ts';
 import examplesData from '../.vitepress/theme/examples.data.ts';
 import { renderForSearch } from '../.vitepress/search-render.mjs';
 import { BANNED_PHRASES, checkDocument, checkDownloadLinks, checkSidebarSlugs } from '../scripts/check-content.mjs';
 import { EXAMPLE_FILENAMES, loadExample } from '../src/lib/examples.mjs';
-import { buildWalkthrough } from '../src/lib/walkthrough.mjs';
+import { buildWalkthrough, segmentRole } from '../src/lib/walkthrough.mjs';
 
 const FRONTMATTER = /^---\n([\s\S]*?)\n---\n/;
 const TITLE_LINE = /^title:\s*(.+)$/m;
@@ -18,6 +20,8 @@ const HEADING = /^(#{1,6})\s+\S/mg;
 const CODE_BLOCK = /```[\s\S]*?```/g;
 const WEB_ADDRESS = /https?:\/\/\S+/g;
 const MARKDOWN_FILE = /\.mdx?$/;
+
+const guideRoot = fileURLToPath(new URL('..', import.meta.url));
 
 const pages = [
   ['guide/index.md', /271|eligibility/i],
@@ -224,50 +228,57 @@ describe('example pages', () => {
   });
 });
 
-describe('X12Example component', () => {
-  const component = readGuideFile('.vitepress/theme/X12Example.vue');
-
-  it('should give each field table a caption and column scopes', () => {
-    const columnHeaderCount = (component.match(/<th scope="col">/g) ?? []).length;
-
-    expect(component).not.toMatch(/<h5>\{\{ segment\.ordinal \}\}\./);
-    expect(component).toMatch(/<table class="x12-field-table" :aria-labelledby="`segment-table-\$\{file\}-\$\{interchange\.ordinal\}-\$\{segment\.ordinal\}`">/);
-    expect(component).toMatch(/<caption :id="`segment-table-\$\{file\}-\$\{interchange\.ordinal\}-\$\{segment\.ordinal\}`">/);
-    expect(component).toMatch(/<strong>Raw segment:<\/strong> <code>/);
-    expect(columnHeaderCount).toBe(4);
+describe('segmentRole', () => {
+  it.each([
+    ['EB01=1', 'benefit'],
+    ['NM103', 'hierarchy'],
+    ['ISA13', 'envelope'],
+    ['BHT', 'context'],
+  ])('should give %s the %s role', (text, role) => {
+    expect(segmentRole(text)).toBe(role);
   });
 
-  it('should reserve readable widths for each field table column', () => {
-    const stylesheet = readGuideFile('.vitepress/theme/custom.css');
-
-    expect(component).toMatch(/<div class="x12-field-table-wrap">/);
-    expect(component).toMatch(/<table class="x12-field-table"/);
-    expect(component).toMatch(/<col class="x12-position-column" \/>/);
-    expect(component).toMatch(/<col class="x12-value-column" \/>/);
-    expect(component).toMatch(/<col class="x12-name-column" \/>/);
-    expect(stylesheet).toMatch(/\.x12-field-table-wrap\s*\{[^}]*overflow-x:\s*auto/s);
-    expect(stylesheet).toMatch(/\.x12-field-table\s*\{[^}]*min-inline-size:\s*48rem[^}]*table-layout:\s*fixed/s);
-    expect(stylesheet).toMatch(/\.x12-position-column\s*\{[^}]*inline-size:\s*7rem/s);
-    expect(stylesheet).toMatch(/\.x12-value-column\s*\{[^}]*inline-size:\s*10rem/s);
-    expect(stylesheet).toMatch(/\.x12-name-column\s*\{[^}]*inline-size:\s*15rem/s);
-  });
-
-  it('should give each segment a unique heading and per-interchange navigation', () => {
-    expect(component).toMatch(/<nav :aria-label="`Interchange \$\{interchange\.ordinal\} segment navigation`">/);
-    expect(component).toMatch(/:href="`#segment-\$\{file\}-\$\{interchange\.ordinal\}-\$\{segment\.ordinal\}`"/);
-    expect(component).toMatch(/\{\{ segment\.ordinal \}\}\. \{\{ segment\.name \}\}/);
-    expect(component).toMatch(/<h5 :id="`segment-\$\{file\}-\$\{interchange\.ordinal\}-\$\{segment\.ordinal\}`">\{\{ segment\.name \}\}<\/h5>/);
+  it.each(['STATUS', 'readX12', '2120'])('should give %s no role', (text) => {
+    expect(segmentRole(text)).toBeUndefined();
   });
 });
 
-describe('theme', () => {
-  it('should import the Catppuccin palette after the default theme so its colors apply', () => {
-    const theme = readGuideFile('.vitepress/theme/index.ts');
-    const defaultThemePosition = theme.indexOf("from 'vitepress/theme'");
-    const palettePosition = theme.indexOf("'@catppuccin/vitepress/theme/mocha/mauve.css'");
+describe('ediocracyMarkdown', () => {
+  const source = `Intro.
 
-    expect(defaultThemePosition).toBeGreaterThanOrEqual(0);
-    expect(palettePosition).toBeGreaterThan(defaultThemePosition);
+## With notes
+
+::: aside Reads as
+A limit of five visits.
+:::
+
+Section text with \`EB01\`.
+
+## Without notes
+
+Plain text.
+`;
+
+  it('should put the notes of an H2 section in a margin column after the section text', async () => {
+    const md = await createMarkdownRenderer(guideRoot, { config: ediocracyMarkdown });
+    const html = md.render(source);
+    const mainStart = html.indexOf('<div class="edi-columns-main">');
+    const textPosition = html.indexOf('Section text');
+    const marginStart = html.indexOf('<div class="edi-columns-margin">');
+    const notePosition = html.indexOf('<p class="edi-note-label">Reads as</p>');
+
+    expect(mainStart).toBeGreaterThan(html.indexOf('With notes'));
+    expect(textPosition).toBeGreaterThan(mainStart);
+    expect(marginStart).toBeGreaterThan(textPosition);
+    expect(notePosition).toBeGreaterThan(marginStart);
+    expect(html.match(/edi-columns-main/g)).toHaveLength(1);
+  });
+
+  it('should give inline code that starts with a segment ID its role class', async () => {
+    const md = await createMarkdownRenderer(guideRoot, { config: ediocracyMarkdown });
+    const html = md.render(source);
+
+    expect(html).toContain('<code class="edi-role-benefit">EB01</code>');
   });
 });
 

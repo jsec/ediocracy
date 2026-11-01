@@ -1,12 +1,20 @@
 import { defineConfig } from 'vitepress';
 
 import typedocSidebar from '../parser/api/typedoc-sidebar.json';
+import { ediocracyMarkdown } from './markdown';
 import { renderForSearch } from './search-render.mjs';
+import { shikiTheme } from './shiki-theme';
 import { guideSidebar } from './sidebar-guide.mjs';
 
 // Links to .edi files in public/ are downloads. Without this, VitePress treats them as
 // page links: it reports them as dead and appends .html.
 process.env.VITE_EXTRA_EXTENSIONS = 'edi';
+
+function apiItems(...groupNames: string[]) {
+  return typedocSidebar
+    .filter((group) => groupNames.includes(group.text))
+    .flatMap((group) => group.items);
+}
 
 export default defineConfig({
   title: 'Ediocracy',
@@ -14,22 +22,32 @@ export default defineConfig({
     'A source-backed introduction to X12 271 eligibility responses for readers who understand the insurance eligibility check process but do not know the X12 data format.',
   outDir: 'dist',
   srcExclude: ['README.md', 'tests/**', 'scripts/**', 'src/**'],
+  appearance: 'force-dark',
   markdown: {
-    theme: {
-      light: 'catppuccin-latte',
-      dark: 'catppuccin-mocha',
-    },
+    theme: shikiTheme,
+    lineNumbers: true,
+    config: ediocracyMarkdown,
   },
   themeConfig: {
+    siteTitle: false,
     nav: [
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Parser', link: '/parser/' },
+      { text: 'Guide', link: '/guide/', activeMatch: '^/guide/' },
+      { text: 'Parser', link: '/parser/', activeMatch: '^/parser/' },
+    ],
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/jsec/ediocracy' },
     ],
     sidebar: {
       '/guide/': guideSidebar,
       '/parser/': [
-        { text: 'Overview', link: '/parser/' },
-        { text: 'Quick start', link: '/parser/quick-start' },
+        {
+          text: 'Parser',
+          items: [
+            { text: 'Overview', link: '/parser/' },
+            { text: 'Quick start', link: '/parser/quick-start' },
+            { text: 'API reference', link: '/parser/api/' },
+          ],
+        },
         {
           text: 'Guides',
           items: [
@@ -39,13 +57,16 @@ export default defineConfig({
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
         },
+        { text: 'API · Functions', items: apiItems('Functions') },
+        { text: 'API · Classes & interfaces', items: apiItems('Classes', 'Interfaces') },
         {
-          text: 'API reference',
-          link: '/parser/api/',
-          items: typedocSidebar,
+          text: 'API · Types',
+          collapsed: true,
+          items: apiItems('Type Aliases', 'Variables'),
         },
       ],
     },
+    outline: { label: 'On this page' },
     search: {
       provider: 'local',
       options: { _render: renderForSearch },

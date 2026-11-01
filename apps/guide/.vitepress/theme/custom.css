@@ -1,63 +1,1632 @@
-.vp-doc pre {
-  max-inline-size: 100%;
-  overflow-x: auto;
-  line-height: 1.45;
+
+:root,
+.dark {
+  --edi-bg: #0a0a0a;
+  --edi-bg-soft: #111111;
+  --edi-bg-code: #050505;
+  --edi-bg-mute: #1a1a1a;
+  --edi-divider: #262626;
+  --edi-border: #3a3a3a;
+  --edi-text-1: #fafafa;
+  --edi-text-2: #d0d0d0;
+  --edi-text-3: #b5b5b5;
+  --edi-text-4: #8a8a8a;
+  --edi-text-5: #5c5c5c;
+  --edi-text-number: #6e6e6e;
+  --edi-accent: #ffd23f;
+  --edi-accent-hover: #ffe580;
+  --edi-accent-wash: #1f1a08;
+
+  --edi-role-env: #5cc8ff;
+  --edi-role-ctx: #7df9c8;
+  --edi-role-hier: #ff8fab;
+  --edi-role-ben: #b6f36b;
+
+  --edi-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --edi-transition: color 120ms, background-color 120ms, border-color 120ms;
+
+  --vp-font-family-base: 'IBM Plex Sans', system-ui, sans-serif;
+  --vp-font-family-mono: var(--edi-mono);
+
+  --vp-c-bg: var(--edi-bg);
+  --vp-c-bg-alt: var(--edi-bg);
+  --vp-c-bg-soft: var(--edi-bg-soft);
+  --vp-c-bg-elv: var(--edi-bg-soft);
+  --vp-c-divider: var(--edi-divider);
+  --vp-c-border: var(--edi-border);
+  --vp-c-gutter: var(--edi-divider);
+  --vp-c-text-1: var(--edi-text-1);
+  --vp-c-text-2: var(--edi-text-3);
+  --vp-c-text-3: var(--edi-text-4);
+  --vp-c-brand-1: var(--edi-accent);
+  --vp-c-brand-2: var(--edi-accent-hover);
+  --vp-c-brand-3: var(--edi-accent);
+  --vp-c-brand-soft: var(--edi-accent-wash);
+  --vp-c-default-soft: var(--edi-bg-mute);
+  --vp-button-brand-text: #000000;
+  --vp-button-brand-hover-text: #000000;
+  --vp-code-bg: var(--edi-bg-mute);
+  --vp-code-color: var(--edi-text-1);
+  --vp-code-block-bg: var(--edi-bg-code);
+  --vp-code-font-size: 0.88em;
+  --vp-code-line-height: 1.75;
+  --vp-code-line-highlight-color: var(--edi-accent-wash);
+  --vp-code-line-number-color: var(--edi-text-5);
+  --vp-code-copy-code-bg: var(--edi-bg-soft);
+  --vp-code-copy-code-hover-bg: var(--edi-bg-mute);
+  --vp-sidebar-bg-color: var(--edi-bg);
+  --vp-nav-bg-color: var(--edi-bg);
+  --vp-nav-height: 64px;
+  --vp-sidebar-width: 272px;
+  --vp-local-search-bg: var(--edi-bg);
+  --vp-local-search-result-bg: var(--edi-bg-soft);
+  --vp-local-search-highlight-bg: var(--edi-accent);
+  --vp-local-search-highlight-text: #000000;
+  --vp-custom-block-info-bg: var(--edi-bg-soft);
+  --vp-custom-block-info-border: var(--edi-divider);
+  --vp-custom-block-tip-bg: var(--edi-bg-soft);
+  --vp-custom-block-tip-border: var(--edi-divider);
 }
 
-.vp-doc .x12-complete-response {
-  overflow-x: visible;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+body {
+  background: var(--edi-bg);
+  -webkit-font-smoothing: antialiased;
 }
 
-.vp-doc table {
-  display: block;
-  max-inline-size: 100%;
-  overflow-x: auto;
+.edi-role-envelope { --edi-role: var(--edi-role-env); }
+.edi-role-context { --edi-role: var(--edi-role-ctx); }
+.edi-role-hierarchy { --edi-role: var(--edi-role-hier); }
+.edi-role-benefit { --edi-role: var(--edi-role-ben); }
+.edi-role-all { --edi-role: var(--edi-text-4); }
+
+.vp-doc code[class*='edi-role-'],
+.edi-home code[class*='edi-role-'] {
+  color: var(--edi-role);
 }
 
-.vp-doc .x12-field-table-wrap {
-  max-inline-size: 100%;
-  overflow-x: auto;
+/* Header */
+
+.VPNavBar,
+.VPNavBar.has-sidebar .content-body,
+.VPNavBar:not(.home) .divider-line {
+  background: var(--edi-bg);
 }
 
-.vp-doc .x12-field-table {
-  display: table;
-  inline-size: 100%;
-  min-inline-size: 48rem;
-  table-layout: fixed;
+.VPNavBar .divider-line,
+.VPNavBar.has-sidebar .divider {
+  background-color: var(--edi-divider);
 }
 
-.vp-doc .x12-position-column {
-  inline-size: 7rem;
+.VPNavBar .divider {
+  border-bottom: 1px solid var(--edi-divider);
 }
 
-.vp-doc .x12-value-column {
-  inline-size: 10rem;
+.edi-logo {
+  font-family: var(--edi-mono);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--edi-text-1);
 }
 
-.vp-doc .x12-name-column {
-  inline-size: 15rem;
+.edi-logo-star {
+  color: var(--edi-text-number);
 }
 
-.vp-doc .x12-field-table th,
-.vp-doc .x12-field-table td {
-  vertical-align: top;
+.edi-logo-tilde {
+  color: var(--edi-accent);
 }
 
-.vp-doc .x12-field-table th:nth-child(-n + 3),
-.vp-doc .x12-field-table td:nth-child(-n + 2) {
-  overflow-wrap: normal;
-  word-break: normal;
+.VPNavBarMenuLink {
+  font-weight: 500;
+  color: var(--edi-text-3);
+}
+
+.VPNavBarMenuLink:hover {
+  color: var(--edi-text-1);
+}
+
+.VPNavBarMenuLink.active {
+  color: var(--edi-accent);
+}
+
+.DocSearch-Button {
+  border: 1px solid var(--edi-divider);
+  border-radius: 8px;
+  background: var(--edi-bg-soft);
+}
+
+@media (min-width: 768px) {
+  .DocSearch-Button {
+    width: clamp(140px, 22vw, 260px);
+    height: 36px;
+    padding: 0 12px;
+  }
+
+  .DocSearch-Button .DocSearch-Button-Placeholder {
+    flex: 1;
+    text-align: start;
+    font-size: 14px;
+    color: var(--edi-text-4);
+  }
+
+  .DocSearch-Button .DocSearch-Button-Keys {
+    border: 1px solid var(--edi-border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--edi-mono);
+  }
+}
+
+/* Sidebar */
+
+.VPSidebar {
+  border-right: 1px solid var(--edi-divider);
+}
+
+.VPSidebar .nav .group + .group {
+  border-top: none;
+}
+
+.VPSidebarItem.level-0 {
+  padding-bottom: 16px;
+}
+
+.VPSidebarItem.level-0 > .item .text {
+  padding-left: 10px;
+  font-family: var(--edi-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.VPSidebarItem.level-1 > .item {
+  padding: 0;
+}
+
+.VPSidebarItem.level-1 .link {
+  width: 100%;
+  border-radius: 6px;
+  padding: 6px 10px;
+  transition: var(--edi-transition);
+}
+
+.VPSidebarItem.level-1 .link:hover {
+  background: var(--edi-bg-mute);
+}
+
+.VPSidebarItem.level-1 .text {
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--edi-text-3);
+}
+
+.VPSidebarItem.level-1 .link[href^='/parser/api/'] .text {
+  font-family: var(--edi-mono);
+}
+
+.VPSidebarItem.level-1 .indicator {
+  display: none;
+}
+
+.VPSidebarItem.level-1.is-active > .item .link {
+  background: var(--edi-bg-mute);
+}
+
+.VPSidebarItem.level-1.is-active > .item .link > .text {
+  font-weight: 600;
+  color: var(--edi-accent);
+}
+
+/* Page layout */
+
+@media (min-width: 960px) {
+  .VPDoc.has-sidebar {
+    padding: 48px clamp(20px, 4vw, 56px) 96px;
+  }
+}
+
+/* The extra classes outrank VitePress's scoped width rules, such as `.VPDoc.has-aside .content-container[data-v-…]`. */
+.Layout .VPDoc.VPDoc .container,
+.Layout .VPDoc.VPDoc .content,
+.Layout .VPDoc.VPDoc .content .content-container {
+  max-width: none;
+}
+
+@media (min-width: 1280px) {
+  .VPDoc .content {
+    padding: 0;
+  }
+}
+
+.VPDoc .aside {
+  max-width: 200px;
+  padding-left: 40px;
+}
+
+@media (max-width: 1319px) {
+  .VPDoc .aside {
+    display: none;
+  }
+}
+
+.VPDocAsideOutline .outline-title {
+  font-family: var(--edi-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.VPDocAsideOutline .content {
+  border-left: none;
+  padding-left: 0;
+  font-size: 13px;
+}
+
+.VPDocAsideOutline .outline-marker {
+  display: none;
+}
+
+.VPDocOutlineItem .outline-link {
+  color: var(--edi-text-3);
+}
+
+.VPDocOutlineItem .outline-link.active {
+  color: var(--edi-accent);
+}
+
+.VPDocFooter .pager-link {
+  border-color: var(--edi-divider);
+  border-radius: 10px;
+}
+
+/* Page header: breadcrumb, API kind pill, title */
+
+.edi-page-header {
+  margin-bottom: 18px;
+}
+
+.vp-doc .edi-crumb {
+  margin: 0 0 14px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--edi-text-4);
+}
+
+.edi-kind {
+  float: left;
+  margin: 10px 14px 0 0;
+  border: 1px solid var(--edi-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--edi-role-env);
+}
+
+/* Prose */
+
+.vp-doc {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--edi-text-2);
 }
 
 .vp-doc p,
 .vp-doc li {
-  max-inline-size: 76ch;
+  max-width: 70ch;
+  text-wrap: pretty;
 }
 
-.vp-doc .synthetic-callout,
-.vp-doc .source-boundary {
-  border-inline-start: 0.25rem solid var(--vp-c-brand-1);
-  padding: 0.75rem 1rem;
+.vp-doc h1 {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--edi-text-1);
+}
+
+[class*='_parser_api_'].vp-doc h1 {
+  font-family: var(--edi-mono);
+}
+
+.vp-doc > div > p:first-child {
+  max-width: 66ch;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.vp-doc h2 {
+  margin-top: 64px;
+  border-top: 1px solid var(--edi-divider);
+  padding-top: 40px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--edi-text-1);
+}
+
+.vp-doc h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--edi-text-1);
+}
+
+/* Pages with `pageClass: edi-numbered` number their H2 sections: 01, 02, … */
+
+.edi-numbered .vp-doc {
+  counter-reset: edi-section;
+}
+
+.edi-numbered .vp-doc h2::before {
+  counter-increment: edi-section;
+  content: counter(edi-section, decimal-leading-zero);
+  margin-right: 14px;
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--edi-text-number);
+}
+
+.vp-doc a {
+  color: var(--edi-accent);
+  font-weight: inherit;
+  text-decoration: none;
+  transition: var(--edi-transition);
+}
+
+.vp-doc a:hover {
+  color: var(--edi-accent-hover);
+  text-decoration: underline;
+}
+
+.vp-doc :not(pre) > code {
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.88em;
+}
+
+.vp-doc a > code {
+  color: inherit;
+}
+
+.vp-doc .edi-pull {
+  max-width: 52ch;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--edi-text-1);
+}
+
+.vp-doc .edi-pull code {
+  padding: 0;
+  background: none;
+  font-size: 1em;
+}
+
+.vp-doc .custom-block {
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+}
+
+/* Code blocks */
+
+.vp-doc div[class*='language-'] {
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+}
+
+.vp-doc div[class*='language-'] code {
+  font-size: 14px;
+}
+
+.vp-doc div[class*='language-'] > span.lang {
+  font-family: var(--edi-mono);
+  color: var(--edi-text-4);
+}
+
+/* Tables */
+
+.vp-doc table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.vp-doc th {
+  background: var(--edi-bg-soft);
+  font-family: var(--edi-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.vp-doc tr,
+.vp-doc th,
+.vp-doc td {
+  border: none;
+  background: transparent;
+}
+
+.vp-doc tr:not(:first-child) td,
+.vp-doc tbody tr:first-child td {
+  border-top: 1px solid var(--edi-divider);
+}
+
+.vp-doc tr:nth-child(2n) {
+  background: transparent;
+}
+
+/* Shared pieces */
+
+.edi-panel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--edi-divider);
+  padding: 12px 16px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  color: var(--edi-text-4);
+}
+
+.edi-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+}
+
+.edi-pill {
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--edi-bg-mute);
+  color: var(--edi-text-2);
+}
+
+.vp-doc a.edi-pill-download {
+  border: 1px solid var(--edi-accent);
+  background: transparent;
+  color: var(--edi-accent);
+}
+
+.vp-doc a.edi-pill-download:hover {
+  text-decoration: none;
+  color: var(--edi-accent-hover);
+}
+
+.edi-chip {
+  justify-self: start;
+  border-radius: 4px;
+  padding: 2px 6px;
+  background: var(--edi-bg-mute);
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--edi-role, var(--edi-text-1));
+}
+
+.edi-button,
+.vp-doc .edi-button {
+  display: inline-block;
+  border: 1px solid var(--edi-border);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--edi-text-1);
+  transition: var(--edi-transition);
+}
+
+.edi-button:hover {
+  background: var(--edi-bg-mute);
+}
+
+.edi-button-primary {
+  border-color: var(--edi-accent);
+  background: var(--edi-accent);
+  color: #000000;
+}
+
+.edi-button-primary:hover {
+  border-color: var(--edi-accent-hover);
+  background: var(--edi-accent-hover);
+}
+
+.edi-button-small {
+  border: 1px solid var(--edi-border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--edi-text-2);
+  transition: var(--edi-transition);
+}
+
+.edi-button-small:hover {
+  background: var(--edi-bg-mute);
+}
+
+/* X12 segment text: the ID in its role color, dim separators, and an optional selected element. */
+
+.edi-x12-segment {
+  font-family: var(--edi-mono);
+  color: var(--edi-text-1);
+}
+
+.edi-x12-id {
+  font-weight: 600;
+  color: var(--edi-role, var(--edi-text-1));
+}
+
+.edi-x12-separator {
+  color: var(--edi-text-5);
+}
+
+.edi-x12-element {
+  border-radius: 3px;
+}
+
+.edi-x12-element.is-clickable {
+  cursor: pointer;
+}
+
+.edi-x12-element.is-selected {
+  background: var(--edi-role, var(--edi-accent));
+  font-weight: 600;
+  color: #000000;
+}
+
+/* Margin notes: `::: aside Label` in Markdown */
+
+.edi-columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px 48px;
+}
+
+.edi-columns-main {
+  flex: 1 1 480px;
+  min-width: 0;
+}
+
+.edi-columns-margin {
+  display: flex;
+  flex: 0 1 240px;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 200px;
+  padding-top: 16px;
+}
+
+.vp-doc .edi-note,
+.vp-doc .edi-note p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--edi-text-3);
+}
+
+.vp-doc .edi-note p + p {
+  margin-top: 6px;
+}
+
+.vp-doc .edi-note .edi-note-label {
+  margin-bottom: 6px;
+  font-family: var(--edi-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-1);
+}
+
+/* A note paragraph that is only a command, such as the install command. */
+.vp-doc .edi-note p > code:only-child {
+  display: block;
+  border: 1px solid var(--edi-divider);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background: var(--edi-bg-soft);
+  font-size: 13px;
+  color: var(--edi-text-1);
+}
+
+.vp-doc .edi-note a[href^='/guide/reference/segments'] {
+  margin-right: 10px;
+  font-family: var(--edi-mono);
+}
+
+/* X12Annotated: a segment excerpt with a selectable field list */
+
+.edi-annotated {
+  display: flex;
+  flex-direction: column;
+  margin: 16px 0;
+  overflow: hidden;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+}
+
+.edi-annotated-source {
+  overflow-x: auto;
+  padding: 14px 18px;
+  background: var(--edi-bg-code);
+  font-size: 17px;
+  line-height: 1.8;
+  white-space: pre;
+}
+
+.edi-annotated-field {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 16px;
+  align-items: baseline;
+  border-top: 1px solid var(--edi-divider);
+  padding: 11px 18px;
+  text-align: left;
+  transition: var(--edi-transition);
+}
+
+.edi-annotated-field:hover {
+  background: var(--edi-bg-mute);
+}
+
+.edi-annotated-field.is-selected {
+  background: var(--edi-bg-soft);
+}
+
+.edi-annotated-field.is-selected .edi-chip {
+  background: var(--edi-role);
+  color: #000000;
+}
+
+.edi-annotated-value {
+  overflow-wrap: anywhere;
+  font-family: var(--edi-mono);
+  font-size: 14px;
+  color: var(--edi-text-1);
+}
+
+.edi-annotated-value.is-empty {
+  color: var(--edi-text-4);
+}
+
+.edi-annotated-text {
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--edi-text-2);
+}
+
+/* X12Example: the split-pane segment inspector */
+
+.edi-example {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.edi-inspector {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 720px;
+  overflow: hidden;
+  border: 1px solid var(--edi-divider);
+  border-radius: 12px;
+}
+
+.edi-inspector-source {
+  display: flex;
+  flex: 1 1 320px;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  border-right: 1px solid var(--edi-divider);
+  background: var(--edi-bg-code);
+  font-family: var(--edi-mono);
+}
+
+.edi-inspector-list {
+  padding: 8px 0;
+}
+
+.vp-doc .edi-inspector-interchange {
+  margin: 8px 0 4px;
+  padding: 0 16px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.edi-inspector-row {
+  display: grid;
+  grid-template-columns: 24px 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 7px 16px;
+  font-family: var(--edi-mono);
+  text-align: left;
+  transition: var(--edi-transition);
+}
+
+.edi-inspector-row:hover,
+.edi-inspector-row.is-selected {
+  background: var(--edi-bg-mute);
+}
+
+.edi-inspector-ordinal {
+  font-size: 12px;
+  text-align: right;
+  color: var(--edi-text-5);
+}
+
+.edi-inspector-id {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--edi-role);
+}
+
+.edi-inspector-rest {
+  overflow: hidden;
+  font-size: 13px;
+  white-space: pre;
+  text-overflow: ellipsis;
+  color: var(--edi-text-4);
+}
+
+.edi-inspector-row.is-selected .edi-inspector-rest {
+  color: var(--edi-text-1);
+}
+
+.edi-inspector-detail {
+  display: flex;
+  flex: 2 1 440px;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+  padding: 28px clamp(18px, 3vw, 32px);
+  background: var(--edi-bg);
+}
+
+.edi-inspector-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  color: var(--edi-text-4);
+}
+
+.edi-inspector-nav > div {
+  display: flex;
+  gap: 8px;
+  font-family: var(--vp-font-family-base);
+}
+
+.edi-inspector-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vp-doc .edi-inspector-heading p {
+  margin: 8px 0 0;
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+.edi-inspector-name {
+  font-family: var(--edi-mono);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--edi-role);
+}
+
+.edi-inspector-role {
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--edi-role);
+}
+
+.edi-inspector-raw {
+  border: 1px solid var(--edi-divider);
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: var(--edi-bg-code);
+  font-size: 17px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.edi-inspector-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 10px;
+}
+
+.edi-field-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--edi-divider);
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: left;
+  transition: var(--edi-transition);
+}
+
+.edi-field-card:hover {
+  background: var(--edi-bg-mute);
+}
+
+.edi-field-card.is-selected {
+  border-color: var(--edi-role);
+  background: var(--edi-bg-soft);
+}
+
+.edi-field-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.edi-field-card-position {
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--edi-role);
+}
+
+.edi-field-card-value {
+  font-family: var(--edi-mono);
+  font-size: 15px;
+  white-space: pre-wrap;
+  text-align: right;
+  color: var(--edi-text-1);
+}
+
+.edi-field-card-value.is-empty {
+  color: var(--edi-text-4);
+}
+
+.edi-field-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--edi-text-1);
+}
+
+.edi-field-card-text {
+  font-size: 13px;
+  line-height: 1.5;
+  text-wrap: pretty;
+  color: var(--edi-text-3);
+}
+
+.vp-doc .edi-inspector-detail > a {
+  font-size: 14px;
+}
+
+/* SegmentIndex: filterable segment table with expandable field lists */
+
+.edi-segment-index {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: -56px;
+}
+
+.edi-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.edi-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--edi-border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--edi-text-2);
+  transition: var(--edi-transition);
+}
+
+.edi-filter.is-selected {
+  border-color: var(--edi-accent);
+  background: var(--edi-accent);
+  color: #000000;
+}
+
+.edi-filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--edi-role);
+}
+
+.edi-index-table {
+  overflow-x: auto;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+}
+
+.edi-index-grid {
+  min-width: 760px;
+}
+
+.edi-index-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1.3fr) minmax(0, 1.2fr) minmax(0, 0.9fr) 28px;
+  gap: 20px;
+  align-items: baseline;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: var(--edi-transition);
+}
+
+.edi-index-row:hover {
+  background: var(--edi-bg-soft);
+}
+
+.edi-index-header,
+.edi-index-header:hover {
+  padding: 12px 20px;
+  background: var(--edi-bg-soft);
+  font-family: var(--edi-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+  cursor: default;
+}
+
+.edi-index-segment {
+  border-top: 1px solid var(--edi-divider);
+  scroll-margin-top: calc(var(--vp-nav-height) + 24px);
+}
+
+.edi-index-segment.is-open {
+  background: var(--edi-bg-code);
+}
+
+.edi-index-name {
+  font-family: var(--edi-mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--edi-role);
+}
+
+.edi-index-purpose {
+  font-size: 14px;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--edi-text-2);
+}
+
+.edi-index-key,
+.edi-index-used {
+  font-size: 14px;
+  line-height: 1.55;
+  text-wrap: pretty;
+  color: var(--edi-text-3);
+}
+
+.edi-index-key code {
+  font-size: 12.5px;
+}
+
+.edi-index-used {
+  font-size: 13px;
+}
+
+.edi-index-toggle {
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  text-align: right;
+  color: var(--edi-text-4);
+}
+
+.edi-index-fields {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 20px 20px 136px;
+}
+
+.edi-index-field {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 20px;
+  align-items: baseline;
+  border-top: 1px solid var(--edi-bg-mute);
+  padding: 9px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--edi-text-3);
+}
+
+.edi-index-position {
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--edi-role);
+}
+
+.edi-index-field-name {
+  font-weight: 500;
+  color: var(--edi-text-1);
+}
+
+/* ControlPairs */
+
+.edi-control-pairs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.edi-control-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+  padding: 20px;
+  background: var(--edi-bg-code);
+}
+
+.edi-control-pair-ids {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--edi-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--edi-role-env);
+}
+
+.edi-control-pair-arrow {
+  font-weight: 400;
+  color: var(--edi-text-5);
+}
+
+.edi-control-pair-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--edi-text-4);
+}
+
+.edi-control-pair-value span:last-child {
+  font-family: var(--edi-mono);
+  font-size: 15px;
+  color: var(--edi-text-1);
+}
+
+/* CodePanel: a code block with a file bar and an output bar */
+
+.edi-code-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 16px 0;
+  overflow: hidden;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+  background: var(--edi-bg-code);
+}
+
+.edi-code-panel-file {
+  color: var(--edi-text-2);
+}
+
+.edi-copy {
+  border: 1px solid var(--edi-border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  color: var(--edi-text-2);
+}
+
+.edi-copy.is-copied {
+  color: var(--edi-role-ben);
+}
+
+.edi-code-panel div[class*='language-'],
+.vp-doc .edi-code-panel div[class*='language-'] {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.edi-code-panel button.copy,
+.edi-code-panel span.lang {
+  display: none;
+}
+
+.edi-code-panel .line {
+  transition: opacity 120ms, background-color 120ms;
+}
+
+.edi-code-panel .line.is-dimmed {
+  opacity: 0.45;
+}
+
+.edi-code-panel .line-number.is-highlighted {
+  color: var(--edi-accent);
+}
+
+.edi-code-panel-output {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-top: 1px solid var(--edi-divider);
+  padding: 12px 16px;
+  background: var(--edi-bg-soft);
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  color: var(--edi-text-number);
+}
+
+.edi-code-panel-result {
+  color: var(--edi-role-ben);
+}
+
+/* CodeSteps: a numbered list whose items select code lines */
+
+.vp-doc .edi-code-steps ol {
+  counter-reset: edi-step;
+  margin: 0;
+  border-top: 1px solid var(--edi-divider);
+  padding: 0;
+  list-style: none;
+}
+
+/* The item text is a mix of text and code, so the number and line label are positioned instead of grid cells. */
+.vp-doc .edi-code-steps li {
+  counter-increment: edi-step;
+  position: relative;
+  max-width: none;
+  margin: 0;
+  border-bottom: 1px solid var(--edi-divider);
+  padding: 16px 96px 16px 68px;
+  line-height: 1.7;
+  cursor: pointer;
+  transition: var(--edi-transition);
+}
+
+.vp-doc .edi-code-steps li:hover,
+.vp-doc .edi-code-steps li.is-active {
+  background: var(--edi-bg-soft);
+}
+
+.vp-doc .edi-code-steps li::before {
+  content: counter(edi-step);
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  font-family: var(--edi-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--edi-text-5);
+}
+
+.vp-doc .edi-code-steps li.is-active::before {
+  color: var(--edi-accent);
+}
+
+.vp-doc .edi-code-steps li::after {
+  content: attr(data-lines);
+  position: absolute;
+  top: 18px;
+  right: 12px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  color: var(--edi-text-4);
+}
+
+/* Link cards: <div class="edi-cards"> around a Markdown list */
+
+.vp-doc .edi-cards ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.vp-doc .edi-cards li {
+  max-width: none;
+  margin: 0;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--edi-text-3);
+  transition: var(--edi-transition);
+}
+
+.vp-doc .edi-cards li:hover {
+  border-color: var(--edi-border);
+}
+
+.vp-doc .edi-cards li p {
+  margin: 0;
+}
+
+.vp-doc .edi-cards li p:first-child {
+  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* API reference pages generated by TypeDoc */
+
+[class*='_parser_api_'].vp-doc blockquote {
+  margin: 16px 0;
+  border: 1px solid var(--edi-divider);
+  border-radius: 10px;
+  padding: 18px 20px;
+  background: var(--edi-bg-code);
+}
+
+[class*='_parser_api_'].vp-doc blockquote > p {
+  max-width: none;
+  font-family: var(--edi-mono);
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--edi-text-4);
+}
+
+[class*='_parser_api_'].vp-doc blockquote strong {
+  font-weight: 400;
+  color: var(--edi-role-env);
+}
+
+[class*='_parser_api_'].vp-doc blockquote code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  color: var(--edi-text-1);
+}
+
+[class*='_parser_api_'].vp-doc blockquote a code {
+  color: var(--edi-accent);
+}
+
+[class*='_parser_api_'].vp-doc blockquote + p {
+  font-size: 13px;
+  color: var(--edi-text-4);
+}
+
+[class*='_parser_api_'].vp-doc blockquote + p a {
+  font-family: var(--edi-mono);
+}
+
+[class*='_parser_api_'].vp-doc h2 {
+  margin-top: 40px;
+  border-top: none;
+  padding-top: 0;
+  font-size: 22px;
+}
+
+/* Home page */
+
+.edi-home {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 88px 56px 120px;
+}
+
+@media (max-width: 767px) {
+  .edi-home {
+    padding: 48px 20px 96px;
+  }
+}
+
+.edi-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  gap: 56px;
+  align-items: center;
+}
+
+.edi-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.edi-eyebrow {
+  font-family: var(--edi-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.edi-wordmark {
+  font-family: var(--edi-mono);
+  font-size: clamp(48px, 8vw, 76px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--edi-text-1);
+}
+
+.edi-wordmark .edi-logo-star {
+  color: var(--edi-text-5);
+}
+
+.edi-tagline {
+  max-width: 30ch;
+  font-size: 24px;
+  line-height: 1.45;
+  text-wrap: pretty;
+  color: var(--edi-text-2);
+}
+
+.edi-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.edi-hero .edi-code-panel {
+  margin: 0;
+  border-radius: 12px;
+}
+
+.edi-hero .edi-code-panel code {
+  font-size: 13.5px;
+}
+
+.edi-anatomy {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border-top: 1px solid var(--edi-divider);
+  padding-top: 56px;
+}
+
+.edi-anatomy-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.edi-anatomy-intro p {
+  max-width: 60ch;
+  font-size: 15px;
+  color: var(--edi-text-4);
+}
+
+.edi-anatomy-intro code {
+  font-family: var(--edi-mono);
+  color: var(--edi-text-1);
+}
+
+.edi-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.edi-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--edi-text-3);
+}
+
+.edi-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--edi-role);
+}
+
+.edi-legend-ids {
+  font-family: var(--edi-mono);
+  color: var(--edi-role);
+}
+
+.edi-anatomy-segment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 24px;
+  font-family: var(--edi-mono);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.edi-anatomy-separator {
+  padding: 0 2px;
+  color: var(--edi-text-5);
+}
+
+.edi-anatomy-element {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edi-anatomy-element.is-empty {
+  min-width: 56px;
+}
+
+.edi-anatomy-value {
+  padding: 0 2px;
+  color: var(--edi-text-1);
+}
+
+.edi-anatomy-element.is-id .edi-anatomy-value {
+  color: var(--edi-role-ben);
+}
+
+.edi-anatomy-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--edi-border);
+  padding: 10px 12px 0 2px;
+  font-family: var(--vp-font-family-base);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--edi-text-3);
+}
+
+.edi-anatomy-element.is-empty .edi-anatomy-label {
+  border-color: var(--edi-divider);
+}
+
+.edi-anatomy-element.is-id .edi-anatomy-label {
+  border-color: var(--edi-role-ben);
+}
+
+.edi-anatomy-label > span:last-child {
+  max-width: 16ch;
+}
+
+.edi-anatomy-position {
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--edi-text-1);
+}
+
+.edi-anatomy-element.is-empty .edi-anatomy-position {
+  color: var(--edi-text-number);
+}
+
+.edi-anatomy-element.is-id .edi-anatomy-position {
+  color: var(--edi-role-ben);
+}
+
+.edi-home-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 56px;
+}
+
+.edi-home-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.edi-home-heading h2 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.edi-home a:not(.edi-button) {
+  color: var(--edi-accent);
+  transition: var(--edi-transition);
+}
+
+.edi-home a:not(.edi-button):hover {
+  color: var(--edi-accent-hover);
+  text-decoration: underline;
+}
+
+.edi-home-heading a {
+  font-size: 14px;
+}
+
+.edi-home-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--edi-divider);
+}
+
+.edi-home-row,
+.edi-home a.edi-home-row {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 20px;
+  border-bottom: 1px solid var(--edi-divider);
+  padding: 16px 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--edi-text-2);
+  text-decoration: none;
+}
+
+@media (max-width: 639px) {
+  .edi-home-row,
+  .edi-home a.edi-home-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+.edi-home-group {
+  padding-top: 3px;
+  font-family: var(--edi-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.edi-home-row ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+  line-height: 1.4;
+}
+
+.edi-home-api {
+  font-family: var(--edi-mono);
+  color: var(--edi-role-env);
+}
+
+.edi-home-requirements {
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--edi-text-4);
 }

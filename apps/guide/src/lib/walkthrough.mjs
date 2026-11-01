@@ -176,6 +176,130 @@ export const SEGMENT_DEFINITIONS = Object.freeze({
   },
 });
 
+/** @typedef {'envelope' | 'context' | 'hierarchy' | 'benefit'} SegmentRole */
+
+/** The theme colors each segment ID by its role. */
+/** @type {Readonly<Record<string, SegmentRole>>} */
+export const SEGMENT_ROLES = Object.freeze({
+  ISA: 'envelope',
+  GS: 'envelope',
+  ST: 'envelope',
+  SE: 'envelope',
+  GE: 'envelope',
+  IEA: 'envelope',
+  BHT: 'context',
+  TRN: 'context',
+  HL: 'hierarchy',
+  NM1: 'hierarchy',
+  LS: 'hierarchy',
+  LE: 'hierarchy',
+  EB: 'benefit',
+  HSD: 'benefit',
+  DTP: 'benefit',
+  REF: 'benefit',
+  MSG: 'benefit',
+});
+
+/** @type {Readonly<Record<SegmentRole, string>>} */
+export const ROLE_LABELS = Object.freeze({
+  envelope: 'Envelope',
+  context: 'Transaction context',
+  hierarchy: 'Party hierarchy',
+  benefit: 'Benefit',
+});
+
+// A segment ID followed by anything but a letter, so `EB01=1` and `NM1` match and `STATUS` does not.
+const SEGMENT_ID = new RegExp(`^(?:${Object.keys(SEGMENT_ROLES).join('|')})(?![A-Za-z])`);
+
+/** @param {string} text @returns {SegmentRole | undefined} */
+export function segmentRole(text) {
+  const match = text.match(SEGMENT_ID);
+
+  return match ? SEGMENT_ROLES[match[0]] : undefined;
+}
+
+/** @typedef {{ keyFields: string, usedIn: Array<[string, string]> }} SegmentIndexEntry */
+
+/**
+ * The segment index on the reference page. `keyFields` uses backticks for
+ * inline code. `usedIn` lists the pages that use the segment as [label, link].
+ */
+/** @type {Readonly<Record<string, SegmentIndexEntry>>} */
+export const SEGMENT_INDEX = Object.freeze({
+  ISA: {
+    keyFields: '`ISA13` interchange control, fixed separator positions.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Multiple', '/guide/examples/multiple-interchanges']],
+  },
+  IEA: {
+    keyFields: '`IEA01` group count, `IEA02` control value.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Multiple', '/guide/examples/multiple-interchanges']],
+  },
+  GS: {
+    keyFields: '`GS06` group control value, functional-group identity.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Medicare secondary', '/guide/examples/medicare-secondary-payer']],
+  },
+  GE: {
+    keyFields: '`GE01` transaction count, `GE02` matching control value.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Multiple', '/guide/examples/multiple-interchanges']],
+  },
+  ST: {
+    keyFields: '`ST01=271`, `ST02` transaction control, `ST03=005010X279A1`.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Medicare Advantage', '/guide/examples/medicare-advantage']],
+  },
+  SE: {
+    keyFields: '`SE01` count from `ST` through `SE`, `SE02` matching control.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Multiple', '/guide/examples/multiple-interchanges']],
+  },
+  BHT: {
+    keyFields: 'Transaction purpose, reference, date, and time values.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Medicare secondary', '/guide/examples/medicare-secondary-payer']],
+  },
+  TRN: {
+    keyFields: '`TRN01=2` referenced trace, `TRN02` trace number, `TRN03` originating company.',
+    usedIn: [['Not in the examples. See Transaction context', '/guide/structure/transaction-context']],
+  },
+  HL: {
+    keyFields: '`HL01` level ID, `HL02` parent ID, `HL03` level code, `HL04` child indicator.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Multiple', '/guide/examples/multiple-interchanges']],
+  },
+  NM1: {
+    keyFields: 'Entity identifier, entity type, name, and example identifier values.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['Medicare Advantage', '/guide/examples/medicare-advantage']],
+  },
+  EB: {
+    keyFields: '`EB01` status, `EB03` service type, and nearby plan and context values.',
+    usedIn: [['Single', '/guide/examples/single-eb'], ['All complete examples', '/guide/reference/examples']],
+  },
+  DTP: {
+    keyFields: 'Date qualifier, format qualifier, and example date value.',
+    usedIn: [['Medicare secondary', '/guide/examples/medicare-secondary-payer'], ['Medicare Advantage', '/guide/examples/medicare-advantage']],
+  },
+  MSG: {
+    keyFields: 'Example message text, read with its surrounding `EB` and hierarchy.',
+    usedIn: [
+      ['Primary and secondary', '/guide/examples/medicare-primary-commercial-secondary'],
+      ['Medicare Advantage', '/guide/examples/medicare-advantage'],
+      ['X12-RFI-2628', 'https://x12.org/resources/requests-for-interpretation/rfi-2628-msg-segment-271'],
+    ],
+  },
+  LS: {
+    keyFields: 'Opens loop `2120` in the examples. `LS01` must match `LE01`.',
+    usedIn: [['Eligibility and benefit statements', '/guide/structure/eligibility-benefits']],
+  },
+  LE: {
+    keyFields: '`LE01` closes the loop that `LS01` opened.',
+    usedIn: [['Eligibility and benefit statements', '/guide/structure/eligibility-benefits']],
+  },
+  HSD: {
+    keyFields: '`HSD01` quantity qualifier, `HSD02` quantity, `HSD05` and `HSD06` period.',
+    usedIn: [['Eligibility and benefit statements', '/guide/structure/eligibility-benefits']],
+  },
+  REF: {
+    keyFields: '`REF01` qualifier, `REF02` identifier.',
+    usedIn: [['Eligibility and benefit statements', '/guide/structure/eligibility-benefits']],
+  },
+});
+
 /** @param {SegmentDefinition} definition @param {string[]} fields @returns {string} */
 function segmentExplanation(definition, fields) {
   const purpose = definition.purpose;
