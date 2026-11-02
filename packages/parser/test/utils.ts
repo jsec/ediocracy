@@ -4,7 +4,13 @@ import path from 'node:path';
 import type { Grammar, Loop } from '../src/loops/types.js';
 import type { Transaction, X12Document } from '../src/reader/types.js';
 
-import { read271s, readX12, type Response271, X12SyntaxError } from '../src/index.js';
+import {
+    read271s,
+    readX12,
+    type Response271,
+    type RouteEntry,
+    X12SyntaxError,
+} from '../src/index.js';
 import { buildLoops } from '../src/loops/loops.js';
 
 export const fixtureDirectory = path.resolve(import.meta.dirname, 'fixtures');
@@ -14,6 +20,11 @@ export type LoopSummary = {
     loops: LoopSummary[];
     tags: string[];
 };
+
+// Each finding as its code and the tag of its segment, for example `unlisted-error AAA`.
+export function codesAndTags(findings: { code: string; segment: { tag: string } }[]): string[] {
+    return findings.map(finding => `${finding.code} ${finding.segment.tag}`);
+}
 
 export function envelopeLines(document: X12Document): string[] {
     const lines: string[] = [];
@@ -35,6 +46,17 @@ export function envelopeLines(document: X12Document): string[] {
 
 export function findingCodes(body: string, grammar: Grammar): string[] {
     return buildLoops(transactionOf(body), grammar).findings.map(finding => finding.code);
+}
+
+// The first item `read271s` returns for the text.
+export function firstEntry(text: string): RouteEntry {
+    const [entry] = read271s(readX12(text));
+
+    if (!entry) {
+        throw new Error('No 271 transaction set in the text');
+    }
+
+    return entry;
 }
 
 export function firstTransaction(text: string): Transaction {

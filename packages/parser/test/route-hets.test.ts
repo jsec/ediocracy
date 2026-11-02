@@ -1,21 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { hetsProfile, interpretRoute, read271s, readX12, type RouteEntry } from '../src/index.js';
-import { readFixture, wrap } from './utils.js';
+import { hetsProfile, interpretRoute, type RouteEntry } from '../src/index.js';
+import { firstEntry, readFixture, wrap } from './utils.js';
 
 const HETS_RECEIVER = 'HL*2*1*21*1~NM1*1P*2*R*****XX*1234567893~';
 const HETS_SOURCE = 'HL*1**20*1~NM1*PR*2*CMS*****PI*CMS~';
 const SUBSCRIBER = 'HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*1AA2CC3DD45~';
-
-function firstEntry(text: string): RouteEntry {
-    const [entry] = read271s(readX12(text));
-
-    if (!entry) {
-        throw new Error('No 271 transaction set in the text');
-    }
-
-    return entry;
-}
 
 function hetsEntryOf(levels: string): RouteEntry {
     const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;

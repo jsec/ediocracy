@@ -9,7 +9,7 @@ import {
     type RouteErrorCondition,
     type RouteProfile,
 } from '../src/index.js';
-import { wrap } from './utils.js';
+import { codesAndTags, wrap } from './utils.js';
 
 const GOOD = 'HL*1**20*1~NM1*PR*2*P*****PI*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
@@ -28,6 +28,7 @@ const testProfile: RouteProfile<string, 'odd-member'> = {
             rejectReason: '72',
         },
     ],
+    listsAllErrors: true,
     memberIdPlaceholders: ['MISSING'],
     name: 'Test route',
     readMember: (member, person, report) => {
@@ -45,14 +46,22 @@ const testProfile: RouteProfile<string, 'odd-member'> = {
     },
 };
 
-function codesAndTags(findings: { code: string; segment: { tag: string } }[]): string[] {
-    return findings.map(finding => `${finding.code} ${finding.segment.tag}`);
-}
+const anyLevelProfile: RouteProfile<string, 'odd-member'> = {
+    ...testProfile,
+    errors: [
+        {
+            condition: 'any',
+            description: 'Any.',
+            rejectReason: '75',
+        },
+    ],
+};
 
-function entryOf(levels: string): RouteEntry {
+function entryOf(levels: string, component = ':'): RouteEntry {
     const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
     const count = body.split('~').filter(segment => segment !== '').length + 1;
-    const [entry] = read271s(readX12(wrap(`${body}SE*${count}*0001~`)));
+    const text = wrap(`${body}SE*${count}*0001~`).replace('*P*:~', () => `*P*${component}~`);
+    const [entry] = read271s(readX12(text));
 
     if (!entry) {
         throw new Error('No 271 transaction set in the text');
@@ -75,11 +84,39 @@ describe('interpretRoute', () => {
     });
 
     describe('profile checks', () => {
-        it('should require the delimiters, source and receiver checks', () => {
-            expectTypeOf<RouteProfile<string, 'odd-member'>['delimiters']>().not.toBeNullable();
-            expectTypeOf<RouteProfile<string, 'odd-member'>['source']>().not.toBeNullable();
+        it('should allow profiles without envelope or member ID checks', () => {
+            expectTypeOf<RouteProfile<string, 'odd-member'>['delimiters']>().toBeNullable();
+            expectTypeOf<RouteProfile<string, 'odd-member'>['source']>().toBeNullable();
             expectTypeOf<RouteProfile<string, 'odd-member'>['receiverEntityCodes']>()
-                .not.toBeNullable();
+                .toBeNullable();
+            expectTypeOf<RouteProfile<string, 'odd-member'>['memberIdPlaceholders']>()
+                .toBeNullable();
+        });
+
+        it('should skip each check the profile leaves out', () => {
+            const levels = [
+                'HL*1**20*1~NM1*PR*2*P*****PI*OTHER~',
+                'HL*2*1*21*1~NM1*FA*2*R*****XX*1~',
+                'HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*MISSING~',
+            ].join('');
+            const bareProfile: RouteProfile<string, 'odd-member'> = {
+                errors: testProfile.errors,
+                listsAllErrors: true,
+                name: testProfile.name,
+                readMember: testProfile.readMember,
+            };
+            const entry = entryOf(levels, '|');
+
+            const fullResult = interpretRoute(entry, testProfile);
+            const result = interpretRoute(entry, bareProfile);
+
+            expect(codesAndTags(fullResult.findings)).toEqual([
+                'unexpected-delimiters ISA',
+                'unexpected-source NM1',
+                'unexpected-receiver NM1',
+                'member-id-placeholder NM1',
+            ]);
+            expect(result.findings).toEqual([]);
         });
     });
 
@@ -232,7 +269,60 @@ describe('interpretRoute', () => {
 
         it('should not accept a benefit-level condition in a profile', () => {
             expectTypeOf<RouteErrorCondition['level']>()
-                .toEqualTypeOf<'dependent' | 'receiver' | 'source' | 'subscriber'>();
+                .toEqualTypeOf<'dependent' | 'receiver' | 'source' | 'subscriber' | undefined>();
+        });
+
+        it('should match a condition without a level at every level except benefit', () => {
+            const levels = [
+                'HL*1**20*1~NM1*PR*2*P*****PI*P1~AAA*N**75*C~',
+                'HL*2*1*21*1~NM1*1P*2*R*****XX*1~AAA*N**75*C~',
+                'HL*3*2*22*1~NM1*IL*1*DOE*JO****MI*A1~AAA*N**75*C~',
+                'HL*4*3*23*0~NM1*03*1*DOE*KID~AAA*N**75*C~',
+            ].join('');
+
+            const result = interpretRoute(entryOf(levels), anyLevelProfile);
+
+            expect(result.errors.map(error => error.level)).toEqual([
+                'source',
+                'receiver',
+                'subscriber',
+                'dependent',
+            ]);
+            expect(result.errors.map(error => error.condition)).toEqual(['any', 'any', 'any', 'any']);
+            expect(result.findings).toEqual([]);
+        });
+
+        it('should not match a condition without a level at the benefit level', () => {
+            const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~AAA*N**75*C~`;
+
+            const result = interpretRoute(entryOf(levels), anyLevelProfile);
+
+            expect(result.errors[0]).toMatchObject({ condition: undefined, level: 'benefit' });
+            expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
+        });
+
+        it('should not report unlisted errors when listsAllErrors is false', () => {
+            const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**73*C~`;
+
+            const result = interpretRoute(entryOf(levels), {
+                ...testProfile,
+                listsAllErrors: false,
+            });
+
+            expect(result.errors[0]).toMatchObject({ condition: undefined });
+            expect(result.findings).toEqual([]);
+        });
+
+        it('should not report a benefit-level error when listsAllErrors is false', () => {
+            const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~AAA*N**72*C~`;
+
+            const result = interpretRoute(entryOf(levels), {
+                ...testProfile,
+                listsAllErrors: false,
+            });
+
+            expect(result.errors[0]).toMatchObject({ condition: undefined, level: 'benefit' });
+            expect(result.findings).toEqual([]);
         });
     });
 });

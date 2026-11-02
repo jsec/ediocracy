@@ -6,11 +6,11 @@ import { readMedicare } from './views.js';
 /**
  * The CMS HETS (Medicare) route, from the CMS HETS 270/271 Companion Guide v15-1 (May 2026).
  *
- * - Separators: §7.1, Table 8, PDF p. 28.
+ * - Separators: §7.1, Table 8.
  * - Information source `PR`/`PI`/`CMS`: the guide's 271 examples.
- * - Receiver entity codes and the `MISSING` member ID: Table 14, AAA03 `43` and `72`, PDF p. 85.
- * - Error conditions: Table 14, PDF pp. 85–86. The descriptions are this library's own words.
- * - Placeholder address: §7.2, PDF p. 29, and Table 24, PDF pp. 94–95.
+ * - Receiver entity codes and the `MISSING` member ID: Table 14, AAA03 `43` and `72`.
+ * - Error conditions: Table 14.
+ * - Placeholder address: §7.2 and Table 24.
  *
  * Use it with `interpretRoute` for responses to 270s sent to HETS.
  */
@@ -104,6 +104,7 @@ export const hetsProfile: RouteProfile<MedicareView, HetsFindingCode> = {
             rejectReason: '73',
         },
     ],
+    listsAllErrors: true,
     memberIdPlaceholders: ['MISSING'],
     name: 'CMS HETS v15-1',
     readMember: readMedicare,

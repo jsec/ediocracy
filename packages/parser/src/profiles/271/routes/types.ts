@@ -28,8 +28,8 @@ export type RouteErrorCondition = {
     condition: string;
     /** One line that says what went wrong. */
     description: string;
-    /** Where the AAA appears. AAAs on a benefit are always reported as `unlisted-error`. */
-    level: Exclude<RequestErrorEntry['level'], 'benefit'>;
+    /** Where the AAA appears. */
+    level?: Exclude<RequestErrorEntry['level'], 'benefit'>;
     /** The AAA03 code. */
     rejectReason: string;
 };
@@ -61,11 +61,13 @@ export type RouteFindingCode
 /** The rules of one route, such as a payer or clearinghouse. */
 export type RouteProfile<View, FindingCode extends string> = {
     /** Separators the route always sends. */
-    delimiters: Delimiters;
+    delimiters?: Delimiters;
     /** The AAA conditions the route documents. */
     errors: RouteErrorCondition[];
+    /** True when `errors` lists every AAA the route sends. */
+    listsAllErrors: boolean;
     /** NM109 values the route sends in place of a member ID. */
-    memberIdPlaceholders: string[];
+    memberIdPlaceholders?: string[];
     /** The route's name, used in finding messages. */
     name: string;
     /** Builds the route's view of one member. Problems found are passed to `report`. */
@@ -75,9 +77,9 @@ export type RouteProfile<View, FindingCode extends string> = {
         report: (code: FindingCode, segment: Segment, message: string) => void,
     ) => View;
     /** The 2100B NM101 values the route allows. */
-    receiverEntityCodes: string[];
+    receiverEntityCodes?: string[];
     /** The 2100A NM101, NM108 and NM109 the route always sends. */
-    source: {
+    source?: {
         /** NM101. */
         entityCode: string;
         /** NM109. */

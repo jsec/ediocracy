@@ -33,6 +33,16 @@ export type {
     RouteFindingCode,
     RouteProfile,
 } from './profiles/271/routes/types.js';
+export { uhcProfile } from './profiles/271/routes/uhc/profile.js';
+export type {
+    CopayRangeEntry,
+    CoverageDateEntry,
+    OtherPayerEntry,
+    UhcFindingCode,
+    UhcView,
+    VariableCopayEntry,
+    VariesBy,
+} from './profiles/271/routes/uhc/types.js';
 export type {
     Benefit,
     Party,

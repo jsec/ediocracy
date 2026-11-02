@@ -5,6 +5,7 @@ import type { Person } from '../types.js';
 import type {
     RouteEligibility,
     RouteEntry,
+    RouteErrorCondition,
     RouteErrorEntry,
     RouteFindingCode,
     RouteProfile,
@@ -65,6 +66,11 @@ class RouteInterpreter<View, FindingCode extends string> {
 
     #checkDelimiters(): void {
         const expected = this.#profile.delimiters;
+
+        if (!expected) {
+            return;
+        }
+
         const actual = this.#entry.interchange.delimiters;
         const differences = SEPARATOR_NAMES
             .filter(name => actual[name] !== expected[name])
@@ -78,9 +84,9 @@ class RouteInterpreter<View, FindingCode extends string> {
     }
 
     #checkMemberId(person: Person): void {
-        const isPlaceholder = isOneOf(this.#profile.memberIdPlaceholders, person.id);
+        const placeholders = this.#profile.memberIdPlaceholders;
 
-        if (!isPlaceholder || !person.name) {
+        if (!placeholders || !person.name || !isOneOf(placeholders, person.id)) {
             return;
         }
 
@@ -89,6 +95,10 @@ class RouteInterpreter<View, FindingCode extends string> {
 
     #checkReceivers(): void {
         const allowed = this.#profile.receiverEntityCodes;
+
+        if (!allowed) {
+            return;
+        }
 
         for (const receiver of this.#entry.response.receivers) {
             const entityCode = receiver.name?.element(1);
@@ -105,6 +115,11 @@ class RouteInterpreter<View, FindingCode extends string> {
 
     #checkSources(): void {
         const expected = this.#profile.source;
+
+        if (!expected) {
+            return;
+        }
+
         const expectedElements = [
             { position: 1, value: expected.entityCode },
             { position: 8, value: expected.idQualifier },
@@ -131,11 +146,9 @@ class RouteInterpreter<View, FindingCode extends string> {
     }
 
     #readError(error: RequestErrorEntry): RouteErrorEntry {
-        const listed = this.#profile.errors.find(condition => (
-            condition.level === error.level && condition.rejectReason === error.rejectReason
-        ));
+        const listed = this.#profile.errors.find(condition => isMatch(condition, error));
 
-        if (!listed) {
+        if (!listed && this.#profile.listsAllErrors) {
             const message = `AAA03 "${error.rejectReason ?? ''}" at the ${error.level} level is not listed`;
 
             this.#report('unlisted-error', error.segment, message);
@@ -181,4 +194,16 @@ export function interpretRoute<View, FindingCode extends string>(
     profile: RouteProfile<View, FindingCode>,
 ): RouteEligibility<View, FindingCode> {
     return new RouteInterpreter(entry, profile).interpret();
+}
+
+function isMatch(condition: RouteErrorCondition, error: RequestErrorEntry): boolean {
+    if (condition.rejectReason !== error.rejectReason) {
+        return false;
+    }
+
+    if (condition.level) {
+        return condition.level === error.level;
+    }
+
+    return error.level !== 'benefit';
 }

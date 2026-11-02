@@ -285,6 +285,34 @@ export function isOneOf<Code extends string>(
     return values.includes(value);
 }
 
+/**
+ * Reads a `CCYYMMDD` date.
+ *
+ * @param text - The date text.
+ * @returns The date, or `undefined` when `text` is not a valid `CCYYMMDD` date.
+ */
+export function toPlainDate(text: string | undefined): Temporal.PlainDate | undefined {
+    const match = D8_DATE.exec(text ?? '');
+
+    if (!match || Number(match[1]) === 0) {
+        return undefined;
+    }
+
+    try {
+        return Temporal.PlainDate.from({
+            day: Number(match[3]),
+            month: Number(match[2]),
+            year: Number(match[1]),
+        }, { overflow: 'reject' });
+    } catch (error) {
+        if (error instanceof RangeError) {
+            return undefined;
+        }
+
+        throw error;
+    }
+}
+
 // The N3 lines (N301, N302) and the N4 city, state and postal code (N401–N403).
 function readAddress(segments: Segment[]): Address | undefined {
     const street = segments.find(segment => segment.tag === 'N3');
@@ -354,26 +382,4 @@ function readRequestError(
         segment: error.segment,
         validRequest: error.segment.element(1),
     };
-}
-
-function toPlainDate(text: string | undefined): Temporal.PlainDate | undefined {
-    const match = D8_DATE.exec(text ?? '');
-
-    if (!match || Number(match[1]) === 0) {
-        return undefined;
-    }
-
-    try {
-        return Temporal.PlainDate.from({
-            day: Number(match[3]),
-            month: Number(match[2]),
-            year: Number(match[1]),
-        }, { overflow: 'reject' });
-    } catch (error) {
-        if (error instanceof RangeError) {
-            return undefined;
-        }
-
-        throw error;
-    }
 }
