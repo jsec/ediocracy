@@ -52,6 +52,10 @@ export default defineConfig({
           items: [
             { text: 'Read 271 responses', link: '/parser/guides/reading-271s' },
             { text: 'Read CMS HETS responses', link: '/parser/guides/reading-hets-responses' },
+            {
+                text: 'Read UnitedHealthcare responses',
+                link: '/parser/guides/reading-uhc-responses',
+            },
             { text: 'Read X12 envelopes', link: '/parser/guides/low-level-reader' },
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
