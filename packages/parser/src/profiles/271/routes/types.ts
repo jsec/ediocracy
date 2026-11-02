@@ -22,7 +22,7 @@ export type RouteEligibility<View, FindingCode extends string> = {
 /** One item returned by `read271s`. */
 export type RouteEntry = ReturnType<typeof read271s>[number];
 
-/** An AAA condition a route documents, matched by level and AAA03. */
+/** An AAA condition a route documents. */
 export type RouteErrorCondition = {
     /** A stable key for the condition, for example `mbi-not-matched`. */
     condition: string;
@@ -68,7 +68,7 @@ export type RouteProfile<View, FindingCode extends string> = {
     listsAllErrors: boolean;
     /** NM109 values the route sends in place of a member ID. */
     memberIdPlaceholders?: string[];
-    /** The route's name, used in finding messages. */
+    /** The route's name. */
     name: string;
     /** Builds the route's view of one member. Problems found are passed to `report`. */
     readMember: (

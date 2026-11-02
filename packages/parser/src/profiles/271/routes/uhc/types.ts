@@ -3,9 +3,9 @@ import type { CostShareEntry, OtherPartyEntry } from '../../eligibility/types.js
 
 /** A minimum–maximum copay range: an EB09 `8H` row and the `M2` row after it. */
 export type CopayRangeEntry = {
-    /** The `M2` row. Its amount is `maximum.amount` (EB07). */
+    /** The `M2` row. */
     maximum: CostShareEntry;
-    /** The `8H` row. Its amount is `minimum.amount` (EB07). */
+    /** The `8H` row. */
     minimum: CostShareEntry;
     /** What the amount depends on, from the minimum row's MSG. */
     variesBy: VariesBy;

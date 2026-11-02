@@ -17,7 +17,7 @@ export type Benefit = {
     coverageLevel: string | undefined;
     /** Dates that apply to the benefit (DTP segments). */
     dates: Segment[];
-    /** The EB segment itself, for elements this type does not name. */
+    /** The EB segment itself. */
     eb: Segment;
     /** Errors the payer reported for this benefit (AAA segments). */
     errors: RequestError[];
@@ -113,7 +113,7 @@ export type Response271 = {
 };
 
 /**
- * A problem found while reading a 271. The rest of the response is still read.
+ * A problem found while reading a 271.
  *
  * - `unexpected-segment`: a segment the 005010X279A1 guide does not allow where it appears, such as
  *   a second name for the same person.

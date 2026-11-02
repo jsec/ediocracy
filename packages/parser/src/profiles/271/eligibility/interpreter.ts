@@ -251,9 +251,9 @@ export function allDependents(person: Person): Person[] {
 }
 
 /**
- * Sorts the benefit rows of a 271 into lists a caller can filter, and reads their numbers and
- * dates. Codes are returned as they appear, without names. Values that cannot be read are
- * `undefined` and reported in `findings`; this function does not throw on payer data.
+ * Sorts the benefit rows of a 271 into lists, and reads their numbers and dates. Codes are
+ * returned as they appear, without names. Values that cannot be read are `undefined` and reported
+ * in `findings`; this function does not throw on payer data.
  *
  * @param response - The result of `read271`.
  * @returns Each member's rows, and every error the payer reported.

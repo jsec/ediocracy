@@ -11,8 +11,6 @@ import { readMedicare } from './views.js';
  * - Receiver entity codes and the `MISSING` member ID: Table 14, AAA03 `43` and `72`.
  * - Error conditions: Table 14.
  * - Placeholder address: §7.2 and Table 24.
- *
- * Use it with `interpretRoute` for responses to 270s sent to HETS.
  */
 export const hetsProfile: RouteProfile<MedicareView, HetsFindingCode> = {
     delimiters: {

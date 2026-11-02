@@ -3,8 +3,7 @@ import type { CostShareEntry, CoverageEntry, OtherPartyEntry } from '../../eligi
 /**
  * A problem `hetsProfile` finds in a member.
  *
- * - `placeholder-address`: N301 says the address is in an MSG; N4 holds placeholder values. The
- *   address is in `MedicareView.ssaAddress` when HETS sent one.
+ * - `placeholder-address`: N301 says the address is in an MSG; N4 holds placeholder values.
  */
 export type HetsFindingCode = 'placeholder-address';
 
@@ -29,11 +28,11 @@ export type MedicareView = {
     medicareAdvantage: MedicarePlanEntry[];
     /** Medicare Secondary Payer rows: EB01 `R`, EB03 including `30`, and an MSP EB04. */
     msp: MspEntry[];
-    /** Part A coverage rows (EB04 `MA`). The entitlement reason is in `messages`. */
+    /** Part A coverage rows (EB04 `MA`). */
     partA: CoverageEntry[];
     /** Part A cost share rows (EB04 `MA`). */
     partACostShares: CostShareEntry[];
-    /** Part B coverage rows (EB04 `MB`). The entitlement reason is in `messages`. */
+    /** Part B coverage rows (EB04 `MB`). */
     partB: CoverageEntry[];
     /** Part B cost share rows (EB04 `MB`). */
     partBCostShares: CostShareEntry[];
@@ -51,9 +50,6 @@ export type MspEntry = {
     entry: OtherPartyEntry;
     /** Policy number (REF `IG`). */
     policyNumber: string | undefined;
-    /**
-     * REF `6P` as sent. HETS uses it for a group number, a date of loss, or a missing group
-     * number, so the value is not parsed.
-     */
+    /** REF `6P` as sent. */
     ref6P: string | undefined;
 };

@@ -162,8 +162,7 @@ class EligibilityResponseReader {
 /**
  * Reads one transaction set as a 271 eligibility response under the 005010X279A1 guide.
  *
- * It does not check that the transaction set is a 271. Use {@link read271s} to read every 271 in a
- * document.
+ * It does not check that the transaction set is a 271.
  *
  * @param transaction - A transaction set from `readX12`, such as
  *   `document.interchanges[0].groups[0].transactions[0]`.

@@ -16,24 +16,20 @@ export type Address = {
 
 /** The fields every coverage, cost share, limitation and other party entry has. */
 export type BenefitFields = {
-    /** The benefit as `read271` returned it, for segments and elements the entry does not name. */
+    /** The benefit as `read271` returned it. */
     benefit: Benefit;
-    /** Dates that apply to the entry. Dates that could not be read are left out and reported. */
+    /** Dates that apply to the entry. Dates that could not be read are left out. */
     dates: DateEntry[];
     /** Free-form message text, one entry per message. */
     messages: string[];
     /**
-     * The network code (EB12), for filtering entries by the provider's network. `undefined` when
-     * EB12 is absent or holds a code other than `N`, `U`, `W` or `Y`; the code is still in
-     * `benefit`.
+     * The network code (EB12). `undefined` when EB12 is absent or holds a code other than `N`,
+     * `U`, `W` or `Y`.
      */
     network: 'N' | 'U' | 'W' | 'Y' | undefined;
     /** Reference numbers for the entry. */
     references: ReferenceEntry[];
-    /**
-     * Service type codes (EB03). An entry answers questions about these service types only; an
-     * entry for `30` does not stand in for other service types.
-     */
+    /** Service type codes (EB03). */
     serviceTypes: string[];
 };
 
@@ -46,13 +42,13 @@ export type CostShareEntry = BenefitFields & {
         /** What kind of code `code` is (III01). */
         qualifier: string | undefined;
     }[];
-    /** Amount (EB07). Deductible, co-payment and out-of-pocket rows put their value here. */
+    /** Amount (EB07). */
     amount: number | undefined;
     /** Who the row covers, such as the individual or family (EB02). */
     coverageLevel: string | undefined;
     /** The EB01 code. */
     kind: 'A' | 'B' | 'C' | 'G';
-    /** Percentage as a fraction, so `.2` is `0.2` (EB08). Co-insurance rows use it. */
+    /** Percentage as a fraction, so `.2` is `0.2` (EB08). */
     percent: number | undefined;
     /** The code for the period `amount` applies to (EB06). */
     timePeriod: string | undefined;
@@ -70,9 +66,7 @@ export type CoverageEntry = BenefitFields & {
     status: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | 'I';
 };
 
-/**
- * A date or date range. Compare it with a date of service using `Temporal.PlainDate.compare`.
- */
+/** A date or date range. */
 export type DateEntry = {
     /** The last day. Equal to `start` for a single date. */
     end: Temporal.PlainDate;
@@ -90,9 +84,7 @@ export type Eligibility = {
     members: MemberEligibility[];
     /**
      * Every error the payer reported: the sources' errors, then the receivers', then for each
-     * member their own errors followed by their benefits' errors. The library does not decide
-     * whether the response is rejected. Stedi treats a response with any of these as a failure,
-     * even when it includes benefits.
+     * member their own errors followed by their benefits' errors.
      */
     requestErrors: RequestErrorEntry[];
 };
@@ -101,9 +93,9 @@ export type Eligibility = {
  * A problem found while reading or interpreting a 271.
  *
  * - `invalid-date`: a date that is not `CCYYMMDD` or a `CCYYMMDD-CCYYMMDD` range, a day that does
- *   not exist, year 0000, or a range that ends before it starts. The date is left out.
+ *   not exist, year 0000, or a range that ends before it starts.
  * - `invalid-number`: an amount, percentage or quantity that is not a decimal number such as
- *   `.2`, `5555.16` or `-95`. The value is `undefined`.
+ *   `.2`, `5555.16` or `-95`.
  * - the codes `read271` reports.
  */
 export type EligibilityFindingCode = 'invalid-date' | 'invalid-number' | Response271FindingCode;
@@ -150,7 +142,7 @@ export type MemberEligibility = {
     details: MemberDetails;
     /** Rows that limit a benefit. */
     limitations: LimitationEntry[];
-    /** Member ID (NM109). Often absent for dependents. */
+    /** Member ID (NM109). */
     memberId: string | undefined;
     /** The member's name. */
     name: {
