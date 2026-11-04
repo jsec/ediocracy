@@ -56,6 +56,10 @@ export default defineConfig({
                 text: 'Read UnitedHealthcare responses',
                 link: '/parser/guides/reading-uhc-responses',
             },
+            {
+                text: 'Read 999 and TA1 acknowledgments',
+                link: '/parser/guides/reading-acknowledgments',
+            },
             { text: 'Read X12 envelopes', link: '/parser/guides/low-level-reader' },
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
