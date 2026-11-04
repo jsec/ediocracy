@@ -51,6 +51,20 @@ export type {
     Response271,
     Response271FindingCode,
 } from './profiles/271/types.js';
+export { read999, read999s } from './profiles/acknowledgements/999/reader.js';
+export type {
+    AcknowledgedGroup,
+    ElementError,
+    ElementPosition,
+    ErrorContext,
+    GroupResult,
+    Response999,
+    Response999FindingCode,
+    SegmentError,
+    TransactionSetResponse,
+    TransactionSetResult,
+} from './profiles/acknowledgements/999/types.js';
+export { readTa1s, type Ta1 } from './profiles/acknowledgements/ta1/reader.js';
 export { X12SyntaxError } from './reader/errors.js';
 export { readX12 } from './reader/reader.js';
 export type { Segment } from './reader/segment.js';

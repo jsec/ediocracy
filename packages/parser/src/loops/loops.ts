@@ -12,6 +12,7 @@ class LoopBuilder {
         findings: [],
         header: [],
         loops: [],
+        trailer: [],
     };
 
     constructor(grammar: Grammar) {
@@ -20,6 +21,18 @@ class LoopBuilder {
 
     build(transaction: Transaction): LoopTree {
         for (const segment of transaction.segments) {
+            if (this.#grammar.trailer?.includes(segment.tag)) {
+                this.#closeLoopsFrom(0);
+                this.#tree.trailer.push(segment);
+                continue;
+            }
+
+            if (this.#tree.trailer.length > 0) {
+                this.#report('unexpected-segment', segment, `${segment.tag} is not expected after the trailer`);
+                this.#tree.trailer.push(segment);
+                continue;
+            }
+
             if (segment.tag === 'HL') {
                 this.#openHierarchicalLevel(segment);
                 continue;
@@ -31,6 +44,14 @@ class LoopBuilder {
             }
 
             if (this.#wasPlacedInOpenLoop(segment)) {
+                continue;
+            }
+
+            const topLevel = this.#grammar.loops?.find(spec => spec.trigger === segment.tag);
+
+            if (topLevel) {
+                this.#closeLoopsFrom(0);
+                this.#openLoop(topLevel, segment, this.#tree.loops);
                 continue;
             }
 

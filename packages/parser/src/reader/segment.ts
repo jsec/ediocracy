@@ -22,6 +22,22 @@ export class Segment {
     }
 
     /**
+     * Splits one element on the component separator.
+     *
+     * @param position - The element position, starting at 1.
+     * @returns The components, or an empty array when the segment has fewer elements.
+     */
+    components(position: number): string[] {
+        const value = this.element(position);
+
+        if (value === undefined) {
+            return [];
+        }
+
+        return value.split(this.#delimiters.component);
+    }
+
+    /**
      * Returns one element as written, including any component or repetition separators.
      *
      * @param position - The element position, starting at 1: `element(1)` of `EB*1**30` is `1`.

@@ -4,8 +4,12 @@ import type { Finding } from '../reader/types.js';
 export type Grammar = {
     // Tags allowed before the first loop, e.g. ['BHT'].
     header: string[];
-    // HL03 level code → loop. Sets without HL (999, TA1) would need top-level loops added here.
+    // HL03 level code → loop.
     hierarchy: Record<string, LoopSpec>;
+    // Top-level loops opened by a tag, for sets without HL, e.g. the 999's 2000 (AK2).
+    loops?: LoopSpec[];
+    // Tags after the loops, e.g. ['AK9']. Each closes every open loop.
+    trailer?: string[];
 };
 
 /** A loop from the implementation guide, such as 2120C, and the segments and loops inside it. */
@@ -39,4 +43,5 @@ export type LoopTree = {
     findings: Finding<LoopFindingCode>[];
     header: Segment[];
     loops: Loop[];
+    trailer: Segment[];
 };

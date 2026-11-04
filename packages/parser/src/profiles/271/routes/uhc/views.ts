@@ -178,7 +178,7 @@ function readCoverageDates(
 
 function variesByOf(entry: CostShareEntry): undefined | VariesBy {
     if (entry.kind !== 'B') {
-        return undefined;
+        return;
     }
 
     const messages = new Set(entry.messages.map(message => message.trim()));
@@ -190,6 +190,4 @@ function variesByOf(entry: CostShareEntry): undefined | VariesBy {
     if (messages.has(PRACTITIONER_MESSAGE)) {
         return 'practitioner';
     }
-
-    return undefined;
 }

@@ -184,7 +184,7 @@ export function read271(transaction: Transaction): Response271 {
 }
 
 /**
- * Reads every 271 in a document, in the order they appear. Other transaction sets are skipped.
+ * Reads every 271 in a document, in the order they appear.
  *
  * @param document - The result of `readX12`.
  * @returns Each response with the interchange and functional group it came from.

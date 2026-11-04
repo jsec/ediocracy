@@ -12,6 +12,22 @@ const delimiters: Delimiters = {
 };
 
 describe('Segment', () => {
+    describe('components', () => {
+        it('should split on the component separator', () => {
+            const segment = new Segment({
+                delimiters,
+                elements: ['2:1', '', '7'],
+                offset: 0,
+                tag: 'IK4',
+            });
+
+            expect(segment.components(1)).toEqual(['2', '1']);
+            expect(segment.components(2)).toEqual(['']);
+            expect(segment.components(3)).toEqual(['7']);
+            expect(segment.components(99)).toEqual([]);
+        });
+    });
+
     describe('element', () => {
         it('should read 1-based positions and keep absent and empty apart', () => {
             const segment = new Segment({

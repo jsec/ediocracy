@@ -37,7 +37,87 @@ const hierarchical: Grammar = {
     },
 };
 
+const flat: Grammar = {
+    header: ['H'],
+    hierarchy: {},
+    loops: [{
+        id: 'A',
+        loops: [{
+            id: 'B',
+            segments: ['X'],
+            trigger: 'B1',
+        }],
+        segments: ['A9'],
+        trigger: 'A1',
+    }],
+    trailer: ['T'],
+};
+
 describe('buildLoops', () => {
+    describe('top-level loops', () => {
+        it('should open a top-level loop at its trigger and close the open one', () => {
+            const tree = buildLoops(transactionOf('H~A1~B1~X~A9~A1~T~'), flat);
+            const headerTags = tree.header.map(segment => segment.tag);
+            const loops = tree.loops.map(loop => summarize(loop));
+            const trailerTags = tree.trailer.map(segment => segment.tag);
+
+            expect(headerTags).toEqual(['H']);
+            expect(loops).toEqual([
+                {
+                    id: 'A',
+                    loops: [{
+                        id: 'B',
+                        loops: [],
+                        tags: ['B1', 'X'],
+                    }],
+                    tags: ['A1', 'A9'],
+                },
+                {
+                    id: 'A',
+                    loops: [],
+                    tags: ['A1'],
+                },
+            ]);
+            expect(trailerTags).toEqual(['T']);
+            expect(tree.findings).toEqual([]);
+        });
+    });
+
+    describe('trailer', () => {
+        it('should close every open loop at a trailer segment', () => {
+            const tree = buildLoops(transactionOf('A1~B1~T~T~'), flat);
+            const loops = tree.loops.map(loop => summarize(loop));
+            const trailerTags = tree.trailer.map(segment => segment.tag);
+
+            expect(loops).toEqual([{
+                id: 'A',
+                loops: [{
+                    id: 'B',
+                    loops: [],
+                    tags: ['B1'],
+                }],
+                tags: ['A1'],
+            }]);
+            expect(trailerTags).toEqual(['T', 'T']);
+        });
+
+        it('should report a segment after the trailer and keep it in the trailer', () => {
+            const tree = buildLoops(transactionOf('A1~T~A1~H~'), flat);
+            const findings = tree.findings.map(({ code, segment }) => [code, segment.tag]);
+            const trailerTags = tree.trailer.map(segment => segment.tag);
+
+            expect(findings).toEqual([['unexpected-segment', 'A1'], ['unexpected-segment', 'H']]);
+            expect(trailerTags).toEqual(['T', 'A1', 'H']);
+            expect(tree.loops).toHaveLength(1);
+        });
+
+        it('should be empty for a grammar without one', () => {
+            const tree = buildLoops(transactionOf('HL*1**1~'), hierarchical);
+
+            expect(tree.trailer).toEqual([]);
+        });
+    });
+
     describe('header', () => {
         it('should put header segments before the first loop in the header', () => {
             const tree = buildLoops(transactionOf('BHT*1~HL*1**1~'), hierarchical);

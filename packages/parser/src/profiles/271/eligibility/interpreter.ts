@@ -84,7 +84,7 @@ class EligibilityInterpreter {
 
             this.#report('invalid-date', segment, message);
 
-            return undefined;
+            return;
         }
 
         return {
@@ -101,19 +101,17 @@ class EligibilityInterpreter {
 
     // An empty or absent value is undefined without a finding.
     #parseNumber(value: string | undefined, segment: Segment): number | undefined {
-        if (value === undefined || value === '') {
-            return undefined;
+        if (!value) {
+            return;
         }
 
         const number = Number(value);
 
-        if (!X12_DECIMAL.test(value) || !Number.isFinite(number)) {
-            this.#report('invalid-number', segment, `"${value}" is not an X12 decimal number`);
-
-            return undefined;
+        if (X12_DECIMAL.test(value) && Number.isFinite(number)) {
+            return number;
         }
 
-        return number;
+        this.#report('invalid-number', segment, `"${value}" is not an X12 decimal number`);
     }
 
     #readBenefitFields(benefit: Benefit): BenefitFields {
@@ -154,7 +152,7 @@ class EligibilityInterpreter {
 
     #readDateOfBirth(demographics: Segment | undefined): Temporal.PlainDate | undefined {
         if (demographics?.element(1) !== 'D8') {
-            return undefined;
+            return;
         }
 
         const text = demographics.element(2);
@@ -295,7 +293,7 @@ export function toPlainDate(text: string | undefined): Temporal.PlainDate | unde
     const match = D8_DATE.exec(text ?? '');
 
     if (!match || Number(match[1]) === 0) {
-        return undefined;
+        return;
     }
 
     try {
@@ -306,7 +304,7 @@ export function toPlainDate(text: string | undefined): Temporal.PlainDate | unde
         }, { overflow: 'reject' });
     } catch (error) {
         if (error instanceof RangeError) {
-            return undefined;
+            return;
         }
 
         throw error;
@@ -319,7 +317,7 @@ function readAddress(segments: Segment[]): Address | undefined {
     const place = segments.find(segment => segment.tag === 'N4');
 
     if (!street && !place) {
-        return undefined;
+        return;
     }
 
     return {

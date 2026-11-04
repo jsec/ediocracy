@@ -142,7 +142,7 @@ class Reader {
                 });
                 open.group = undefined;
 
-                return undefined;
+                return;
             }
             case 'GS': {
                 if (open.transaction || open.group) {
@@ -152,7 +152,7 @@ class Reader {
                 open.group = { header: segment, transactions: [] };
                 this.#checkControlNumber(segment, 6);
 
-                return undefined;
+                return;
             }
             case 'IEA': {
                 if (open.transaction || open.group) {
@@ -200,7 +200,7 @@ class Reader {
                 });
                 open.transaction = undefined;
 
-                return undefined;
+                return;
             }
             case 'ST': {
                 if (!open.group) {
@@ -214,19 +214,19 @@ class Reader {
                 open.transaction = { header: segment, segments: [] };
                 this.#checkControlNumber(segment, 2);
 
-                return undefined;
+                return;
             }
             default: {
                 if (open.transaction) {
                     open.transaction.segments.push(segment);
 
-                    return undefined;
+                    return;
                 }
 
                 if (!open.group && segment.tag === 'TA1') {
                     open.segments.push(segment);
 
-                    return undefined;
+                    return;
                 }
 
                 throw misplaced(segment, `"${segment.tag}" is outside a transaction set`);
