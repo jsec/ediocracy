@@ -64,6 +64,10 @@ export default defineConfig({
                 link: '/parser/guides/reading-uhc-responses',
             },
             {
+                text: 'Read Humana responses',
+                link: '/parser/guides/reading-humana-responses',
+            },
+            {
                 text: 'Read 999 and TA1 acknowledgments',
                 link: '/parser/guides/reading-acknowledgments',
             },
