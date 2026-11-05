@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { read271, read271s, readX12 } from '../src/index.js';
+import { readX12 } from '../src/index.js';
+import { read271, read271s } from '../src/profiles/271/index.js';
 import { firstTransaction, only271, readFixture, wrap } from './utils.js';
 
 describe('read271', () => {

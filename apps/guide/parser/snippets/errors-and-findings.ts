@@ -1,7 +1,8 @@
 // #region example
 import { readFile } from 'node:fs/promises';
 
-import { read271s, readX12, X12SyntaxError } from '@ediocracy/parser';
+import { readX12, X12SyntaxError } from '@ediocracy/parser';
+import { read271s } from '@ediocracy/parser/271';
 
 try {
     readX12('not x12');

@@ -226,21 +226,33 @@ body {
   color: var(--edi-text-3);
 }
 
-.VPSidebarItem.level-1 .link[href^='/parser/api/'] .text {
-  font-family: var(--edi-mono);
-}
-
 .VPSidebarItem.level-1 .indicator {
   display: none;
 }
 
-.VPSidebarItem.level-1.is-active > .item .link {
+.VPSidebarItem.level-1.is-active > .item .link,
+.VPSidebarItem.level-2.is-active > .item .link {
   background: var(--edi-bg-mute);
 }
 
-.VPSidebarItem.level-1.is-active > .item .link > .text {
+.VPSidebarItem.level-1.is-active > .item .link > .text,
+.VPSidebarItem.level-2.is-active > .item .link > .text {
   font-weight: 600;
   color: var(--edi-accent);
+}
+
+.VPSidebar .VPSidebarItem.level-1:has(> .items) > .item .text {
+  padding: 12px 10px 4px;
+  font-family: var(--edi-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--edi-text-4);
+}
+
+.VPSidebar .VPSidebarItem.level-1 > .items {
+  padding-left: 0;
+  border-left: none;
 }
 
 /* Page layout */

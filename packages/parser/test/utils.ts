@@ -2,16 +2,12 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import type { Grammar, Loop } from '../src/loops/types.js';
+import type { RouteEntry } from '../src/profiles/271/routes/index.js';
 import type { Transaction, X12Document } from '../src/reader/types.js';
 
-import {
-    read271s,
-    readX12,
-    type Response271,
-    type RouteEntry,
-    X12SyntaxError,
-} from '../src/index.js';
+import { readX12, X12SyntaxError } from '../src/index.js';
 import { buildLoops } from '../src/loops/loops.js';
+import { read271s, type Response271 } from '../src/profiles/271/index.js';
 
 export const fixtureDirectory = path.resolve(import.meta.dirname, 'fixtures');
 

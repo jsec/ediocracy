@@ -1,14 +1,13 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
+import { readX12 } from '../src/index.js';
+import { interpret271, read271s } from '../src/profiles/271/index.js';
 import {
-    interpret271,
     interpretRoute,
-    read271s,
-    readX12,
     type RouteEntry,
     type RouteErrorCondition,
     type RouteProfile,
-} from '../src/index.js';
+} from '../src/profiles/271/routes/index.js';
 import { codesAndTags, wrap } from './utils.js';
 
 const GOOD = 'HL*1**20*1~NM1*PR*2*P*****PI*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';

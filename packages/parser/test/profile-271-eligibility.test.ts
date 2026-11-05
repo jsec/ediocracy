@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { interpret271, type Response271 } from '../src/index.js';
+import { interpret271, type Response271 } from '../src/profiles/271/index.js';
 import { only271, readFixture, wrap } from './utils.js';
 
 const SOURCE_AND_RECEIVER = 'HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~';

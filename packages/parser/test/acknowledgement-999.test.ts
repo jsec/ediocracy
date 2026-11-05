@@ -6,9 +6,10 @@ import type {
     Response999,
     TransactionSetResponse,
     TransactionSetResult,
-} from '../src/index.js';
+} from '../src/profiles/acknowledgements/index.js';
 
-import { read999, read999s, readX12 } from '../src/index.js';
+import { readX12 } from '../src/index.js';
+import { read999, read999s } from '../src/profiles/acknowledgements/index.js';
 import { codesAndTags, firstTransaction, readFixture } from './utils.js';
 
 const VERSION = '005010X231A1';

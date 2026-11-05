@@ -5,7 +5,7 @@ import { useData, useRoute } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { computed } from 'vue';
 
-const API_PAGE = /^\/parser\/api\/([^/]+)\//;
+const API_PAGE = /^\/parser\/api\/parser\/(?:(.+)\/)?(functions|classes|interfaces|type-aliases|variables)\//;
 const PAGE_SUFFIX = /(?:index)?(?:\.html|\.md)?$/;
 const API_KINDS: Record<string, string> = {
   'functions': 'function',
@@ -18,11 +18,15 @@ const API_KINDS: Record<string, string> = {
 const { frontmatter, theme } = useData<Theme.Config>();
 const route = useRoute();
 
-const apiSection = computed(() => route.path.match(API_PAGE)?.[1]);
+const apiPage = computed(() => route.path.match(API_PAGE));
+const apiSection = computed(() => apiPage.value?.[2]);
 
 const crumb = computed(() => {
   if (apiSection.value) {
-    return `@ediocracy/parser / ${apiSection.value.replace('-', ' ')}`;
+    const subpath = apiPage.value?.[1];
+    const module = subpath ? `@ediocracy/parser/${subpath}` : '@ediocracy/parser';
+
+    return `${module} / ${apiSection.value.replace('-', ' ')}`;
   }
 
   const section = route.path.split('/')[1];

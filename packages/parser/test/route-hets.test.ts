@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { hetsProfile, interpretRoute, type RouteEntry } from '../src/index.js';
+import { hetsProfile, interpretRoute, type RouteEntry } from '../src/profiles/271/routes/index.js';
 import { firstEntry, readFixture, wrap } from './utils.js';
 
 const HETS_RECEIVER = 'HL*2*1*21*1~NM1*1P*2*R*****XX*1234567893~';

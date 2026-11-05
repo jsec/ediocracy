@@ -1,7 +1,8 @@
 // #region example
 import { readFile } from 'node:fs/promises';
 
-import { read271, readX12 } from '@ediocracy/parser';
+import { readX12 } from '@ediocracy/parser';
+import { read271 } from '@ediocracy/parser/271';
 
 const text = await readFile('response.x12', 'utf8');
 const document = readX12(text);

@@ -1,12 +1,16 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
-    "../../packages/parser/src/index.ts"
+    "../../packages/parser/src/index.ts",
+    "../../packages/parser/src/profiles/271/index.ts",
+    "../../packages/parser/src/profiles/271/routes/index.ts",
+    "../../packages/parser/src/profiles/acknowledgements/index.ts"
   ],
   "tsconfig": "../../packages/parser/tsconfig.json",
   "plugin": [
     "typedoc-plugin-markdown",
-    "typedoc-vitepress-theme"
+    "typedoc-vitepress-theme",
+    "./scripts/typedoc-hide-object-signatures.mjs"
   ],
   "out": "./parser/api",
   "docsRoot": "./",
@@ -20,5 +24,10 @@
   "pageTitleTemplates": {
     "member": "{name}"
   },
-  "parametersFormat": "table"
+  "parametersFormat": "table",
+  "excludeScopesInPaths": true,
+  "typeAliasPropertiesFormat": "table",
+  "tableColumnSettings": {
+    "hideSources": true
+  }
 }

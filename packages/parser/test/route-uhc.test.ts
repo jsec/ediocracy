@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { interpretRoute, type RouteEntry, uhcProfile } from '../src/index.js';
+import { interpretRoute, type RouteEntry, uhcProfile } from '../src/profiles/271/routes/index.js';
 import { codesAndTags, firstEntry, readFixture, wrap } from './utils.js';
 
 const MINIMUM_ROW = 'EB*B*IND*BY***27*5**8H*5**Y~MSG*AMOUNT VARIES BY PRACTITIONER~';

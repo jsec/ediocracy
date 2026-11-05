@@ -9,11 +9,18 @@ import { guideSidebar } from './sidebar-guide.mjs';
 // page links: it reports them as dead and appends .html.
 process.env.VITE_EXTRA_EXTENSIONS = 'edi';
 
-function apiItems(...groupNames: string[]) {
-  return typedocSidebar
-    .filter((group) => groupNames.includes(group.text))
-    .flatMap((group) => group.items);
-}
+const API_GROUP_NAMES: Record<string, string> = {
+  '@ediocracy/parser': 'X12 envelopes',
+  '@ediocracy/parser/271': '271 responses',
+  '@ediocracy/parser/271/routes': 'Route profiles',
+  '@ediocracy/parser/acknowledgements': 'Acknowledgements',
+};
+const API_SUBHEADINGS: [string, string[]][] = [
+  ['Functions', ['Functions']],
+  ['Constants', ['Variables']],
+  ['Classes & interfaces', ['Classes', 'Interfaces']],
+  ['Types', ['Type Aliases']],
+];
 
 export default defineConfig({
   title: 'Ediocracy',
@@ -64,13 +71,16 @@ export default defineConfig({
             { text: 'Errors and findings', link: '/parser/guides/errors-and-findings' },
           ],
         },
-        { text: 'API · Functions', items: apiItems('Functions') },
-        { text: 'API · Classes & interfaces', items: apiItems('Classes', 'Interfaces') },
-        {
-          text: 'API · Types',
+        ...typedocSidebar.map((module) => ({
+          text: API_GROUP_NAMES[module.text],
           collapsed: true,
-          items: apiItems('Type Aliases', 'Variables'),
-        },
+          items: API_SUBHEADINGS.map(([text, kinds]) => ({
+            text,
+            items: module.items
+              .filter((group) => kinds.includes(group.text))
+              .flatMap((group) => group.items),
+          })).filter((subheading) => subheading.items.length > 0),
+        })),
       ],
     },
     outline: { label: 'On this page' },

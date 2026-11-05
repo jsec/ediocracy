@@ -25,7 +25,10 @@ export type Loop = {
     segments: [Segment, ...Segment[]];
 };
 
-/** A problem found while grouping segments into loops; see {@link Response271FindingCode}. */
+/**
+ * A problem found while grouping segments into loops; see
+ * {@link "@ediocracy/parser/271".Response271FindingCode}.
+ */
 export type LoopFindingCode = 'duplicate-hl-id' | 'missing-hl-parent' | 'unclosed-loop' | 'unexpected-segment' | 'unknown-hl-level';
 
 export type LoopSpec = {
