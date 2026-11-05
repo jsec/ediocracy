@@ -3,7 +3,6 @@ import type { CostShareEntry, MemberEligibility } from '../../eligibility/types.
 import type { Person } from '../../types.js';
 import type {
     CopayRangeEntry,
-    CoverageDateEntry,
     UhcFindingCode,
     UhcView,
     VariableCopayEntry,
@@ -12,7 +11,7 @@ import type {
 
 type Report = (code: UhcFindingCode, segment: Segment, message: string) => void;
 
-import { toPlainDate } from '../../eligibility/interpreter.js';
+import { readCoverageDates } from '../coverage-dates.js';
 
 // MSG text on a variable copay (guide v9.0, §6.2 #11–12).
 const LOCATION_MESSAGE = 'AMOUNT VARIES BY LOCATION';
@@ -20,8 +19,6 @@ const PRACTITIONER_MESSAGE = 'AMOUNT VARIES BY PRACTITIONER';
 // EB09 on the two rows of a copay range (guide v9.0, §6.2 #12).
 const RANGE_MAXIMUM = 'M2';
 const RANGE_MINIMUM = '8H';
-// DTP01 for plan coverage dates (guide v9.0, §6.2 #6).
-const PLAN_COVERAGE = '346';
 
 /**
  * Builds the UnitedHealthcare view of one member.
@@ -116,64 +113,6 @@ function readCopays(
         copayRanges,
         variableCopays,
     };
-}
-
-// Member dates first, then dates on EB03 `30` coverage rows (guide v9.0, §6.2 #6).
-function readCoverageDates(
-    member: MemberEligibility,
-    person: Person,
-    report: Report,
-): CoverageDateEntry[] {
-    const planRowDates = member.coverage
-        .filter(entry => entry.serviceTypes.includes('30'))
-        .flatMap(entry => entry.benefit.dates);
-    const segments = [...person.dates, ...planRowDates]
-        .filter(segment => segment.element(1) === PLAN_COVERAGE);
-    const coverageDates: CoverageDateEntry[] = [];
-
-    for (const segment of segments) {
-        const format = segment.element(2);
-
-        if (format !== 'D8' && format !== 'RD8') {
-            report(
-                'unexpected-coverage-date-format',
-                segment,
-                `DTP02 "${format ?? ''}" is not D8 or RD8`,
-            );
-            continue;
-        }
-
-        // Dates that cannot be read are left out. interpret271 reports them as `invalid-date`.
-        if (format === 'D8') {
-            const start = toPlainDate(segment.element(3));
-
-            if (start) {
-                coverageDates.push({
-                    end: undefined,
-                    segment,
-                    start,
-                });
-            }
-
-            continue;
-        }
-
-        const texts = (segment.element(3) ?? '').split('-');
-        const start = toPlainDate(texts[0]);
-        const end = toPlainDate(texts[1]);
-
-        if (!start || !end || texts.length !== 2 || Temporal.PlainDate.compare(start, end) > 0) {
-            continue;
-        }
-
-        coverageDates.push({
-            end,
-            segment,
-            start,
-        });
-    }
-
-    return coverageDates;
 }
 
 function variesByOf(entry: CostShareEntry): undefined | VariesBy {

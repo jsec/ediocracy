@@ -1,8 +1,9 @@
 /**
- * Applies a route profile, such as CMS HETS or UnitedHealthcare, to a 271.
+ * Applies a route profile, such as CMS HETS, UnitedHealthcare or Humana, to a 271.
  *
  * @module @ediocracy/parser/271/routes
  */
+export type { CoverageDateEntry } from './coverage-dates.js';
 export { interpretRoute } from './engine.js';
 export { hetsProfile } from './hets/profile.js';
 export type {
@@ -11,6 +12,14 @@ export type {
     MedicareView,
     MspEntry,
 } from './hets/types.js';
+export { humanaProfile } from './humana/profile.js';
+export type {
+    BillingEntry,
+    HumanaFindingCode,
+    HumanaView,
+    PlanEntry,
+    StatusEntry,
+} from './humana/types.js';
 export type {
     RouteEligibility,
     RouteEntry,
@@ -22,7 +31,6 @@ export type {
 export { uhcProfile } from './uhc/profile.js';
 export type {
     CopayRangeEntry,
-    CoverageDateEntry,
     OtherPayerEntry,
     UhcFindingCode,
     UhcView,

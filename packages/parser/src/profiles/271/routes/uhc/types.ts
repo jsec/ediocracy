@@ -1,5 +1,5 @@
-import type { Segment } from '../../../../reader/segment.js';
 import type { CostShareEntry, OtherPartyEntry } from '../../eligibility/types.js';
+import type { CoverageDateEntry } from '../coverage-dates.js';
 
 /** A minimum–maximum copay range: an EB09 `8H` row and the `M2` row after it. */
 export type CopayRangeEntry = {
@@ -9,16 +9,6 @@ export type CopayRangeEntry = {
     minimum: CostShareEntry;
     /** What the amount depends on, from the minimum row's MSG. */
     variesBy: VariesBy;
-};
-
-/** A plan coverage date (DTP01 `346`). */
-export type CoverageDateEntry = {
-    /** The coverage end date. Set only for DTP02 `RD8`, which means coverage has ended. */
-    end: Temporal.PlainDate | undefined;
-    /** The DTP segment. */
-    segment: Segment;
-    /** The coverage start date. */
-    start: Temporal.PlainDate;
 };
 
 /** An other payer row (EB01 `R`). */

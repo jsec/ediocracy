@@ -80,6 +80,16 @@ export type Person = Party & {
     demographics: Segment | undefined;
     /** The dependents listed under this person. */
     dependents: Person[];
+    /**
+     * Name loops after the first in this level, in order. Each holds its NM1 and REF segments.
+     * The loops' benefits are in `benefits`. Empty when the level has one name loop.
+     */
+    otherNames: {
+        /** The loop's NM1 segment. */
+        name: Segment;
+        /** The loop's REF segments. */
+        references: Segment[];
+    }[];
     /** Reference numbers, such as the group number (REF segments). */
     references: Segment[];
     /** The dependent's relationship to the subscriber (INS segment). */

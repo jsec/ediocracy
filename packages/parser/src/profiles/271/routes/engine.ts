@@ -46,13 +46,15 @@ class RouteInterpreter<View, FindingCode extends string> {
 
             this.#checkMemberId(person);
 
-            return this.#profile.readMember(member, person, (code, segment, message) => {
+            const report = (code: FindingCode, segment: Segment, message: string): void => {
                 this.#viewFindings.push({
                     code,
                     message,
                     segment,
                 });
-            });
+            };
+
+            return this.#profile.readMember(member, person, report, this.#entry);
         });
         const errors = eligibility.requestErrors.map(error => this.#readError(error));
 
@@ -123,8 +125,11 @@ class RouteInterpreter<View, FindingCode extends string> {
         const expectedElements = [
             { position: 1, value: expected.entityCode },
             { position: 8, value: expected.idQualifier },
-            { position: 9, value: expected.id },
         ];
+        const allowedIds = typeof expected.id === 'string' ? [expected.id] : expected.id;
+        const allowedIdText = typeof expected.id === 'string'
+            ? `"${expected.id}"`
+            : `one of ${expected.id.join(', ')}`;
 
         for (const source of this.#entry.response.sources) {
             const name = source.name;
@@ -136,6 +141,11 @@ class RouteInterpreter<View, FindingCode extends string> {
             const differences = expectedElements
                 .filter(element => name.element(element.position) !== element.value)
                 .map(element => `NM10${element.position} "${name.element(element.position) ?? ''}" is not "${element.value}"`);
+            const id = name.element(9);
+
+            if (!isOneOf(allowedIds, id)) {
+                differences.push(`NM109 "${id ?? ''}" is not ${allowedIdText}`);
+            }
 
             if (differences.length === 0) {
                 continue;

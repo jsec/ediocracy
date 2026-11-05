@@ -118,6 +118,12 @@ class EligibilityResponseReader {
             .map(loop => readBenefit(loop));
         const dependents = level.loops.filter(loop => loop.id === '2000D').map(loop => this.#readPerson(loop));
         const nameSegments = nameLoops[0]?.segments ?? [];
+        const otherNames = nameLoops
+            .slice(1)
+            .map(nameLoop => ({
+                name: nameLoop.segments[0],
+                references: nameLoop.segments.filter(segment => segment.tag === 'REF'),
+            }));
 
         return {
             ...readParty(level, nameLoops[0]),
@@ -126,6 +132,7 @@ class EligibilityResponseReader {
             dates: nameSegments.filter(segment => segment.tag === 'DTP'),
             demographics: nameSegments.find(segment => segment.tag === 'DMG'),
             dependents,
+            otherNames,
             references: nameSegments.filter(segment => segment.tag === 'REF'),
             relationship: nameSegments.find(segment => segment.tag === 'INS'),
             traces: segmentsWithTag(level, 'TRN'),

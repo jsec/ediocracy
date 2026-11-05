@@ -70,20 +70,24 @@ export type RouteProfile<View, FindingCode extends string> = {
     memberIdPlaceholders?: string[];
     /** The route's name. */
     name: string;
-    /** Builds the route's view of one member. Problems found are passed to `report`. */
+    /**
+     * Builds the route's view of one member. Problems found are passed to `report`. `entry` is
+     * the response the member came from.
+     */
     readMember: (
         member: MemberEligibility,
         person: Person,
         report: (code: FindingCode, segment: Segment, message: string) => void,
+        entry: RouteEntry,
     ) => View;
     /** The 2100B NM101 values the route allows. */
     receiverEntityCodes?: string[];
-    /** The 2100A NM101, NM108 and NM109 the route always sends. */
+    /** The 2100A NM101, NM108 and NM109 the route sends. When left out, 2100A is not checked. */
     source?: {
         /** NM101. */
         entityCode: string;
-        /** NM109. */
-        id: string;
+        /** NM109, or the list of NM109 values the route allows. */
+        id: string | string[];
         /** NM108. */
         idQualifier: string;
     };

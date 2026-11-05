@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { readX12 } from '../src/index.js';
 import { read271, read271s } from '../src/profiles/271/index.js';
-import { firstTransaction, only271, readFixture, wrap } from './utils.js';
+import { codesAndTags, firstTransaction, only271, readFixture, wrap } from './utils.js';
 
 describe('read271', () => {
     describe('generic fixtures', () => {
@@ -299,6 +299,34 @@ describe('read271', () => {
 
             expect(response.findings).toEqual([]);
             expect(subscribers).toEqual([['A', 1], ['B', 2]]);
+        });
+    });
+
+    describe('otherNames', () => {
+        it('should keep the NM1 and REFs of a second name loop', () => {
+            const body = 'ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~'
+                + 'HL*3*2*22*0~NM1*IL*1*DOE*JOHN*M***MI*H00000000~REF*6P*R8975001*HUMANA HEALTH PLAN, INC.~'
+                + 'EB*1*EMP*30*HN~NM1*IL*1*DOE*JOHN*M***MI*H00000000~REF*6P*R8962001*HUMANA HEALTH PLAN, INC.~'
+                + 'EB*1*EMP*30*MC~SE*15*0001~';
+            const response = read271(firstTransaction(wrap(body)));
+            const [subscriber] = response.subscribers;
+            const [otherName] = subscriber?.otherNames ?? [];
+            const otherReferences = otherName?.references.map(segment => segment.element(2));
+            const references = subscriber?.references.map(segment => segment.element(2));
+
+            expect(subscriber?.otherNames).toHaveLength(1);
+            expect(otherName?.name.element(9)).toBe('H00000000');
+            expect(otherReferences).toEqual(['R8962001']);
+            expect(references).toEqual(['R8975001']);
+            expect(subscriber?.benefits).toHaveLength(2);
+            expect(codesAndTags(response.findings)).toEqual(['unexpected-segment NM1']);
+        });
+
+        it('should be empty for one name loop', () => {
+            const response = only271(readFixture('x12/GX12-022-271-structural-witness.x12'));
+            const [subscriber] = response.subscribers;
+
+            expect(subscriber?.otherNames).toEqual([]);
         });
     });
 });

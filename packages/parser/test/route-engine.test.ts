@@ -56,6 +56,15 @@ const anyLevelProfile: RouteProfile<string, 'odd-member'> = {
     ],
 };
 
+const listProfile: RouteProfile<string, 'odd-member'> = {
+    ...testProfile,
+    source: {
+        entityCode: 'PR',
+        id: ['61101', '65065'],
+        idQualifier: 'PI',
+    },
+};
+
 function entryOf(levels: string, component = ':'): RouteEntry {
     const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
     const count = body.split('~').filter(segment => segment !== '').length + 1;
@@ -179,9 +188,46 @@ describe('interpretRoute', () => {
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-receiver NM1']);
         });
+
+        it('should accept each NM109 in a source id list', () => {
+            const results = ['61101', '65065'].map((id) => {
+                const levels = `HL*1**20*1~NM1*PR*2*HUMANA*****PI*${id}~HL*2*1*21*1~NM1*1P*2*R*****XX*1~`;
+
+                return interpretRoute(entryOf(levels), listProfile);
+            });
+
+            expect(results.map(result => result.findings)).toEqual([[], []]);
+        });
+
+        it('should report an NM109 not in a source id list', () => {
+            const levels = 'HL*1**20*1~NM1*PR*2*HUMANA*****PI*12345~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
+
+            const result = interpretRoute(entryOf(levels), listProfile);
+
+            expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
+            expect(result.findings[0]?.message).toContain('NM109 "12345" is not one of 61101, 65065');
+        });
     });
 
     describe('members', () => {
+        it('should pass the entry to readMember', () => {
+            const entry = entryOf(`${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~`);
+            const entries: RouteEntry[] = [];
+            const profile: RouteProfile<string, 'odd-member'> = {
+                ...testProfile,
+                readMember: (_member, _person, _report, received) => {
+                    entries.push(received);
+
+                    return '-';
+                },
+            };
+
+            interpretRoute(entry, profile);
+
+            expect(entries).toHaveLength(1);
+            expect(entries[0]).toBe(entry);
+        });
+
         it('should report a placeholder member ID and keep the ID as sent', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*MISSING~`;
 
