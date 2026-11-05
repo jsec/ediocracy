@@ -23,7 +23,7 @@ The parser has two functions that read 271 transaction sets:
 
 ## The response
 
-[`Response271`](/parser/api/type-aliases/Response271) has the following
+[`Response271`](/parser/api/271/type-aliases/Response271) has the following
 fields:
 
 - `sources`: the payers that answered (loop 2100A).
@@ -35,17 +35,17 @@ fields:
 
 ## Parties and people
 
-A [`Party`](/parser/api/type-aliases/Party) has a `name` field that contains
+A [`Party`](/parser/api/271/type-aliases/Party) has a `name` field that contains
 the NM1 segment, the `id` and `idQualifier` fields (NM109 and NM108), and an
 `errors` field that contains any errors that the payer reported for the party
 in AAA segments.
 
-A [`Person`](/parser/api/type-aliases/Person) is a party with `benefits`,
+A [`Person`](/parser/api/271/type-aliases/Person) is a party with `benefits`,
 `dependents`, and `traces` (TRN segments).
 
 ## Benefits
 
-Each [`Benefit`](/parser/api/type-aliases/Benefit) is one EB segment and the
+Each [`Benefit`](/parser/api/271/type-aliases/Benefit) is one EB segment and the
 segments that qualify it. The parser returns codes as they appear, without
 translation. For example, `status` is EB01 and `serviceTypes` is the list of
 EB03 repetitions. The `eb` field contains the EB segment itself, so you can

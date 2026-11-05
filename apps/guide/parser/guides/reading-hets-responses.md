@@ -27,8 +27,8 @@ results for each member:
 <<< @/parser/snippets/reading-hets-responses.ts#example
 
 For each item that `read271s` returns,
-[`interpretRoute(entry, profile)`](/parser/api/functions/interpretRoute)
-returns a [`RouteEligibility`](/parser/api/type-aliases/RouteEligibility)
+[`interpretRoute(entry, profile)`](/parser/api/271/routes/functions/interpretRoute)
+returns a [`RouteEligibility`](/parser/api/271/routes/type-aliases/RouteEligibility)
 object with the following fields:
 
 - `eligibility`: the result of `interpret271` for the response, unchanged.
@@ -36,14 +36,14 @@ object with the following fields:
   `eligibility.requestErrors`, with the HETS `condition` and `description`
   when the guide lists the error.
 - `findings`: the problems that the profile found in the response.
-- `members`: one [`MedicareView`](/parser/api/type-aliases/MedicareView)
+- `members`: one [`MedicareView`](/parser/api/271/routes/type-aliases/MedicareView)
   object for each member, in the same order as `eligibility.members`.
 
 ## Findings
 
 The `findings` field uses codes from
-[`RouteFindingCode`](/parser/api/type-aliases/RouteFindingCode) and
-[`HetsFindingCode`](/parser/api/type-aliases/HetsFindingCode). The profile
+[`RouteFindingCode`](/parser/api/271/routes/type-aliases/RouteFindingCode) and
+[`HetsFindingCode`](/parser/api/271/routes/type-aliases/HetsFindingCode). The profile
 reports the following codes:
 
 - `unexpected-delimiters`: the ISA declares separators other than `*`, `|`,

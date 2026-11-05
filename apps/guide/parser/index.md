@@ -33,8 +33,8 @@ The package provides the following functions and classes:
 - The [`readX12`](/parser/api/functions/readX12) function reads any X12 text
   into interchanges, groups, transaction sets, and segments. For more
   information, see [Read X12 envelopes](/parser/guides/low-level-reader).
-- The [`read271`](/parser/api/functions/read271) and
-  [`read271s`](/parser/api/functions/read271s) functions read 271
+- The [`read271`](/parser/api/271/functions/read271) and
+  [`read271s`](/parser/api/271/functions/read271s) functions read 271
   transaction sets into the `Response271` type. For more information, see
   [Read 271 responses](/parser/guides/reading-271s).
 - The [`X12SyntaxError`](/parser/api/classes/X12SyntaxError) class is the

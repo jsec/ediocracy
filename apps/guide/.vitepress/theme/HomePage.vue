@@ -20,7 +20,7 @@ const ANATOMY = [
 
 const PARSER_ENTRIES = [
   ['readX12', '/parser/api/functions/readX12', 'Reads any X12 text into interchanges, groups, transaction sets, and segments.'],
-  ['read271 · read271s', '/parser/api/functions/read271', 'Read 271 transaction sets into the Response271 type: payers, providers, subscribers, and benefits.'],
+  ['read271 · read271s', '/parser/api/271/functions/read271', 'Read 271 transaction sets into the Response271 type: payers, providers, subscribers, and benefits.'],
   ['X12SyntaxError', '/parser/api/classes/X12SyntaxError', 'Thrown for text the parser can’t read. Smaller problems come back as findings.'],
 ];
 </script>

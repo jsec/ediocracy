@@ -31,7 +31,7 @@ The parser returns findings in the following properties:
   codes report control numbers or counts in a trailer that don't match, a
   missing control number, or a segment that ends with a separator.
 - The `Response271.findings` property uses codes from
-  [`Response271FindingCode`](/parser/api/type-aliases/Response271FindingCode).
+  [`Response271FindingCode`](/parser/api/271/type-aliases/Response271FindingCode).
   These codes report a segment that the 005010X279A1 guide doesn't allow
   where it appears, a hierarchy problem in the HL segments, a list of related
   parties that doesn't end, or an unexpected version.

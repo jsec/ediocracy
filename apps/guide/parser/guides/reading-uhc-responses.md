@@ -28,8 +28,8 @@ UnitedHealthcare results for each member:
 <<< @/parser/snippets/reading-uhc-responses.ts#example
 
 For each item that `read271s` returns,
-[`interpretRoute(entry, profile)`](/parser/api/functions/interpretRoute)
-returns a [`RouteEligibility`](/parser/api/type-aliases/RouteEligibility)
+[`interpretRoute(entry, profile)`](/parser/api/271/routes/functions/interpretRoute)
+returns a [`RouteEligibility`](/parser/api/271/routes/type-aliases/RouteEligibility)
 object with the following fields:
 
 - `eligibility`: the result of `interpret271` for the response, unchanged.
@@ -37,7 +37,7 @@ object with the following fields:
   `eligibility.requestErrors`, with the UnitedHealthcare `condition` and
   `description` when the guide lists the error.
 - `findings`: the problems that the profile found in the response.
-- `members`: one [`UhcView`](/parser/api/type-aliases/UhcView) object for
+- `members`: one [`UhcView`](/parser/api/271/routes/type-aliases/UhcView) object for
   each member, in the same order as `eligibility.members`.
 
 ## Checks that the profile doesn't make
@@ -114,8 +114,8 @@ The `variesBy` field of a range comes from the `8H` row.
 ## Findings
 
 The `findings` field uses codes from
-[`RouteFindingCode`](/parser/api/type-aliases/RouteFindingCode) and
-[`UhcFindingCode`](/parser/api/type-aliases/UhcFindingCode). The profile
+[`RouteFindingCode`](/parser/api/271/routes/type-aliases/RouteFindingCode) and
+[`UhcFindingCode`](/parser/api/271/routes/type-aliases/UhcFindingCode). The profile
 reports the following codes:
 
 - `unexpected-coverage-date-format`: a `DTP` segment with `DTP01` set to

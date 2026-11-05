@@ -47,18 +47,18 @@ acknowledgment in it:
 
 <<< @/parser/snippets/reading-acknowledgments.ts#example
 
-The [`readTa1s`](/parser/api/functions/readTa1s) function returns one item
+The [`readTa1s`](/parser/api/acknowledgements/functions/readTa1s) function returns one item
 for each TA1 segment. Each item contains the `interchange` that the segment is
-in, and a [`Ta1`](/parser/api/type-aliases/Ta1) object.
+in, and a [`Ta1`](/parser/api/acknowledgements/type-aliases/Ta1) object.
 
-The [`read999s`](/parser/api/functions/read999s) function returns one item
+The [`read999s`](/parser/api/acknowledgements/functions/read999s) function returns one item
 for each transaction set that has `ST01` set to `999`. Each item contains the
 `interchange`, the functional `group`, and a
-[`Response999`](/parser/api/type-aliases/Response999) object. The function
+[`Response999`](/parser/api/acknowledgements/type-aliases/Response999) object. The function
 skips all other transaction sets, including 997 acknowledgments.
 
 To read one transaction set, use the
-[`read999`](/parser/api/functions/read999) function.
+[`read999`](/parser/api/acknowledgements/functions/read999) function.
 
 ## The 999 acknowledgment
 
@@ -108,7 +108,7 @@ In a segment error, the `position` field is the position of the segment in
 the transaction set. The `ST` segment is position 1.
 
 In an element error, the `position` field is an
-[`ElementPosition`](/parser/api/type-aliases/ElementPosition) object with the
+[`ElementPosition`](/parser/api/acknowledgements/type-aliases/ElementPosition) object with the
 following fields:
 
 - `element`: the position of the element in its segment. The first element
@@ -279,7 +279,7 @@ The following table shows the codes that `TA105` can have:
 ## Findings
 
 The `findings` field of a `Response999` object uses the codes from
-[`Response999FindingCode`](/parser/api/type-aliases/Response999FindingCode).
+[`Response999FindingCode`](/parser/api/acknowledgements/type-aliases/Response999FindingCode).
 The reader reports the following codes:
 
 - `invalid-number`: a numeric element or component has characters that
