@@ -71,7 +71,7 @@ describe('read271', () => {
         });
     });
 
-    describe('producer and X12 examples', () => {
+    describe('producer and sample responses', () => {
         it('should read three benefits from the count mismatch sample despite its count mismatch', () => {
             const document = readX12(readFixture('271/count-mismatch-sample.x12'));
             const [result] = read271s(document);
@@ -182,9 +182,8 @@ describe('read271', () => {
             expect(subscriber?.benefits).toHaveLength(expected.benefitCount);
         });
 
-        // https://x12.org/examples/005010x279/example-1b-response-generic-request-clinic-patients-subscriber-eligibility, retrieved 2026-10-28.
-        it('should read a subscriber response with five benefits from X12 example 1b', () => {
-            const response = only271(wrap(readFixture('271/x12-example-1b.x12'), '>'));
+        it('should read a subscriber response with five benefits', () => {
+            const response = only271(wrap(readFixture('271/subscriber-five-benefits.x12'), '>'));
             const [subscriber] = response.subscribers;
             const benefits = subscriber?.benefits ?? [];
             const sourceIds = response.sources.map(source => source.id);
@@ -193,35 +192,33 @@ describe('read271', () => {
             const entityLoopIds = benefits[4]?.relatedEntities.map(loop => loop.id);
 
             expect(response.findings).toEqual([]);
-            expect(sourceIds).toEqual(['842610001']);
-            expect(receiverIds).toEqual(['2000035']);
+            expect(sourceIds).toEqual(['55501']);
+            expect(receiverIds).toEqual(['1111111112']);
             expect(subscriber?.traces).toHaveLength(1);
-            expect(statuses).toEqual(['1', 'L', '1', 'B', 'B']);
-            expect(benefits[2]?.serviceTypes).toEqual(['1', '33', '35', '47', '86', '88', '98', 'AL', 'MH', 'UC']);
+            expect(statuses).toEqual(['1', 'L', '1', 'C', 'C']);
+            expect(benefits[2]?.serviceTypes).toEqual(['1', '4', '5', '48', '50', '98', 'UC']);
             expect(benefits[3]).toMatchObject({
-                amount: '10',
+                amount: '500',
                 inNetwork: 'Y',
-                insuranceType: 'HM',
-                timePeriod: '27',
+                insuranceType: 'PR',
+                timePeriod: '23',
             });
             expect(entityLoopIds).toEqual(['2120C']);
         });
 
-        // https://x12.org/examples/005010x279/example-1c-error-response-payer-clinic-not-eligible-inquiries-payer, retrieved 2026-10-28.
-        it('should read a receiver rejection with no subscribers from X12 example 1c', () => {
-            const response = only271(wrap(readFixture('271/x12-example-1c.x12')));
+        it('should read a receiver rejection with no subscribers', () => {
+            const response = only271(wrap(readFixture('271/receiver-rejection.x12')));
             const [receiver] = response.receivers;
 
             expect(response.findings).toEqual([]);
             expect(response.receivers).toHaveLength(1);
             expect(receiver?.errors).toHaveLength(1);
-            expect(receiver?.errors[0]).toMatchObject({ code: '50', followUp: 'N' });
+            expect(receiver?.errors[0]).toMatchObject({ code: '43', followUp: 'C' });
             expect(response.subscribers).toEqual([]);
         });
 
-        // https://x12.org/examples/005010x279/example-2b-response-generic-request-physician-patients-dependent-eligibility, retrieved 2026-10-28.
-        it('should read a dependent response from X12 example 2b', () => {
-            const response = only271(wrap(readFixture('271/x12-example-2b.x12'), '>'));
+        it('should read a dependent response', () => {
+            const response = only271(wrap(readFixture('271/dependent-five-benefits.x12'), '>'));
             const [subscriber] = response.subscribers;
             const [dependent] = subscriber?.dependents ?? [];
             const entityLoopIds = dependent?.benefits[4]?.relatedEntities.map(loop => loop.id);
@@ -229,7 +226,7 @@ describe('read271', () => {
             expect(response.findings).toEqual([]);
             expect(subscriber?.benefits).toEqual([]);
             expect(subscriber?.dependents).toHaveLength(1);
-            expect(dependent?.name?.element(3)).toBe('SMITH');
+            expect(dependent?.name?.element(3)).toBe('RIVERA');
             expect(dependent?.traces).toHaveLength(1);
             expect(dependent?.benefits).toHaveLength(5);
             expect(entityLoopIds).toEqual(['2120D']);

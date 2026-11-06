@@ -174,16 +174,16 @@ describe('interpret271', () => {
     });
 
     describe('request errors', () => {
-        it('should report the receiver rejection in X12 example 1c', () => {
-            const response = only271(wrap(readFixture('271/x12-example-1c.x12')));
+        it('should report the receiver rejection', () => {
+            const response = only271(wrap(readFixture('271/receiver-rejection.x12')));
             const eligibility = interpret271(response);
 
             expect(eligibility.requestErrors).toHaveLength(1);
             expect(eligibility.requestErrors[0]).toMatchObject({
-                followUp: 'N',
+                followUp: 'C',
                 level: 'receiver',
                 memberId: undefined,
-                rejectReason: '50',
+                rejectReason: '43',
                 validRequest: 'Y',
             });
         });
@@ -328,9 +328,15 @@ describe('interpret271', () => {
                 file: 'sandbox-medicare-advantage.x12',
                 text: readFixture('271/sandbox-medicare-advantage.x12'),
             },
-            { file: 'x12-example-1b.x12', text: wrap(readFixture('271/x12-example-1b.x12'), '>') },
-            { file: 'x12-example-1c.x12', text: wrap(readFixture('271/x12-example-1c.x12')) },
-            { file: 'x12-example-2b.x12', text: wrap(readFixture('271/x12-example-2b.x12'), '>') },
+            {
+                file: 'dependent-five-benefits.x12',
+                text: wrap(readFixture('271/dependent-five-benefits.x12'), '>'),
+            },
+            { file: 'receiver-rejection.x12', text: wrap(readFixture('271/receiver-rejection.x12')) },
+            {
+                file: 'subscriber-five-benefits.x12',
+                text: wrap(readFixture('271/subscriber-five-benefits.x12'), '>'),
+            },
         ])('should place every benefit of $file in exactly one list', (fixture) => {
             const response = only271(fixture.text);
             const eligibility = interpret271(response);
