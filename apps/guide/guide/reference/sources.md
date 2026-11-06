@@ -27,5 +27,5 @@ situational requirements.
 | [CMS-MSP](https://www.cms.gov/medicare/coordination-benefits-recovery/overview/secondary-payer) | Describes Medicare Secondary Payer (MSP) and coordination concepts at the program level. |
 | [CMS-MA](https://www.cms.gov/medicare/enrollment-renewal/health-plans) | Describes Medicare Advantage context at the program level. |
 
-Field names in the [segment and field index](/guide/reference/segments) are the
-X12 005010 element names.
+Field names in the [segment and field index](/guide/reference/segments) are
+short descriptions written for this guide.

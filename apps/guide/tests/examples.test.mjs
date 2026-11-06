@@ -9,19 +9,19 @@ import { buildWalkthrough } from '../src/lib/walkthrough.mjs';
 const ELEMENT_SEPARATOR = '*';
 const LINE_BREAKS = /\r?\n/g;
 
-const X12_ELEMENT_NAMES = {
-  ISA: ['Authorization Information Qualifier', 'Authorization Information', 'Security Information Qualifier', 'Security Information', 'Interchange ID Qualifier', 'Interchange Sender ID', 'Interchange ID Qualifier', 'Interchange Receiver ID', 'Interchange Date', 'Interchange Time', 'Repetition Separator', 'Interchange Control Version Number', 'Interchange Control Number', 'Acknowledgment Requested', 'Interchange Usage Indicator', 'Component Element Separator'],
-  GS: ['Functional Identifier Code', "Application Sender's Code", "Application Receiver's Code", 'Date', 'Time', 'Group Control Number', 'Responsible Agency Code', 'Version / Release / Industry Identifier Code'],
-  ST: ['Transaction Set Identifier Code', 'Transaction Set Control Number', 'Implementation Convention Reference'],
-  BHT: ['Hierarchical Structure Code', 'Transaction Set Purpose Code', 'Reference Identification', 'Date', 'Time'],
-  HL: ['Hierarchical ID Number', 'Hierarchical Parent ID Number', 'Hierarchical Level Code', 'Hierarchical Child Code'],
-  NM1: ['Entity Identifier Code', 'Entity Type Qualifier', 'Name Last or Organization Name', 'Name First', 'Name Middle', 'Name Prefix', 'Name Suffix', 'Identification Code Qualifier', 'Identification Code'],
-  EB: ['Eligibility or Benefit Information Code', 'Coverage Level Code', 'Service Type Code', 'Insurance Type Code', 'Plan Coverage Description'],
-  DTP: ['Date/Time Qualifier', 'Date Time Period Format Qualifier', 'Date Time Period'],
-  MSG: ['Free-Form Message Text'],
-  SE: ['Number of Included Segments', 'Transaction Set Control Number'],
-  GE: ['Number of Transaction Sets Included', 'Group Control Number'],
-  IEA: ['Number of Included Functional Groups', 'Interchange Control Number'],
+const FIELD_NAMES = {
+  ISA: ['Authorization type', 'Authorization value', 'Security type', 'Security value', 'Sender ID type', 'Sender ID', 'Receiver ID type', 'Receiver ID', 'Date', 'Time', 'Repetition separator', 'Envelope version', 'Control number', 'Acknowledgment request', 'Test or production', 'Component separator'],
+  GS: ['Group type', 'Sender code', 'Receiver code', 'Date', 'Time', 'Group control number', 'Agency', 'Version'],
+  ST: ['Transaction set type', 'Control number', 'Guide version'],
+  BHT: ['Hierarchy structure', 'Purpose', 'Reference', 'Date', 'Time'],
+  HL: ['Level ID', 'Parent level ID', 'Level type', 'Has child levels'],
+  NM1: ['Party role', 'Person or organization', 'Last name or organization', 'First name', 'Middle name', 'Prefix', 'Suffix', 'ID type', 'ID'],
+  EB: ['Benefit status', 'Coverage level', 'Service type', 'Insurance type', 'Plan description'],
+  DTP: ['Date type', 'Date format', 'Date or range'],
+  MSG: ['Message text'],
+  SE: ['Segment count', 'Control number'],
+  GE: ['Transaction set count', 'Group control number'],
+  IEA: ['Group count', 'Control number'],
 };
 
 const examplesDirectory = new URL('../public/examples/', import.meta.url);
@@ -236,29 +236,29 @@ describe('buildWalkthrough', () => {
       }
     });
 
-    it.each(EXAMPLE_FILENAMES)('should use the exact X12 element names in %s', (filename) => {
+    it.each(EXAMPLE_FILENAMES)('should use the guide field names in %s', (filename) => {
       const segments = walkthroughSegments(filename);
       const fieldNames = segments.map((segment) => segment.fields.map((field) => field.name));
-      const expectedNames = segments.map((segment) => X12_ELEMENT_NAMES[segment.name].slice(0, segment.fields.length));
+      const expectedNames = segments.map((segment) => FIELD_NAMES[segment.name].slice(0, segment.fields.length));
 
       expect(fieldNames).toEqual(expectedNames);
     });
 
-    it('should explain coded values with their public code meanings', () => {
+    it('should explain coded values', () => {
       const secondary = walkthroughSegments('medicare-secondary-payer.edi');
       const advantage = walkthroughSegments('medicare-advantage.edi');
       const fieldExplanation = (segments, segmentName, position) => segments
         .find((segment) => segment.name === segmentName)
         .fields.find((field) => field.position === position).explanation;
 
-      expect(fieldExplanation(secondary, 'GS', 'GS01')).toMatch(/Eligibility, Coverage or Benefit Information/);
-      expect(fieldExplanation(secondary, 'BHT', 'BHT01')).toMatch(/Information Source, Information Receiver, Subscriber, Dependent/);
-      expect(fieldExplanation(secondary, 'BHT', 'BHT02')).toMatch(/Response/);
-      expect(fieldExplanation(secondary, 'DTP', 'DTP01')).toMatch(/Plan \(date\/range for which plan is in effect\)/);
-      expect(fieldExplanation(secondary, 'EB', 'EB01')).toMatch(/Active Coverage/);
-      expect(fieldExplanation(secondary, 'ISA', 'ISA15')).toMatch(/code for test data/);
-      expect(fieldExplanation(secondary, 'NM1', 'NM108')).toMatch(/Payor Identification/);
-      expect(fieldExplanation(advantage, 'GS', 'GS01')).toMatch(/Eligibility, Coverage or Benefit Information/);
+      expect(fieldExplanation(secondary, 'GS', 'GS01')).toMatch(/eligibility responses/);
+      expect(fieldExplanation(secondary, 'BHT', 'BHT01')).toMatch(/payer, provider, subscriber, and dependent/);
+      expect(fieldExplanation(secondary, 'BHT', 'BHT02')).toMatch(/a response/);
+      expect(fieldExplanation(secondary, 'DTP', 'DTP01')).toMatch(/when the plan is in effect/);
+      expect(fieldExplanation(secondary, 'EB', 'EB01')).toMatch(/active coverage/);
+      expect(fieldExplanation(secondary, 'ISA', 'ISA15')).toMatch(/test data/);
+      expect(fieldExplanation(secondary, 'NM1', 'NM108')).toMatch(/payer ID/);
+      expect(fieldExplanation(advantage, 'GS', 'GS01')).toMatch(/eligibility responses/);
     });
 
     it('should not use backticks in field explanations', () => {

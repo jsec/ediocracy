@@ -3,9 +3,10 @@ title: Segment and field index
 description: A lookup table for the X12 segments and fields in the complete examples.
 ---
 
-Use this table to find a segment in a complete example. Field names are the
-X12 005010 element names. For complete grammar and situational rules, use the
-X279A1 implementation guide.
+Use this table to find a segment in a complete example. The field names are
+short descriptions written for this guide. The X12 standard uses its own names.
+For complete grammar and situational rules, use the X279A1 implementation
+guide.
 
 ## Segment index
 
