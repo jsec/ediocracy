@@ -30,6 +30,7 @@ const testProfile: RouteProfile<string, 'odd-member'> = {
     listsAllErrors: true,
     memberIdPlaceholders: ['MISSING'],
     name: 'Test route',
+    payerIds: ['P1'],
     readMember: (member, person, report) => {
         if (member.memberId === 'ODD' && person.name) {
             report('odd-member', person.name, 'odd');
@@ -111,6 +112,7 @@ describe('interpretRoute', () => {
                 errors: testProfile.errors,
                 listsAllErrors: true,
                 name: testProfile.name,
+                payerIds: testProfile.payerIds,
                 readMember: testProfile.readMember,
             };
             const entry = entryOf(levels, '|');

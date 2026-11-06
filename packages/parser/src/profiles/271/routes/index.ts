@@ -21,6 +21,7 @@ export type {
     StatusEntry,
 } from './humana/types.js';
 export type {
+    DetectedRoute,
     RouteEligibility,
     RouteEntry,
     RouteErrorCondition,

@@ -8,6 +8,7 @@ import { readMedicare } from './views.js';
  *
  * - Separators: §7.1, Table 8.
  * - Information source `PR`/`PI`/`CMS`: the guide's 271 examples.
+ * - Payer ID `CMS` for `interpretRoute(entry)`: the guide's 271 examples.
  * - Receiver entity codes and the `MISSING` member ID: Table 14, AAA03 `43` and `72`.
  * - Error conditions: Table 14.
  * - Placeholder address: §7.2 and Table 24.
@@ -105,6 +106,7 @@ export const hetsProfile: RouteProfile<MedicareView, HetsFindingCode> = {
     listsAllErrors: true,
     memberIdPlaceholders: ['MISSING'],
     name: 'CMS HETS v15-1',
+    payerIds: ['CMS'],
     readMember: readMedicare,
     receiverEntityCodes: ['1P', '80', 'FA'],
     source: {

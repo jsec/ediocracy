@@ -3,6 +3,40 @@ import type { Delimiters, Finding } from '../../../reader/types.js';
 import type { Eligibility, MemberEligibility, RequestErrorEntry } from '../eligibility/types.js';
 import type { read271s } from '../reader.js';
 import type { Person } from '../types.js';
+import type { HetsFindingCode, MedicareView } from './hets/types.js';
+import type { HumanaFindingCode, HumanaView } from './humana/types.js';
+import type { UhcFindingCode, UhcView } from './uhc/types.js';
+
+/**
+ * The result of `interpretRoute(entry)`. `route` names the profile whose `payerIds` include the
+ * response's 2100A NM109, and `result` is that profile's result. When no profile lists the payer
+ * ID, `route` is `undefined` and `eligibility` is the `interpret271` result.
+ */
+export type DetectedRoute
+    = | {
+        /** `interpret271(entry.response)`. */
+        eligibility: Eligibility;
+        /** No profile lists the payer ID. */
+        route: undefined;
+    }
+    | {
+        /** `interpretRoute(entry, hetsProfile)`. */
+        result: RouteEligibility<MedicareView, HetsFindingCode>;
+        /** The route whose profile lists the payer ID. */
+        route: 'hets';
+    }
+    | {
+        /** `interpretRoute(entry, humanaProfile)`. */
+        result: RouteEligibility<HumanaView, HumanaFindingCode>;
+        /** The route whose profile lists the payer ID. */
+        route: 'humana';
+    }
+    | {
+        /** `interpretRoute(entry, uhcProfile)`. */
+        result: RouteEligibility<UhcView, UhcFindingCode>;
+        /** The route whose profile lists the payer ID. */
+        route: 'uhc';
+    };
 
 /**
  * The result of `interpretRoute`: the `interpret271` result, the route's conditions for each
@@ -70,6 +104,8 @@ export type RouteProfile<View, FindingCode extends string> = {
     memberIdPlaceholders?: string[];
     /** The route's name. */
     name: string;
+    /** The 2100A NM109 values whose responses `interpretRoute(entry)` applies this profile to. */
+    payerIds: string[];
     /**
      * Builds the route's view of one member. Problems found are passed to `report`. `entry` is
      * the response the member came from.

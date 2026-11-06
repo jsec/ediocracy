@@ -12,6 +12,7 @@ const DATE_OUTSIDE_WINDOW = 'The requested dates were more than 18 months back o
  *
  * - Error conditions: §6.1 #3 (`62`, `63`) and §6.1 #7 (`75`).
  * - Coverage dates: §6.2 #6. Other payers: §6.2 #9. Variable copays: §6.2 #11–12.
+ * - Payer IDs for `interpretRoute(entry)`: FAQ Q3, the payer IDs the guide applies to.
  */
 export const uhcProfile: RouteProfile<UhcView, UhcFindingCode> = {
     errors: [
@@ -34,5 +35,6 @@ export const uhcProfile: RouteProfile<UhcView, UhcFindingCode> = {
     ],
     listsAllErrors: false,
     name: 'UnitedHealthcare v9.0',
+    payerIds: ['87726', '52133', '00773', '94265'],
     readMember: readUhc,
 };

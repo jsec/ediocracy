@@ -3,12 +3,16 @@ import type { HumanaFindingCode, HumanaView } from './types.js';
 
 import { readHumana } from './views.js';
 
+// 2100A NM109 values from the guide's 270 table.
+const PAYER_IDS = ['61101', '61115', '65065', 'CX021'];
+
 /**
  * The Humana route, from the Humana 270/271 Standard Companion Guide v2.0 (June 2018). Humana's
  * HIPAA companion guide page links this version, but it has not been confirmed as current.
  *
  * - Payer IDs and receiver entity codes come from the guide's 270 table. The guide says the
- *   271 is for the payer ID sent in the 270.
+ *   271 is for the payer ID sent in the 270, so the same IDs select this profile in
+ *   `interpretRoute(entry)`.
  * - The guide does not list every AAA.
  * - Envelope rules are Availity's, so separators are not checked.
  */
@@ -30,11 +34,12 @@ export const humanaProfile: RouteProfile<HumanaView, HumanaFindingCode> = {
     ],
     listsAllErrors: false,
     name: 'Humana v2.0',
+    payerIds: PAYER_IDS,
     readMember: readHumana,
     receiverEntityCodes: ['1P', '2B', '36', '80', 'FA', 'GP', 'P5'],
     source: {
         entityCode: 'PR',
-        id: ['61101', '61115', '65065', 'CX021'],
+        id: PAYER_IDS,
         idQualifier: 'PI',
     },
 };

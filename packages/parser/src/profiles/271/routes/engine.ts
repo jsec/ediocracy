@@ -3,6 +3,7 @@ import type { Finding } from '../../../reader/types.js';
 import type { RequestErrorEntry } from '../eligibility/types.js';
 import type { Person } from '../types.js';
 import type {
+    DetectedRoute,
     RouteEligibility,
     RouteEntry,
     RouteErrorCondition,
@@ -12,6 +13,9 @@ import type {
 } from './types.js';
 
 import { allDependents, interpret271, isOneOf } from '../eligibility/interpreter.js';
+import { hetsProfile } from './hets/profile.js';
+import { humanaProfile } from './humana/profile.js';
+import { uhcProfile } from './uhc/profile.js';
 
 const SEPARATOR_NAMES = ['component', 'element', 'repetition', 'segment'] as const;
 
@@ -181,6 +185,30 @@ class RouteInterpreter<View, FindingCode extends string> {
 }
 
 /**
+ * Picks the route from the response's 2100A payer ID and applies it. The payer ID is NM109 of the
+ * first 2100A that has an NM1.
+ *
+ * @param entry - One item returned by `read271s`.
+ * @returns The route and its result, or `route: undefined` and the `interpret271` result when no
+ * profile lists the payer ID.
+ *
+ * @example
+ * ```ts
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read271s } from '@ediocracy/parser/271';
+ * import { interpretRoute } from '@ediocracy/parser/271/routes';
+ *
+ * for (const entry of read271s(readX12(text))) {
+ *     const detected = interpretRoute(entry);
+ *
+ *     if (detected.route === 'hets') {
+ *         console.log(detected.result.members[0]?.partA.length);
+ *     }
+ * }
+ * ```
+ */
+export function interpretRoute(entry: RouteEntry): DetectedRoute;
+/**
  * Applies a route's rules to one 271: checks the separators, the information source and the
  * receivers, adds the route's condition to each error, and builds the route's view of each member.
  *
@@ -191,7 +219,9 @@ class RouteInterpreter<View, FindingCode extends string> {
  *
  * @example
  * ```ts
- * import { hetsProfile, interpretRoute, read271s, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read271s } from '@ediocracy/parser/271';
+ * import { hetsProfile, interpretRoute } from '@ediocracy/parser/271/routes';
  *
  * for (const entry of read271s(readX12(text))) {
  *     const result = interpretRoute(entry, hetsProfile);
@@ -202,8 +232,30 @@ class RouteInterpreter<View, FindingCode extends string> {
 export function interpretRoute<View, FindingCode extends string>(
     entry: RouteEntry,
     profile: RouteProfile<View, FindingCode>,
-): RouteEligibility<View, FindingCode> {
-    return new RouteInterpreter(entry, profile).interpret();
+): RouteEligibility<View, FindingCode>;
+export function interpretRoute<View, FindingCode extends string>(
+    entry: RouteEntry,
+    profile?: RouteProfile<View, FindingCode>,
+): DetectedRoute | RouteEligibility<View, FindingCode> {
+    if (profile) {
+        return new RouteInterpreter(entry, profile).interpret();
+    }
+
+    const payerId = entry.response.sources.find(source => source.name)?.id;
+
+    if (isOneOf(hetsProfile.payerIds, payerId)) {
+        return { result: interpretRoute(entry, hetsProfile), route: 'hets' };
+    }
+
+    if (isOneOf(humanaProfile.payerIds, payerId)) {
+        return { result: interpretRoute(entry, humanaProfile), route: 'humana' };
+    }
+
+    if (isOneOf(uhcProfile.payerIds, payerId)) {
+        return { result: interpretRoute(entry, uhcProfile), route: 'uhc' };
+    }
+
+    return { eligibility: interpret271(entry.response), route: undefined };
 }
 
 function isMatch(condition: RouteErrorCondition, error: RequestErrorEntry): boolean {
