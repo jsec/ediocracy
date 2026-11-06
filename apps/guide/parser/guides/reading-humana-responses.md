@@ -25,8 +25,10 @@ Make sure that you have the following:
   through a clearinghouse.
 - The `@ediocracy/parser` package.
 
-The library doesn't detect which payer sent a response. Use `humanaProfile`
-only for responses to requests that you sent to Humana.
+To have the library pick the profile from the `2100A` payer ID in the
+response, use `interpretRoute(entry)` instead of passing `humanaProfile`.
+For more information, see
+[Apply the payer's rules](/parser/guides/reading-271s#apply-the-payers-rules).
 
 ## Read a response
 

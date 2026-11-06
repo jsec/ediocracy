@@ -2,23 +2,29 @@
 title: Read UnitedHealthcare responses
 ---
 
-This page explains how to read a 271 eligibility response from
-UnitedHealthcare with `interpretRoute` and `uhcProfile`. The profile applies
-the 271 rules from the UnitedHealthcare 270/271 Standard Companion Guide,
-version 9.0 (February 2025). It gives each listed error its UnitedHealthcare
-meaning, and it picks each member's coverage dates, other payers, and variable
-copays from the benefit rows.
+This page describes how to read a 271 eligibility response from
+UnitedHealthcare by using `interpretRoute` with `uhcProfile`. The profile
+applies the 271 rules from the UnitedHealthcare 270/271 Standard Companion
+Guide, version 9.0 (February 2025). It does the following:
+
+- Gives each error that the companion guide lists its UnitedHealthcare
+  meaning.
+- Reads each member's coverage dates, other payers, and variable copays from
+  the benefit rows.
 
 ## Before you begin
 
-You need the following:
+Make sure that you have the following:
 
 - A 271 response to a 270 request that you sent to UnitedHealthcare, directly
   or through a clearinghouse such as Optum or Stedi.
 - The `@ediocracy/parser` package.
 
-The library doesn't check which payer sent a response. Use `uhcProfile` only
-for responses to requests that you sent to UnitedHealthcare.
+To have the library pick the profile from the `2100A` payer ID in the
+response, use `interpretRoute(entry)` instead of passing `uhcProfile`.
+For more information, see
+[Apply the payer's rules](/parser/guides/reading-271s#apply-the-payers-rules).
+When you pass `uhcProfile` yourself, the profile doesn't check the payer ID.
 
 ## Read a response
 
@@ -30,21 +36,21 @@ UnitedHealthcare results for each member:
 For each item that `read271s` returns,
 [`interpretRoute(entry, profile)`](/parser/api/271/routes/functions/interpretRoute)
 returns a [`RouteEligibility`](/parser/api/271/routes/type-aliases/RouteEligibility)
-object with the following fields:
+object. The object has the following fields:
 
-- `eligibility`: the result of `interpret271` for the response, unchanged.
+- `eligibility`: the unchanged result of `interpret271` for the response.
 - `errors`: each error that the payer reported, in the same order as
-  `eligibility.requestErrors`, with the UnitedHealthcare `condition` and
-  `description` when the guide lists the error.
+  `eligibility.requestErrors`. When the companion guide lists an error, its
+  entry includes the UnitedHealthcare `condition` and `description`.
 - `findings`: the problems that the profile found in the response.
 - `members`: one [`UhcView`](/parser/api/271/routes/type-aliases/UhcView) object for
   each member, in the same order as `eligibility.members`.
 
 ## Checks that the profile doesn't make
 
-The UnitedHealthcare guide gives separators, a `2100A` payer, and `2100B`
-entity codes for the 270 request only. It doesn't give them for the 271
-response, and a clearinghouse can deliver the response. For these reasons,
+The companion guide gives separators, a `2100A` payer, and `2100B` entity
+codes for the 270 request only. It doesn't give them for the 271 response,
+and a clearinghouse can deliver the response. For these reasons,
 `uhcProfile` doesn't check the following:
 
 - The ISA separators. The profile never reports `unexpected-delimiters`.
@@ -55,7 +61,8 @@ response, and a clearinghouse can deliver the response. For these reasons,
 
 ## Errors
 
-The guide names three `AAA03` codes and doesn't give a level for them. The
+The companion guide names three `AAA03` codes and doesn't give a level for
+them. The
 following table shows the condition that `uhcProfile` gives each code:
 
 | `AAA03` | `condition` | Meaning |
@@ -67,14 +74,14 @@ These conditions apply to an `AAA` segment at the source, receiver,
 subscriber, or dependent level. An `AAA` segment on a benefit row gets no
 condition, even when it has one of these codes.
 
-The guide doesn't list every error that UnitedHealthcare sends. For this
-reason, an error without a condition isn't a finding. In `errors`, that
+The companion guide doesn't list every error that UnitedHealthcare sends, so
+the profile doesn't report an unlisted error as a finding. In `errors`, that
 entry has `condition` and `description` set to `undefined`.
 
-## The UnitedHealthcare view
+## UnitedHealthcare view
 
-Each `UhcView` object contains the following lists. Each list keeps the rows
-in the order that they appear in the response.
+Each `UhcView` object contains the lists in the following table. Each list
+keeps its rows in the order that they appear in the response.
 
 | Field | Rows |
 | --- | --- |
@@ -86,7 +93,7 @@ in the order that they appear in the response.
 ### Coverage dates
 
 The `end` field of a coverage date is set only when `DTP02` is `RD8`. The
-guide uses `RD8` when coverage has ended. When `DTP02` is `D8`, `end` is
+companion guide uses `RD8` when coverage has ended. When `DTP02` is `D8`, `end` is
 `undefined`.
 
 ### Other payers
@@ -118,12 +125,13 @@ The `findings` field uses codes from
 [`UhcFindingCode`](/parser/api/271/routes/type-aliases/UhcFindingCode). The profile
 reports the following codes:
 
-- `unexpected-coverage-date-format`: a `DTP` segment with `DTP01` set to
+- `unexpected-coverage-date-format`: a `DTP` segment has `DTP01` set to
   `346` and `DTP02` set to a value other than `D8` or `RD8`. The date isn't
   in `coverageDates`. `interpret271` also reports the segment as
   `invalid-date` in `eligibility.findings`.
-- `unpaired-copay-range`: one of the following variable copay rows. The row
-  isn't in `copayRanges` or `variableCopays`.
+- `unpaired-copay-range`: a variable copay row isn't part of a range. The row
+  isn't in `copayRanges` or `variableCopays`. The profile reports this code
+  for the following rows:
   - A row with `EB09` set to `8H` that the row directly after it doesn't
     complete.
   - A row with `EB09` set to `M2` that doesn't complete an `8H` row.
@@ -133,11 +141,11 @@ never cause a finding.
 
 ## Limitations
 
-The `UhcView` object doesn't include the following rows. You can find them in
-`eligibility`.
+The `UhcView` object doesn't include the following information. To get it,
+read `eligibility`.
 
 - Messages that distinguish between several in-network amounts for one
-  benefit.
-- Health reimbursement arrangement (HRA) rows.
-- Vendor rows.
-- Benefit limits (`HSD` segments).
+  benefit
+- Health reimbursement arrangement (HRA) rows
+- Vendor rows
+- Benefit limits (`HSD` segments)

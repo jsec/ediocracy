@@ -2,22 +2,26 @@
 title: Read CMS HETS responses
 ---
 
-This page explains how to read a 271 eligibility response from CMS HETS with
-`interpretRoute` and `hetsProfile`. HETS is the system that answers Medicare
-eligibility requests. The profile applies the 271 rules from the CMS HETS
-270/271 Companion Guide, version 15-1 (May 2026). It checks the response
-against those rules, gives each listed error its HETS meaning, and sorts each
-member's benefit rows into Medicare lists.
+This page describes how to read a 271 eligibility response from CMS HETS by
+using `interpretRoute` with `hetsProfile`. HETS is the system that answers
+Medicare eligibility requests. The profile applies the 271 rules from the CMS
+HETS 270/271 Companion Guide, version 15-1 (May 2026). It does the following:
+
+- Checks the response against the rules in the companion guide.
+- Gives each error that the companion guide lists its HETS meaning.
+- Sorts each member's benefit rows into Medicare lists.
 
 ## Before you begin
 
-You need the following:
+Make sure that you have the following:
 
 - A 271 response to a 270 request that you sent to HETS.
 - The `@ediocracy/parser` package.
 
-The library doesn't check which system sent a response. Use `hetsProfile`
-only for responses to requests that you sent to HETS.
+To have the library pick the profile from the `2100A` payer ID in the
+response, use `interpretRoute(entry)` instead of passing `hetsProfile`.
+For more information, see
+[Apply the payer's rules](/parser/guides/reading-271s#apply-the-payers-rules).
 
 ## Read a response
 
@@ -29,12 +33,12 @@ results for each member:
 For each item that `read271s` returns,
 [`interpretRoute(entry, profile)`](/parser/api/271/routes/functions/interpretRoute)
 returns a [`RouteEligibility`](/parser/api/271/routes/type-aliases/RouteEligibility)
-object with the following fields:
+object. The object has the following fields:
 
-- `eligibility`: the result of `interpret271` for the response, unchanged.
+- `eligibility`: the unchanged result of `interpret271` for the response.
 - `errors`: each error that the payer reported, in the same order as
-  `eligibility.requestErrors`, with the HETS `condition` and `description`
-  when the guide lists the error.
+  `eligibility.requestErrors`. When the companion guide lists an error, its
+  entry includes the HETS `condition` and `description`.
 - `findings`: the problems that the profile found in the response.
 - `members`: one [`MedicareView`](/parser/api/271/routes/type-aliases/MedicareView)
   object for each member, in the same order as `eligibility.members`.
@@ -56,7 +60,7 @@ reports the following codes:
   sends this value with `AAA03` set to `72` when the request had no Medicare
   Beneficiary Identifier (MBI). The `memberId` field still contains
   `MISSING`.
-- `unlisted-error`: an `AAA` segment whose level and `AAA03` code aren't in
+- `unlisted-error`: the level and `AAA03` code of an `AAA` segment aren't in
   the HETS error table.
 - `placeholder-address`: HETS couldn't format the beneficiary's address. For
   more information, see [Placeholder address](#placeholder-address).
@@ -72,7 +76,7 @@ example, `AAA03` set to `72` at the subscriber level has the condition
 ## Medicare views
 
 Each `MedicareView` object contains lists of rows from `eligibility`. Each
-list keeps the rows in the order that they appear in the response, including
+list keeps its rows in the order that they appear in the response, including
 rows that repeat other rows. A row can be in more than one list.
 
 The following table shows the rows in each list:
@@ -123,15 +127,15 @@ values.
 
 ## Limitations
 
-The `MedicareView` object doesn't include the following rows. You can find
-them in `eligibility`.
+The `MedicareView` object doesn't include the following rows. To get them,
+read `eligibility`.
 
-- Hospital and skilled nursing facility (SNF) spells.
-- Home health.
-- Hospice.
-- End-stage renal disease (ESRD).
-- Preventive services.
-- Therapy and rehabilitation.
-- Medicare Diabetes Prevention Program (MDPP).
-- Vaccinations.
-- Prior authorization.
+- Hospital and skilled nursing facility (SNF) spells
+- Home health
+- Hospice
+- End-stage renal disease (ESRD)
+- Preventive services
+- Therapy and rehabilitation
+- Medicare Diabetes Prevention Program (MDPP)
+- Vaccinations
+- Prior authorization

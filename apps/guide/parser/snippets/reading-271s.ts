@@ -14,9 +14,11 @@ if (transaction) {
     for (const source of response.sources) {
         console.log('Payer:', source.name?.element(3), source.id);
     }
+
     for (const receiver of response.receivers) {
         console.log('Provider:', receiver.name?.element(3), receiver.id);
     }
+
     for (const subscriber of response.subscribers) {
         for (const benefit of subscriber.benefits) {
             console.log(benefit.status, benefit.serviceTypes, benefit.planDescription);
