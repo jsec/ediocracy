@@ -22,8 +22,8 @@
     },
     "devDependencies": {
         "@jarsec/eslint-config": "7.5.1",
-        "@types/node": "26.6.5",
-        "eslint": "10.13.0",
+        "@types/node": "26.6.6",
+        "eslint": "10.14.0",
         "typescript": "6.0.3",
         "vitest": "catalog:"
     }

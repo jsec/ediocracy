@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/markdown-it-container": "4.0.1",
-    "@types/node": "26.6.5",
+    "@types/node": "26.6.6",
     "markdown-it-container": "4.0.0",
     "typedoc": "0.28.20",
     "typedoc-plugin-markdown": "4.14.1",
