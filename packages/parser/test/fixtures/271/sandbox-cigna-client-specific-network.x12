@@ -1,0 +1,270 @@
+ISA*00*          *00*          *ZZ*STEDI          *01*117151744      *261108*1728*^*00501*909449635*0*T*`~
+GS*HB*STEDI*117151744*20261108*172835*1*X*005010X279A1~
+ST*271*0001*005010X279A1~
+BHT*0022*11*01M6Y38TY5NH8ECKAF3VWJ511J*20260325*0901~
+HL*1**20*1~
+NM1*PR*2*CHLIC*****FI*591056496~
+PER*IC**TE*8664942111*UR*cignaforhcp.cigna.com~
+HL*2*1*21*1~
+NM1*1P*2*Provider Name*****XX*1999999984~
+HL*3*2*22*0~
+NM1*IL*1*Fossum*Casey****MI*5641296~
+REF*6P*00123874~
+REF*6P*00123874*ACME, Inc.~
+N3*123 HOMEDALE CT~
+N4*MIAMI*FL*331792424~
+DMG*D8*19760506*M~
+DTP*346*D8*20240101~
+DTP*347*D8*20241231~
+DTP*356*D8*20230101~
+EB*1**30**Humana Gold Plan~
+EB*1**1^54^33^98^88^UC^47^50^AL^MH^35^86^48~
+EB*1**1~
+EB*1**MH~
+EB*1**47~
+EB*A*IND*5*****0***N*Y~
+MSG*Gestational Diabetes~
+III*ZZ*21~
+EB*A*IND*5*****0***N*Y~
+MSG*Adult Routine~
+MSG*General~
+MSG*Benefit also applies to convenience care~
+III*ZZ*22~
+EB*A*IND*5*****.1***N*N~
+MSG*General~
+III*ZZ*23~
+EB*A*IND*BL*****0***N*Y~
+MSG*Other Services PCP~
+MSG*Other Services Specialist~
+MSG*Specialist~
+MSG*PCP~
+MSG*Cardiac Surgery~
+MSG*Other Services PCP - Virtual Care Included For Specific Services~
+III*ZZ*11~
+EB*C*IND*BL^71^BN^BQ^BK^98^3^A3^BR^AD^AE****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+III*ZZ*99~
+EB*A*IND*BL^71^BN^BQ^BK^98^3^A3^BR^AD^AE*****0***N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*99~
+EB*B*IND*BL^71^BN^BQ^BK^82^98^3^A3^BR***27*10****N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*11~
+EB*B*IND*BL^71^BN^BQ^BK^82^98^3^A3^BR***27*10****N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*99~
+EB*A*IND*BL*****0***Y*Y~
+MSG*Specialist Therapy~
+MSG*Requires prior authorization after 36 visit(s)~
+MSG*PCP Therapy~
+MSG*Diagnostic Specialist~
+MSG*Diagnostic PCP~
+III*ZZ*11~
+EB*A*IND*BL^BG*****0***Y*Y~
+MSG*Services rendered thru Client Specific Network~
+MSG*Requires prior authorization after 36 visit(s)~
+III*ZZ*11~
+EB*B*IND*BL^71^BN^BQ^BK^98^3^A3^BR***27*20****N*Y~
+MSG*Specialist~
+III*ZZ*99~
+EB*C*IND*82^81****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Benefit also applies to convenience care~
+III*ZZ*22~
+EB*C*IND*82^81****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Benefit also applies to convenience care~
+III*ZZ*99~
+EB*C*IND*82^81****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Benefit also applies to convenience care~
+III*ZZ*49~
+EB*B*IND*82***27*20****N*Y~
+MSG*Services rendered thru Client Specific Network~
+MSG*Benefit also applies to convenience care~
+III*ZZ*11~
+EB*B*IND*82***27*20****N*Y~
+MSG*Services rendered thru Client Specific Network~
+MSG*Benefit also applies to convenience care~
+III*ZZ*99~
+EB*A*IND*82*****0***N*Y~
+MSG*Including Women's Contraceptive Surgery~
+MSG*Contraceptive Management PCP~
+III*ZZ*22~
+EB*A*IND*82*****0***N*Y~
+MSG*Including Women's Contraceptive Surgery~
+MSG*Contraceptive Management PCP~
+MSG*Contraceptive Management Specialist~
+III*ZZ*11~
+EB*B*IND*82***27*10****N*Y~
+MSG*Contraceptive Management PCP~
+III*ZZ*11~
+EB*B*IND*82***27*10****N*Y~
+MSG*Contraceptive Management PCP~
+III*ZZ*99~
+EB*B*IND*82***27*10****N*Y~
+MSG*Contraceptive Management PCP~
+III*ZZ*22~
+EB*A*IND*82*****0***N*Y~
+MSG*Contraceptive Management PCP~
+MSG*Contraceptive Management Specialist~
+III*ZZ*99~
+EB*B*IND*82***27*10****N*Y~
+MSG*Contraceptive Management~
+III*ZZ*49~
+EB*A*IND*82*****0***N*Y~
+MSG*Contraceptive Management~
+III*ZZ*49~
+EB*A*IND*82*****0***Y*Y~
+MSG*Tubal Ligation~
+MSG*General~
+III*ZZ*11~
+EB*A*IND*82*****0***Y*Y~
+MSG*Tubal Ligation~
+MSG*Including Women's Contraceptive Surgery~
+III*ZZ*21~
+EB*B*IND*82***27*10****N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*22~
+EB*B*IND*82***27*20****Y*Y~
+MSG*General~
+MSG*Benefit also applies to convenience care~
+III*ZZ*11~
+EB*B*IND*82***27*20****N*Y~
+MSG*Contraceptive Management Specialist~
+III*ZZ*99~
+EB*B*IND*82***27*20****N*Y~
+MSG*Contraceptive Management Specialist~
+III*ZZ*11~
+EB*A*IND*98*****0***N*Y~
+MSG*Telehealth through contracted vendor~
+III*ZZ*99~
+EB*B*IND*98***27*10****N*Y~
+MSG*Telehealth through contracted vendor~
+III*ZZ*99~
+EB*C*IND*98****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+III*ZZ*99~
+EB*A*IND*98*****0***N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*99~
+EB*B*IND*98***27*10****N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*99~
+EB*A*IND*98*****0***N*Y~
+MSG*Other Services Specialist~
+MSG*Routine~
+MSG*Specialist~
+MSG*PCP~
+MSG*Other Services PCP - Virtual Care Included For Specific Services~
+III*ZZ*11~
+EB*A*IND*98*****0***N*Y~
+MSG*Routine~
+III*ZZ*22~
+EB*A*IND*98*****0***N*Y~
+MSG*Routine - Included For Specific Services~
+MSG*Specialist~
+MSG*PCP~
+III*ZZ*99~
+EB*A*IND*86*****.1***N*N~
+MSG*X-Ray~
+MSG*General~
+MSG*Professional Services~
+MSG*Lab~
+III*ZZ*23~
+EB*B*IND*86***27*100****N*Y~
+MSG*Services rendered thru Client Specific Network~
+III*ZZ*23~
+EB*B*IND*86***27*100****N*W~
+MSG*General~
+III*ZZ*23~
+EB*A*IND*69*****0***N*Y~
+MSG*Ultrasound~
+III*ZZ*22~
+EB*A*IND*69*****0***N*Y~
+MSG*Ultrasound Specialist~
+MSG*Lab Specialist~
+MSG*Ultrasound PCP~
+MSG*Gestational Diabetes Screening~
+MSG*Lab PCP~
+III*ZZ*11~
+EB*A*IND*69*****0***N*Y~
+MSG*Gestational Diabetes Screening~
+III*ZZ*21~
+EB*A*IND*75*****.1***N*Y~
+MSG*Including Mastectomy Bra~
+EB*A*IND*75*****.5***N*N~
+MSG*Including Mastectomy Bra~
+EB*A*IND*81^AD^AE*****0***N*Y~
+III*ZZ*22~
+EB*A*IND*81^AD^AE^64*****0***N*Y~
+III*ZZ*11~
+EB*A*IND*81^AD^AE*****0***N*Y~
+MSG*Included For Specific Services~
+III*ZZ*99~
+EB*A*IND*81*****0***N*Y~
+MSG*Pap Smear~
+MSG*PSA and Prostate Exam~
+EB*A*IND*17*****0***N*Y~
+MSG*Lab PCP~
+MSG*X-Ray PCP~
+MSG*Lab Specialist~
+MSG*X-Ray Specialist~
+III*ZZ*11~
+EB*A*IND*80*****0***N*Y~
+MSG*HPV~
+MSG*General~
+EB*A*IND*80^76^19^BH^UC*****0***N*Y~
+MSG*Services rendered thru Client Specific Network~
+EB*C*IND*80^76^19^BH^UC****0****N*Y~
+MSG*Includes services provided by Client Specific Network~
+EB*A*IND*76*****0***N*Y~
+MSG*PCP - Included For Specific Services~
+MSG*PCP~
+MSG*Specialist - Included For Specific Services~
+MSG*Specialist~
+EB*A*IND*BG*****0***Y*Y~
+MSG*Specialist~
+MSG*Requires prior authorization after 36 visit(s)~
+MSG*PCP~
+III*ZZ*11~
+EB*F*IND*A1***23***VS*100*Y*Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Combined Home Health Care and Professional (Physician) Visit (Nursing Home)~
+MSG*Amounts apply to both in-network and out-of-network~
+EB*CB**A1^AG********Y*W~
+EB*F*IND*A1***23***VS*100*Y*N~
+MSG*Amounts apply to both in-network and out-of-network~
+MSG*Combined Home Health Care and Professional (Physician) Visit (Nursing Home)~
+EB*A*IND*BR*****0***Y*Y~
+MSG*Cataract Surgery~
+III*ZZ*11~
+EB*B*IND*BR***27*20****Y*Y~
+MSG*Cataract Surgery~
+III*ZZ*11~
+EB*A*IND*BR*****0***N*Y~
+MSG*Glaucoma Screening Specialist~
+MSG*Specialist~
+MSG*PCP~
+MSG*Glaucoma Screening PCP~
+III*ZZ*11~
+EB*A*IND*73*****0***N*Y~
+MSG*PCP~
+MSG*Pulmonary PCP~
+MSG*Specialist~
+MSG*Pulmonary Specialist~
+III*ZZ*11~
+EB*F*IND*33***29***VS*25**Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Amounts apply to both in-network and out-of-network~
+EB*F*IND*33***29***VS*25**N~
+MSG*Virtual Care Included For Specific Services~
+MSG*Amounts apply to both in-network and out-of-network~
+EB*F*IND*64***29***VS*20**N~
+MSG*Amounts apply to both in-network and out-of-network~
+EB*F*IND*64***29***VS*20**Y~
+MSG*Includes services provided by Client Specific Network~
+MSG*Amounts apply to both in-network and out-of-network~
+SE*266*0001~
+GE*1*1~
+IEA*1*909449635~

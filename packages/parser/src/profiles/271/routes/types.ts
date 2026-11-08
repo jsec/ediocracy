@@ -3,6 +3,7 @@ import type { Delimiters, Finding } from '../../../reader/types.js';
 import type { Eligibility, MemberEligibility, RequestErrorEntry } from '../eligibility/types.js';
 import type { read271s } from '../reader.js';
 import type { Person } from '../types.js';
+import type { CignaFindingCode, CignaView } from './cigna/types.js';
 import type { HetsFindingCode, MedicareView } from './hets/types.js';
 import type { HumanaFindingCode, HumanaView } from './humana/types.js';
 import type { UhcFindingCode, UhcView } from './uhc/types.js';
@@ -18,6 +19,12 @@ export type DetectedRoute
         eligibility: Eligibility;
         /** No profile lists the payer ID. */
         route: undefined;
+    }
+    | {
+        /** `interpretRoute(entry, cignaProfile)`. */
+        result: RouteEligibility<CignaView, CignaFindingCode>;
+        /** The route whose profile lists the payer ID. */
+        route: 'cigna';
     }
     | {
         /** `interpretRoute(entry, hetsProfile)`. */
@@ -124,7 +131,7 @@ export type RouteProfile<View, FindingCode extends string> = {
         entityCode: string;
         /** NM109, or the list of NM109 values the route allows. */
         id: string | string[];
-        /** NM108. */
-        idQualifier: string;
+        /** NM108, or the list of NM108 values the route allows. */
+        idQualifier: string | string[];
     };
 };

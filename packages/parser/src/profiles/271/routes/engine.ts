@@ -13,6 +13,7 @@ import type {
 } from './types.js';
 
 import { allDependents, interpret271, isOneOf } from '../eligibility/interpreter.js';
+import { cignaProfile } from './cigna/profile.js';
 import { hetsProfile } from './hets/profile.js';
 import { humanaProfile } from './humana/profile.js';
 import { uhcProfile } from './uhc/profile.js';
@@ -126,10 +127,12 @@ class RouteInterpreter<View, FindingCode extends string> {
             return;
         }
 
-        const expectedElements = [
-            { position: 1, value: expected.entityCode },
-            { position: 8, value: expected.idQualifier },
-        ];
+        const allowedQualifiers = typeof expected.idQualifier === 'string'
+            ? [expected.idQualifier]
+            : expected.idQualifier;
+        const allowedQualifierText = typeof expected.idQualifier === 'string'
+            ? `"${expected.idQualifier}"`
+            : `one of ${expected.idQualifier.join(', ')}`;
         const allowedIds = typeof expected.id === 'string' ? [expected.id] : expected.id;
         const allowedIdText = typeof expected.id === 'string'
             ? `"${expected.id}"`
@@ -142,10 +145,18 @@ class RouteInterpreter<View, FindingCode extends string> {
                 continue;
             }
 
-            const differences = expectedElements
-                .filter(element => name.element(element.position) !== element.value)
-                .map(element => `NM10${element.position} "${name.element(element.position) ?? ''}" is not "${element.value}"`);
+            const differences: string[] = [];
+            const entityCode = name.element(1);
+            const qualifier = name.element(8);
             const id = name.element(9);
+
+            if (entityCode !== expected.entityCode) {
+                differences.push(`NM101 "${entityCode ?? ''}" is not "${expected.entityCode}"`);
+            }
+
+            if (!isOneOf(allowedQualifiers, qualifier)) {
+                differences.push(`NM108 "${qualifier ?? ''}" is not ${allowedQualifierText}`);
+            }
 
             if (!isOneOf(allowedIds, id)) {
                 differences.push(`NM109 "${id ?? ''}" is not ${allowedIdText}`);
@@ -253,6 +264,10 @@ export function interpretRoute<View, FindingCode extends string>(
 
     if (isOneOf(uhcProfile.payerIds, payerId)) {
         return { result: interpretRoute(entry, uhcProfile), route: 'uhc' };
+    }
+
+    if (isOneOf(cignaProfile.payerIds, payerId)) {
+        return { result: interpretRoute(entry, cignaProfile), route: 'cigna' };
     }
 
     return { eligibility: interpret271(entry.response), route: undefined };

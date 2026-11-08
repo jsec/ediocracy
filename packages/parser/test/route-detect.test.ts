@@ -2,6 +2,7 @@ import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import { type Eligibility, interpret271 } from '../src/profiles/271/index.js';
 import {
+    cignaProfile,
     hetsProfile,
     humanaProfile,
     type HumanaView,
@@ -43,17 +44,42 @@ function twoPayerEntryOf(first: string, second: string): RouteEntry {
 
 describe('payerIds', () => {
     it('should list the payer IDs each profile covers', () => {
-        const result = [hetsProfile.payerIds, humanaProfile.payerIds, uhcProfile.payerIds];
+        const result = [
+            hetsProfile.payerIds,
+            humanaProfile.payerIds,
+            uhcProfile.payerIds,
+            cignaProfile.payerIds,
+        ];
 
         expect(result).toEqual([
             ['CMS'],
             ['61101', '61115', '65065', 'CX021'],
             ['87726', '52133', '00773', '94265'],
+            [
+                '06-1059331',
+                '061059331',
+                '59-1031071',
+                '591031071',
+                '41-1648670',
+                '411648670',
+                '59-2308055',
+                '592308055',
+                '06-0303370',
+                '060303370',
+                '59-1056496',
+                '591056496',
+                '62308',
+            ],
         ]);
     });
 
     it('should not list a payer ID in two profiles', () => {
-        const ids = [...hetsProfile.payerIds, ...humanaProfile.payerIds, ...uhcProfile.payerIds];
+        const ids = [
+            ...hetsProfile.payerIds,
+            ...humanaProfile.payerIds,
+            ...uhcProfile.payerIds,
+            ...cignaProfile.payerIds,
+        ];
 
         expect(new Set(ids).size).toBe(ids.length);
     });
@@ -68,6 +94,16 @@ describe('payerIds', () => {
 });
 
 describe('interpretRoute(entry)', () => {
+    it('should select cigna for each Cigna payer ID', () => {
+        const result = cignaProfile.payerIds.map((payerId) => {
+            const entry = payerEntryOf(`NM1*PR*2*CIGNA*****FI*${payerId}~`);
+
+            return interpretRoute(entry).route;
+        });
+
+        expect(result).toEqual(cignaProfile.payerIds.map(() => 'cigna'));
+    });
+
     it('should select the route for each payer ID', () => {
         const payerIds = ['CMS', '87726', '52133', '00773', '94265', '61101', '61115', '65065', 'CX021'];
 

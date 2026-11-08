@@ -66,6 +66,15 @@ const listProfile: RouteProfile<string, 'odd-member'> = {
     },
 };
 
+const qualifierListProfile: RouteProfile<string, 'odd-member'> = {
+    ...testProfile,
+    source: {
+        entityCode: 'PR',
+        id: 'P1',
+        idQualifier: ['FI', 'PI'],
+    },
+};
+
 function entryOf(levels: string, component = ':'): RouteEntry {
     const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
     const count = body.split('~').filter(segment => segment !== '').length + 1;
@@ -208,6 +217,25 @@ describe('interpretRoute', () => {
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
             expect(result.findings[0]?.message).toContain('NM109 "12345" is not one of 61101, 65065');
+        });
+
+        it('should accept each listed NM108', () => {
+            const results = ['FI', 'PI'].map((qualifier) => {
+                const levels = `HL*1**20*1~NM1*PR*2*P*****${qualifier}*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~`;
+
+                return interpretRoute(entryOf(levels), qualifierListProfile);
+            });
+
+            expect(results.map(result => result.findings)).toEqual([[], []]);
+        });
+
+        it('should report an NM108 that is not listed', () => {
+            const levels = 'HL*1**20*1~NM1*PR*2*P*****XX*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
+
+            const result = interpretRoute(entryOf(levels), qualifierListProfile);
+
+            expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
+            expect(result.findings[0]?.message).toBe('2100A NM108 "XX" is not one of FI, PI (Test route)');
         });
     });
 
