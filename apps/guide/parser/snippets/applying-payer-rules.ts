@@ -15,6 +15,10 @@ for (const entry of read271s(readX12(text))) {
             console.log('HETS Part A rows:', detected.result.members[0]?.partA.length);
             break;
         }
+        case 'cigna': {
+            console.log('Cigna:', detected.result.members.map(view => view.participation));
+            break;
+        }
         case 'humana': {
             console.log('Humana:', detected.result.members.map(view => view.lineOfBusiness));
             break;

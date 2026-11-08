@@ -68,6 +68,10 @@ export default defineConfig({
                 link: '/parser/guides/reading-humana-responses',
             },
             {
+                text: 'Read Cigna responses',
+                link: '/parser/guides/reading-cigna-responses',
+            },
+            {
                 text: 'Read 999 and TA1 acknowledgments',
                 link: '/parser/guides/reading-acknowledgments',
             },
