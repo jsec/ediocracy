@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 
 import { interpret271, type Response271 } from '../src/profiles/271/index.js';
 import { only271, readFixture, wrap } from './utils.js';
@@ -65,13 +65,14 @@ describe('interpret271', () => {
             const eligibility = interpret271(only271(readFixture('271/sandbox-kaiser.x12')));
             const coverage = eligibility.members[0]?.coverage ?? [];
             const inactive = coverage.filter(entry => entry.status === '6');
+            const qualifiers = inactive.map(entry => entry.dates[0]?.qualifier);
+            const [firstDate] = inactive[0]?.dates ?? [];
 
             expect(inactive).toHaveLength(8);
             expect(inactive.every(entry => !entry.isActive)).toBe(true);
-            const qualifiers = inactive.map(entry => entry.dates[0]?.qualifier);
-
             expect(qualifiers).toEqual(Array.from({ length: 8 }, () => '292'));
-            expect(inactive[0]?.dates[0]?.start.toString()).toBe('2008-01-01');
+            assert(firstDate?.format === 'RD8');
+            expect(firstDate.start.toString()).toBe('2008-01-01');
         });
 
         it.each(['EB~', 'EB***30~'])(
@@ -264,15 +265,35 @@ describe('interpret271', () => {
             const eligibility = interpret271(only271(readFixture('271/dependent-sample.x12')));
             const [planDates] = eligibility.members[0]?.details.dates ?? [];
 
-            expect(planDates?.qualifier).toBe('291');
-            expect(planDates?.start.toString()).toBe('2024-01-01');
-            expect(planDates?.end.toString()).toBe('2024-12-31');
+            expect(planDates).toMatchObject({
+                format: 'RD8',
+                qualifier: '291',
+            });
+            assert(planDates?.format === 'RD8');
+            expect(planDates.start.toString()).toBe('2024-01-01');
+            expect(planDates.end.toString()).toBe('2024-12-31');
+        });
+
+        it('should read a D8 date as one date, without a start or end', () => {
+            const response = respond(`${SOURCE_AND_RECEIVER}HL*3*2*22*0~NM1*IL*1*A*****MI*M1~`
+                + 'DTP*346*D8*20250901~');
+
+            const [planBegin] = interpret271(response).members[0]?.details.dates ?? [];
+
+            expect(planBegin).toMatchObject({
+                format: 'D8',
+                qualifier: '346',
+            });
+            assert(planBegin?.format === 'D8');
+            expect(planBegin.date.toString()).toBe('2025-09-01');
+            expect(planBegin).not.toHaveProperty('end');
+            expect(planBegin).not.toHaveProperty('start');
         });
 
         it('should keep the Aetna subscriber dates in order', () => {
             const eligibility = interpret271(only271(readFixture('271/sandbox-aetna.x12')));
             const dates = eligibility.members[0]?.details.dates.map(
-                date => `${date.qualifier} ${date.start.toString()}`,
+                date => `${date.qualifier} ${date.format === 'D8' && date.date.toString()}`,
             );
 
             expect(dates).toEqual(['346 2024-04-01', '472 2024-09-17']);

@@ -71,27 +71,36 @@ class EligibilityInterpreter {
     }
 
     #parseDate(segment: Segment): DateEntry | undefined {
+        const qualifier = segment.element(1) ?? '';
         const format = segment.element(2);
         const value = segment.element(3) ?? '';
-        const texts = format === 'RD8' ? value.split('-') : [value];
-        const isKnownFormat = format === 'D8' || (format === 'RD8' && texts.length === 2);
-        const start = toPlainDate(texts[0]);
-        const end = toPlainDate(texts.at(-1));
-        const isOrderedRange = start && end && Temporal.PlainDate.compare(start, end) <= 0;
+        const date = toPlainDate(value);
 
-        if (!isKnownFormat || !isOrderedRange) {
-            const message = `DTP02 "${format ?? ''}" and DTP03 "${value}" are not a valid date`;
-
-            this.#report('invalid-date', segment, message);
-
-            return;
+        if (format === 'D8' && date) {
+            return {
+                date,
+                format,
+                qualifier,
+            };
         }
 
-        return {
-            end,
-            qualifier: segment.element(1) ?? '',
-            start,
-        };
+        const texts = value.split('-');
+        const start = toPlainDate(texts[0]);
+        const end = toPlainDate(texts[1]);
+        const isOrderedRange = start && end && Temporal.PlainDate.compare(start, end) <= 0;
+
+        if (isOrderedRange && format === 'RD8' && texts.length === 2) {
+            return {
+                end,
+                format,
+                qualifier,
+                start,
+            };
+        }
+
+        const message = `DTP02 "${format ?? ''}" and DTP03 "${value}" are not a valid date`;
+
+        this.#report('invalid-date', segment, message);
     }
 
     // Invalid dates are reported and left out.

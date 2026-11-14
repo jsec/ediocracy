@@ -66,11 +66,23 @@ export type CoverageEntry = BenefitFields & {
     status: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | 'I';
 };
 
-/** A date or date range. */
+/**
+ * A date (DTP02 `D8`) or a date range (DTP02 `RD8`). What a single date means depends on
+ * DTP01: `346` is a plan begin date, and `347` is a plan end date.
+ */
 export type DateEntry = {
-    /** The last day. Equal to `start` for a single date. */
-    end: Temporal.PlainDate;
+    /** The date. */
+    date: Temporal.PlainDate;
+    /** DTP02. */
+    format: 'D8';
     /** What the date is for (DTP01). */
+    qualifier: string;
+} | {
+    /** The last day. */
+    end: Temporal.PlainDate;
+    /** DTP02. */
+    format: 'RD8';
+    /** What the dates are for (DTP01). */
     qualifier: string;
     /** The first day. */
     start: Temporal.PlainDate;
