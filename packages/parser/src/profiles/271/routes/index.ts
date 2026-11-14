@@ -1,5 +1,5 @@
 /**
- * Applies a route profile, such as CMS HETS, UnitedHealthcare, Humana or Cigna, to a 271.
+ * Applies a route profile, such as CMS HETS, UnitedHealthcare, Humana, Cigna or HCSC, to a 271.
  *
  * @module @ediocracy/parser/271/routes
  */
@@ -15,6 +15,14 @@ export type {
 } from './cigna/types.js';
 export type { CoverageDateEntry } from './coverage-dates.js';
 export { interpretRoute } from './engine.js';
+export { hcscProfile } from './hcsc/profile.js';
+export type {
+    GroupEntry,
+    HcscFindingCode,
+    HcscView,
+    RelatedPlanEntry,
+    UtilizationManagementEntry,
+} from './hcsc/types.js';
 export { hetsProfile } from './hets/profile.js';
 export type {
     HetsFindingCode,

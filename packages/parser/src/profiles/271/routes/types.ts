@@ -4,6 +4,7 @@ import type { Eligibility, MemberEligibility, RequestErrorEntry } from '../eligi
 import type { read271s } from '../reader.js';
 import type { Person } from '../types.js';
 import type { CignaFindingCode, CignaView } from './cigna/types.js';
+import type { HcscFindingCode, HcscView } from './hcsc/types.js';
 import type { HetsFindingCode, MedicareView } from './hets/types.js';
 import type { HumanaFindingCode, HumanaView } from './humana/types.js';
 import type { UhcFindingCode, UhcView } from './uhc/types.js';
@@ -25,6 +26,12 @@ export type DetectedRoute
         result: RouteEligibility<CignaView, CignaFindingCode>;
         /** The route whose profile lists the payer ID. */
         route: 'cigna';
+    }
+    | {
+        /** `interpretRoute(entry, hcscProfile)`. */
+        result: RouteEligibility<HcscView, HcscFindingCode>;
+        /** The route whose profile lists the payer ID. */
+        route: 'hcsc';
     }
     | {
         /** `interpretRoute(entry, hetsProfile)`. */
@@ -70,7 +77,7 @@ export type RouteErrorCondition = {
     /** One line that says what went wrong. */
     description: string;
     /** Where the AAA appears. */
-    level?: Exclude<RequestErrorEntry['level'], 'benefit'>;
+    level?: RequestErrorEntry['level'];
     /** The AAA03 code. */
     rejectReason: string;
 };

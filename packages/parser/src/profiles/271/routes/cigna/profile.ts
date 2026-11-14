@@ -85,7 +85,7 @@ const errors: RouteErrorCondition[] = ERROR_CODES.flatMap(code => [
  *
  * - NM101 `PR` and the NM109 tax IDs come from the guide's 10.2 table and 11.3 examples.
  * - The table has no NM108 row. `FI` comes from the 11.3 examples, and `PI` with `62308` from
- *   the Stedi sandbox.
+ *   a clearinghouse's test responses.
  * - The guide says the response uses the separators the request sent, and it has no 2100B
  *   row, so neither is checked.
  * - The guide lists only the AAA codes for a member who can't be identified (7.2.1).

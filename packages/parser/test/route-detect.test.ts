@@ -3,6 +3,7 @@ import { describe, expect, expectTypeOf, it } from 'vitest';
 import { type Eligibility, interpret271 } from '../src/profiles/271/index.js';
 import {
     cignaProfile,
+    hcscProfile,
     hetsProfile,
     humanaProfile,
     type HumanaView,
@@ -49,6 +50,7 @@ describe('payerIds', () => {
             humanaProfile.payerIds,
             uhcProfile.payerIds,
             cignaProfile.payerIds,
+            hcscProfile.payerIds,
         ];
 
         expect(result).toEqual([
@@ -70,6 +72,17 @@ describe('payerIds', () => {
                 '591056496',
                 '62308',
             ],
+            [
+                '84980',
+                'G84980',
+                'HCSV2',
+                '00621',
+                'G00621',
+                'MCIL2',
+                '00840',
+                '00751',
+                'HMAPD',
+            ],
         ]);
     });
 
@@ -79,6 +92,7 @@ describe('payerIds', () => {
             ...humanaProfile.payerIds,
             ...uhcProfile.payerIds,
             ...cignaProfile.payerIds,
+            ...hcscProfile.payerIds,
         ];
 
         expect(new Set(ids).size).toBe(ids.length);
@@ -102,6 +116,16 @@ describe('interpretRoute(entry)', () => {
         });
 
         expect(result).toEqual(cignaProfile.payerIds.map(() => 'cigna'));
+    });
+
+    it('should select hcsc for each HCSC payer ID', () => {
+        const result = hcscProfile.payerIds.map((payerId) => {
+            const entry = payerEntryOf(`NM1*PR*2*BCBS*****PI*${payerId}~`);
+
+            return interpretRoute(entry).route;
+        });
+
+        expect(result).toEqual(hcscProfile.payerIds.map(() => 'hcsc'));
     });
 
     it('should select the route for each payer ID', () => {

@@ -14,6 +14,7 @@ import type {
 
 import { allDependents, interpret271, isOneOf } from '../eligibility/interpreter.js';
 import { cignaProfile } from './cigna/profile.js';
+import { hcscProfile } from './hcsc/profile.js';
 import { hetsProfile } from './hets/profile.js';
 import { humanaProfile } from './humana/profile.js';
 import { uhcProfile } from './uhc/profile.js';
@@ -268,6 +269,10 @@ export function interpretRoute<View, FindingCode extends string>(
 
     if (isOneOf(cignaProfile.payerIds, payerId)) {
         return { result: interpretRoute(entry, cignaProfile), route: 'cigna' };
+    }
+
+    if (isOneOf(hcscProfile.payerIds, payerId)) {
+        return { result: interpretRoute(entry, hcscProfile), route: 'hcsc' };
     }
 
     return { eligibility: interpret271(entry.response), route: undefined };

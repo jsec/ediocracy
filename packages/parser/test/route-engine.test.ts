@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
 import { readX12 } from '../src/index.js';
-import { interpret271, read271s } from '../src/profiles/271/index.js';
+import { interpret271, read271s, type RequestErrorEntry } from '../src/profiles/271/index.js';
 import {
     interpretRoute,
     type RouteEntry,
@@ -342,9 +342,9 @@ describe('interpretRoute', () => {
             expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
         });
 
-        it('should not accept a benefit-level condition in a profile', () => {
+        it('should accept every error level in a condition', () => {
             expectTypeOf<RouteErrorCondition['level']>()
-                .toEqualTypeOf<'dependent' | 'receiver' | 'source' | 'subscriber' | undefined>();
+                .toEqualTypeOf<RequestErrorEntry['level'] | undefined>();
         });
 
         it('should match a condition without a level at every level except benefit', () => {
@@ -373,6 +373,25 @@ describe('interpretRoute', () => {
             const result = interpretRoute(entryOf(levels), anyLevelProfile);
 
             expect(result.errors[0]).toMatchObject({ condition: undefined, level: 'benefit' });
+            expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
+        });
+
+        it('should match a benefit-level condition only at the benefit level', () => {
+            const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**62*C~EB*1**30~AAA*N**62*C~`;
+
+            const result = interpretRoute(entryOf(levels), {
+                ...testProfile,
+                errors: [
+                    {
+                        condition: 'benefit-only',
+                        description: 'B',
+                        level: 'benefit',
+                        rejectReason: '62',
+                    },
+                ],
+            });
+
+            expect(result.errors.map(error => error.condition)).toEqual([undefined, 'benefit-only']);
             expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
         });
 
