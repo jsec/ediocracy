@@ -19,6 +19,10 @@ for (const entry of read271s(readX12(text))) {
             console.log('Cigna:', detected.result.members.map(view => view.participation));
             break;
         }
+        case 'hcsc': {
+            console.log('HCSC groups:', detected.result.members.map(view => view.group?.number));
+            break;
+        }
         case 'humana': {
             console.log('Humana:', detected.result.members.map(view => view.lineOfBusiness));
             break;

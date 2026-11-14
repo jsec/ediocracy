@@ -59,8 +59,8 @@ response, without translation. For example, `status` is `EB01`, and
 ## Apply the payer's rules {#apply-the-payers-rules}
 
 Some payers publish companion guides with rules for their 271 responses. The
-library has route profiles for four of these payers: CMS HETS,
-UnitedHealthcare, Humana, and Cigna.
+library has route profiles for five of these payers: CMS HETS,
+UnitedHealthcare, Humana, Cigna, and Health Care Service Corporation (HCSC).
 
 To apply the right profile, call
 [`interpretRoute(entry)`](/parser/api/271/routes/functions/interpretRoute)
@@ -74,6 +74,7 @@ lists that payer ID. The following table shows the payer IDs for each route:
 | `uhc` | [`uhcProfile`](/parser/guides/reading-uhc-responses) | `87726`, `52133`, `00773`, `94265` |
 | `humana` | [`humanaProfile`](/parser/guides/reading-humana-responses) | `61101`, `61115`, `65065`, `CX021` |
 | `cigna` | [`cignaProfile`](/parser/guides/reading-cigna-responses) | 13 IDs. For the list, see [Payer checks](/parser/guides/reading-cigna-responses#payer-checks). |
+| `hcsc` | [`hcscProfile`](/parser/guides/reading-hcsc-responses) | Nine IDs. For the list, see [Payer checks](/parser/guides/reading-hcsc-responses#payer-checks). |
 
 The function returns a
 [`DetectedRoute`](/parser/api/271/routes/type-aliases/DetectedRoute) object:
