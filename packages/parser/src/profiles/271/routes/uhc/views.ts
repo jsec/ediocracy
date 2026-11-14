@@ -37,7 +37,7 @@ export function readUhc(
 
     return {
         copayRanges: copays.copayRanges,
-        coverageDates: readCoverageDates(member, person, report),
+        coverageDates: readCoverageDates(member),
         otherPayers: member.otherParties
             .filter(entry => entry.kind === 'R')
             .map(entry => ({

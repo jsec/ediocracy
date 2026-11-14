@@ -178,10 +178,11 @@ describe('humanaProfile', () => {
             expect(coverageDates?.[0]?.end).toBeUndefined();
         });
 
-        it('should report a coverage date that is not D8 or RD8', () => {
+        it('should leave out a coverage date that is not D8 or RD8, with no Humana finding', () => {
             const result = interpretRoute(humanaEntryOf(`${SUBSCRIBER}DTP*346*D6*20070501~`), humanaProfile);
 
-            expect(codesAndTags(result.findings)).toEqual(['unexpected-coverage-date-format DTP']);
+            expect(result.members[0]?.coverageDates).toEqual([]);
+            expect(result.findings).toEqual([]);
         });
     });
 

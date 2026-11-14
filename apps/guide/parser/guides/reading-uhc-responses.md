@@ -96,6 +96,10 @@ The `end` field of a coverage date is set only when `DTP02` is `RD8`. The
 companion guide uses `RD8` when coverage has ended. When `DTP02` is `D8`, `end` is
 `undefined`.
 
+A date that `interpret271` can't read, such as one with `DTP02` set to `D6`,
+isn't in `coverageDates`. `interpret271` reports it as `invalid-date` in
+`eligibility.findings`.
+
 ### Other payers
 
 The `name` field of an other payer is the `NM103` element of the `2120`
@@ -125,10 +129,6 @@ The `findings` field uses codes from
 [`UhcFindingCode`](/parser/api/271/routes/type-aliases/UhcFindingCode). The profile
 reports the following codes:
 
-- `unexpected-coverage-date-format`: a `DTP` segment has `DTP01` set to
-  `346` and `DTP02` set to a value other than `D8` or `RD8`. The date isn't
-  in `coverageDates`. `interpret271` also reports the segment as
-  `invalid-date` in `eligibility.findings`.
 - `unpaired-copay-range`: a variable copay row isn't part of a range. The row
   isn't in `copayRanges` or `variableCopays`. The profile reports this code
   for the following rows:

@@ -81,6 +81,7 @@ class EligibilityInterpreter {
                 date,
                 format,
                 qualifier,
+                segment,
             };
         }
 
@@ -94,6 +95,7 @@ class EligibilityInterpreter {
                 end,
                 format,
                 qualifier,
+                segment,
                 start,
             };
         }

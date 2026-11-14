@@ -22,12 +22,11 @@ export type OtherPayerEntry = {
 /**
  * A problem `uhcProfile` finds in a member.
  *
- * - `unexpected-coverage-date-format`: a DTP01 `346` whose DTP02 is not `D8` or `RD8`.
  * - `unpaired-copay-range`: a variable copay with EB09 `8H` that the cost share row directly
  *   after it does not close, or a variable copay with EB09 `M2` that no variable `8H` row paired
  *   with.
  */
-export type UhcFindingCode = 'unexpected-coverage-date-format' | 'unpaired-copay-range';
+export type UhcFindingCode = 'unpaired-copay-range';
 
 /** One member's rows from a UnitedHealthcare response, picked from the `interpret271` lists. */
 export type UhcView = {

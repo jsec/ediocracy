@@ -158,8 +158,6 @@ The profile reports the following codes:
   guide states that Humana sends a message to tell these rows apart.
 - `invalid-grace-month`: a `Grace Period Month` message has a number other
   than 1, 2, or 3.
-- `unexpected-coverage-date-format`: a `DTP` segment has `DTP01` set to `346`
-  and `DTP02` set to a value other than `D8` or `RD8`.
 
 ## Limitations
 

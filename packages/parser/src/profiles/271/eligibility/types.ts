@@ -77,6 +77,8 @@ export type DateEntry = {
     format: 'D8';
     /** What the date is for (DTP01). */
     qualifier: string;
+    /** The DTP segment. */
+    segment: Segment;
 } | {
     /** The last day. */
     end: Temporal.PlainDate;
@@ -84,6 +86,8 @@ export type DateEntry = {
     format: 'RD8';
     /** What the dates are for (DTP01). */
     qualifier: string;
+    /** The DTP segment. */
+    segment: Segment;
     /** The first day. */
     start: Temporal.PlainDate;
 };

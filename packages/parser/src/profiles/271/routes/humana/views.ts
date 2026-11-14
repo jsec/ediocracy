@@ -66,7 +66,7 @@ export function readHumana(
 
     return {
         billing: readBilling(status, report),
-        coverageDates: readCoverageDates(member, person, report),
+        coverageDates: readCoverageDates(member),
         lineOfBusiness,
         plans,
         sameIdMembers: readSameIdMembers(person, entry),

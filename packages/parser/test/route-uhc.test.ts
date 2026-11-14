@@ -76,11 +76,13 @@ describe('uhcProfile', () => {
             expect(starts).toEqual(['2026-01-01', '2026-02-01']);
         });
 
-        it('should report a 346 that is not D8 or RD8 and leave it out', () => {
+        it('should leave out a 346 that is not D8 or RD8, with no UHC finding', () => {
             const result = interpretRoute(uhcEntryOf('DTP*346*D6*202601~'), uhcProfile);
+            const eligibilityCodes = result.eligibility.findings.map(finding => finding.code);
 
             expect(result.members[0]?.coverageDates).toEqual([]);
-            expect(codesAndTags(result.findings)).toEqual(['unexpected-coverage-date-format DTP']);
+            expect(result.findings).toEqual([]);
+            expect(eligibilityCodes).toContain('invalid-date');
         });
 
         it('should leave out an RD8 it cannot read, with no UHC finding', () => {

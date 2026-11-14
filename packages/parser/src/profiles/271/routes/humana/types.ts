@@ -29,13 +29,11 @@ export type BillingEntry = {
  * - `invalid-grace-month`: a `Grace Period Month` MSG whose number is not 1, 2 or 3.
  * - `missing-benefit-message`: an in-network row with no MSG, when another in-network row has
  *   the same EB01, EB02, EB03 and EB06.
- * - `unexpected-coverage-date-format`: a DTP01 `346` whose DTP02 is not `D8` or `RD8`.
  * - `unexpected-inactive-code`: EB01 `6` on a medical response, or `V` on a dental one.
  */
 export type HumanaFindingCode
     = | 'invalid-grace-month'
         | 'missing-benefit-message'
-        | 'unexpected-coverage-date-format'
         | 'unexpected-inactive-code';
 
 /** One member's rows from a Humana response. */
