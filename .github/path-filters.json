@@ -8,7 +8,6 @@
     "turbo.json",
     "lefthook.yml",
     "renovate.json",
-    "commitlint.config.mjs",
     ".github/path-filters.json",
     ".github/workflows/ci.yml"
   ],
@@ -20,7 +19,6 @@
     "turbo.json",
     "lefthook.yml",
     "renovate.json",
-    "commitlint.config.mjs",
     ".github/path-filters.json",
     ".github/workflows/ci.yml"
   ]
