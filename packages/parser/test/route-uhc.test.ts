@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { interpretRoute, type RouteEntry, uhcProfile } from '../src/profiles/271/routes/index.js';
-import { codesAndTags, firstEntry, readFixture, wrap } from './utils.js';
+import { codesAndTags, entry271, firstEntry, readFixture } from './utils.js';
 
 const MINIMUM_ROW = 'EB*B*IND*BY***27*5**8H*5**Y~MSG*AMOUNT VARIES BY PRACTITIONER~';
 const UHC_LEVELS = [
@@ -11,10 +11,7 @@ const UHC_LEVELS = [
 ].join('');
 
 function uhcEntryOf(segments: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${UHC_LEVELS}${segments}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return firstEntry(wrap(`${body}SE*${count}*0001~`));
+    return entry271(`${UHC_LEVELS}${segments}`);
 }
 
 describe('uhcProfile', () => {

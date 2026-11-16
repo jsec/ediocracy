@@ -1,6 +1,6 @@
 import type { Segment } from '../../../../reader/segment.js';
 import type { MemberEligibility } from '../../eligibility/types.js';
-import type { Benefit, Person } from '../../types.js';
+import type { Person } from '../../types.js';
 import type {
     AttributionEntry,
     CignaFindingCode,
@@ -11,7 +11,7 @@ import type {
     SharedRiskNetworkEntry,
 } from './types.js';
 
-import { toPlainDate } from '../../eligibility/interpreter.js';
+import { dateOf } from '../../eligibility/interpreter.js';
 
 type Report = (code: CignaFindingCode, segment: Segment, message: string) => void;
 
@@ -81,12 +81,6 @@ export function readCigna(
         partners: readPartners(member),
         sharedRiskNetworks: readSharedRiskNetworks(person),
     };
-}
-
-function dateOf(benefit: Benefit, qualifier: string): Temporal.PlainDate | undefined {
-    const segment = benefit.dates.find(date => date.element(1) === qualifier);
-
-    return toPlainDate(segment?.element(3));
 }
 
 function readAttribution(person: Person, report: Report): AttributionEntry[] {

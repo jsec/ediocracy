@@ -1,18 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
 import { hetsProfile, interpretRoute, type RouteEntry } from '../src/profiles/271/routes/index.js';
-import { firstEntry, readFixture, wrap } from './utils.js';
+import { entry271, firstEntry, readFixture } from './utils.js';
 
 const HETS_RECEIVER = 'HL*2*1*21*1~NM1*1P*2*R*****XX*1234567893~';
 const HETS_SOURCE = 'HL*1**20*1~NM1*PR*2*CMS*****PI*CMS~';
 const SUBSCRIBER = 'HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*1AA2CC3DD45~';
 
+// HETS responses use `|` as the component separator.
 function hetsEntryOf(levels: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-    const text = wrap(`${body}SE*${count}*0001~`).replace('*P*:~', '*P*|~');
-
-    return firstEntry(text);
+    return entry271(levels, '|');
 }
 
 describe('hetsProfile', () => {

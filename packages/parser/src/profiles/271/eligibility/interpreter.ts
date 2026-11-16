@@ -30,7 +30,7 @@ const COVERAGE_STATUSES = [
     '8',
     'I',
 ] as const satisfies CoverageEntry['status'][];
-const D8_DATE = /^(\d{4})(\d{2})(\d{2})$/;
+const D8_DATE = /^\d{8}$/;
 const NETWORKS = ['N', 'U', 'W', 'Y'] as const satisfies BenefitFields['network'][];
 const OTHER_PARTY_KINDS = ['L', 'R', 'U'] as const satisfies OtherPartyEntry['kind'][];
 // X12 decimal: an optional leading minus, digits, and an optional decimal point.
@@ -260,6 +260,19 @@ export function allDependents(person: Person): Person[] {
 }
 
 /**
+ * Reads the date of a benefit's first DTP with the given DTP01.
+ *
+ * @param benefit - The benefit as `read271` returned it.
+ * @param qualifier - The DTP01 to look for.
+ * @returns The date, or `undefined` when there is no such DTP or its date is not `CCYYMMDD`.
+ */
+export function dateOf(benefit: Benefit, qualifier: string): Temporal.PlainDate | undefined {
+    const segment = benefit.dates.find(date => date.element(1) === qualifier);
+
+    return toPlainDate(segment?.element(3));
+}
+
+/**
  * Sorts the benefit rows of a 271 into lists, and reads their numbers and dates. Codes are
  * returned as they appear, without names. Values that cannot be read are `undefined` and reported
  * in `findings`; this function does not throw on payer data.
@@ -269,7 +282,8 @@ export function allDependents(person: Person): Person[] {
  *
  * @example
  * ```ts
- * import { interpret271, read271s, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { interpret271, read271s } from '@ediocracy/parser/271';
  *
  * for (const { response } of read271s(readX12(text))) {
  *     const eligibility = interpret271(response);
@@ -301,18 +315,13 @@ export function isOneOf<Code extends string>(
  * @returns The date, or `undefined` when `text` is not a valid `CCYYMMDD` date.
  */
 export function toPlainDate(text: string | undefined): Temporal.PlainDate | undefined {
-    const match = D8_DATE.exec(text ?? '');
-
-    if (!match || Number(match[1]) === 0) {
+    // Temporal accepts year 0000, which X12 does not.
+    if (!text || !D8_DATE.test(text) || text.startsWith('0000')) {
         return;
     }
 
     try {
-        return Temporal.PlainDate.from({
-            day: Number(match[3]),
-            month: Number(match[2]),
-            year: Number(match[1]),
-        }, { overflow: 'reject' });
+        return Temporal.PlainDate.from(text);
     } catch (error) {
         if (error instanceof RangeError) {
             return;

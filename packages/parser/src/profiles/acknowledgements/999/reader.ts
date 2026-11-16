@@ -14,9 +14,9 @@ import type {
 } from './types.js';
 
 import { buildLoops } from '../../../loops/loops.js';
+import { DIGITS_ONLY } from '../../../reader/constants.js';
 
 const VERSION = '005010X231A1';
-const WHOLE_NUMBER = /^\d+$/;
 
 const acknowledgmentGrammar: Grammar = {
     header: ['AK1'],
@@ -83,7 +83,7 @@ class AcknowledgmentReader {
 
         const number = Number(value);
 
-        if (WHOLE_NUMBER.test(value) && Number.isSafeInteger(number)) {
+        if (DIGITS_ONLY.test(value) && Number.isSafeInteger(number)) {
             return number;
         }
 
@@ -222,7 +222,8 @@ class AcknowledgmentReader {
  *
  * @example
  * ```ts
- * import { read999, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read999 } from '@ediocracy/parser/acknowledgements';
  *
  * const transaction = readX12(text).interchanges[0]?.groups[0]?.transactions[0];
  * if (transaction) {
@@ -243,7 +244,8 @@ export function read999(transaction: Transaction): Response999 {
  *
  * @example
  * ```ts
- * import { read999s, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read999s } from '@ediocracy/parser/acknowledgements';
  *
  * for (const { response } of read999s(readX12(text))) {
  *     for (const set of response.transactionSets) {

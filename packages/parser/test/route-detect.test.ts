@@ -11,14 +11,7 @@ import {
     type RouteEntry,
     uhcProfile,
 } from '../src/profiles/271/routes/index.js';
-import { firstEntry, readFixture, wrap } from './utils.js';
-
-function entryOf(levels: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return firstEntry(wrap(`${body}SE*${count}*0001~`));
-}
+import { entry271, firstEntry, readFixture } from './utils.js';
 
 const MEMBER_LEVELS = 'HL*3*2*22*0~NM1*IL*1*DOE*JOHN****MI*123~EB*1**30~';
 
@@ -29,7 +22,7 @@ function payerEntryOf(payerSegments: string): RouteEntry {
         MEMBER_LEVELS,
     ].join('');
 
-    return entryOf(levels);
+    return entry271(levels);
 }
 
 function twoPayerEntryOf(first: string, second: string): RouteEntry {
@@ -40,7 +33,7 @@ function twoPayerEntryOf(first: string, second: string): RouteEntry {
         'HL*3*4*22*0~NM1*IL*1*DOE*JOHN****MI*123~EB*1**30~',
     ].join('');
 
-    return entryOf(levels);
+    return entry271(levels);
 }
 
 describe('payerIds', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { cignaProfile, interpretRoute, type RouteEntry } from '../src/profiles/271/routes/index.js';
-import { codesAndTags, firstEntry, readFixture, wrap } from './utils.js';
+import { codesAndTags, entry271, firstEntry, readFixture } from './utils.js';
 
 const SAMPLES = [
     '271/sandbox-cigna-behavioral.x12',
@@ -28,14 +28,7 @@ const TAX_IDS = [
 ];
 
 function cignaEntryOf(segments: string, payerSegment = CHLIC): RouteEntry {
-    return entryOf(`HL*1**20*1~${payerSegment}${RECEIVER}HL*3*2*22*0~${segments}`);
-}
-
-function entryOf(levels: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return firstEntry(wrap(`${body}SE*${count}*0001~`));
+    return entry271(`HL*1**20*1~${payerSegment}${RECEIVER}HL*3*2*22*0~${segments}`);
 }
 
 function viewOf(segments: string) {
@@ -93,7 +86,7 @@ describe('cignaProfile', () => {
                 const members = level === 'subscriber'
                     ? `HL*3*2*22*0~${SUBSCRIBER}AAA*Y**${code}*C~`
                     : `HL*3*2*22*1~${SUBSCRIBER}HL*4*3*23*0~NM1*03*1*DOE*SAM~AAA*Y**${code}*C~`;
-                const entry = entryOf(`HL*1**20*1~${CHLIC}${RECEIVER}${members}`);
+                const entry = entry271(`HL*1**20*1~${CHLIC}${RECEIVER}${members}`);
 
                 const errors = interpretRoute(entry, cignaProfile).errors;
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { hcscProfile, interpretRoute, type RouteEntry } from '../src/profiles/271/routes/index.js';
-import { codesAndTags, firstEntry, readFixture, wrap } from './utils.js';
+import { codesAndTags, entry271, firstEntry, readFixture } from './utils.js';
 
 const DEPENDENT = 'NM1*03*1*DOE*SAM~';
 const RECEIVER = 'NM1*1P*2*R*****XX*1~';
@@ -28,13 +28,6 @@ const ERROR_ROWS = [
 
 type ErrorLevel = typeof ERROR_ROWS[number][0];
 
-function entryOf(levels: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return firstEntry(wrap(`${body}SE*${count}*0001~`));
-}
-
 function errorEntryOf(level: ErrorLevel, code: string): RouteEntry {
     const aaa = `AAA*N**${code}*C~`;
     const levels = {
@@ -46,11 +39,11 @@ function errorEntryOf(level: ErrorLevel, code: string): RouteEntry {
         subscriber: `${TEXAS}HL*2*1*21*1~${RECEIVER}HL*3*2*22*0~${SUBSCRIBER}${aaa}`,
     } satisfies Record<ErrorLevel, string>;
 
-    return entryOf(`HL*1**20*1~${levels[level]}`);
+    return entry271(`HL*1**20*1~${levels[level]}`);
 }
 
 function hcscEntryOf(segments: string, payerSegment = TEXAS): RouteEntry {
-    return entryOf(`HL*1**20*1~${payerSegment}HL*2*1*21*1~${RECEIVER}HL*3*2*22*0~${segments}`);
+    return entry271(`HL*1**20*1~${payerSegment}HL*2*1*21*1~${RECEIVER}HL*3*2*22*0~${segments}`);
 }
 
 function viewOf(segments: string) {
@@ -126,7 +119,7 @@ describe('hcscProfile', () => {
             const levels = `HL*1**20*1~${TEXAS}HL*2*1*21*1~${RECEIVER}HL*3*2*22*1~${SUBSCRIBER}`
                 + `HL*4*3*23*0~${DEPENDENT}EB*1**30~AAA*N**62*C~`;
 
-            const result = interpretRoute(entryOf(levels), hcscProfile);
+            const result = interpretRoute(entry271(levels), hcscProfile);
 
             expect(result.errors).toMatchObject([
                 {

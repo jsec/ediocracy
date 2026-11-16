@@ -1,10 +1,10 @@
 import type { RouteProfile } from '../types.js';
 import type { HumanaFindingCode, HumanaView } from './types.js';
 
-import { readHumana } from './views.js';
+import { DENTAL_PAYER_IDS, MEDICAL_PAYER_IDS, readHumana } from './views.js';
 
 // 2100A NM109 values from the guide's 270 table.
-const PAYER_IDS = ['61101', '61115', '65065', 'CX021'];
+const PAYER_IDS = [...MEDICAL_PAYER_IDS, ...DENTAL_PAYER_IDS];
 
 /**
  * The Humana route, from the Humana 270/271 Standard Companion Guide v2.0 (June 2018). Humana's

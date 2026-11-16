@@ -1,14 +1,13 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 
-import { readX12 } from '../src/index.js';
-import { interpret271, read271s, type RequestErrorEntry } from '../src/profiles/271/index.js';
+import { interpret271, type RequestErrorEntry } from '../src/profiles/271/index.js';
 import {
     interpretRoute,
     type RouteEntry,
     type RouteErrorCondition,
     type RouteProfile,
 } from '../src/profiles/271/routes/index.js';
-import { codesAndTags, wrap } from './utils.js';
+import { codesAndTags, entry271, firstEntry, wrap } from './utils.js';
 
 const GOOD = 'HL*1**20*1~NM1*PR*2*P*****PI*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
@@ -75,23 +74,10 @@ const qualifierListProfile: RouteProfile<string, 'odd-member'> = {
     },
 };
 
-function entryOf(levels: string, component = ':'): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-    const text = wrap(`${body}SE*${count}*0001~`).replace('*P*:~', () => `*P*${component}~`);
-    const [entry] = read271s(readX12(text));
-
-    if (!entry) {
-        throw new Error('No 271 transaction set in the text');
-    }
-
-    return entry;
-}
-
 describe('interpretRoute', () => {
     describe('matching responses', () => {
         it('should return interpret271 output unchanged and no findings', () => {
-            const entry = entryOf(`${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~`);
+            const entry = entry271(`${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~`);
 
             const result = interpretRoute(entry, testProfile);
 
@@ -124,7 +110,7 @@ describe('interpretRoute', () => {
                 payerIds: testProfile.payerIds,
                 readMember: testProfile.readMember,
             };
-            const entry = entryOf(levels, '|');
+            const entry = entry271(levels, '|');
 
             const fullResult = interpretRoute(entry, testProfile);
             const result = interpretRoute(entry, bareProfile);
@@ -151,7 +137,7 @@ describe('interpretRoute', () => {
                 },
             };
 
-            const result = interpretRoute(entryOf(GOOD), profile);
+            const result = interpretRoute(entry271(GOOD), profile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-delimiters ISA']);
             expect(result.findings[0]?.message).toContain('component');
@@ -161,13 +147,7 @@ describe('interpretRoute', () => {
         it('should report a missing repetition separator before 00501', () => {
             const body = 'ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~';
             const text = wrap(`${body}${GOOD}SE*7*0001~`, 'U').replace('*00501*', '*00401*');
-            const [entry] = read271s(readX12(text));
-
-            if (!entry) {
-                throw new Error('No 271 transaction set in the text');
-            }
-
-            const result = interpretRoute(entry, testProfile);
+            const result = interpretRoute(firstEntry(text), testProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-delimiters ISA']);
             expect(result.findings[0]?.message).toContain('repetition');
@@ -178,7 +158,7 @@ describe('interpretRoute', () => {
         it('should report a source NM1 that differs', () => {
             const levels = 'HL*1**20*1~NM1*PR*2*P*****PI*OTHER~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
             expect(result.findings[0]?.message).toContain('OTHER');
@@ -187,7 +167,7 @@ describe('interpretRoute', () => {
         it('should skip a source without an NM1', () => {
             const levels = 'HL*1**20*1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.findings).toEqual([]);
         });
@@ -195,7 +175,7 @@ describe('interpretRoute', () => {
         it('should report a receiver whose NM101 is not listed', () => {
             const levels = 'HL*1**20*1~NM1*PR*2*P*****PI*P1~HL*2*1*21*1~NM1*PR*2*R*****XX*1~';
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-receiver NM1']);
         });
@@ -204,7 +184,7 @@ describe('interpretRoute', () => {
             const results = ['61101', '65065'].map((id) => {
                 const levels = `HL*1**20*1~NM1*PR*2*HUMANA*****PI*${id}~HL*2*1*21*1~NM1*1P*2*R*****XX*1~`;
 
-                return interpretRoute(entryOf(levels), listProfile);
+                return interpretRoute(entry271(levels), listProfile);
             });
 
             expect(results.map(result => result.findings)).toEqual([[], []]);
@@ -213,7 +193,7 @@ describe('interpretRoute', () => {
         it('should report an NM109 not in a source id list', () => {
             const levels = 'HL*1**20*1~NM1*PR*2*HUMANA*****PI*12345~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
-            const result = interpretRoute(entryOf(levels), listProfile);
+            const result = interpretRoute(entry271(levels), listProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
             expect(result.findings[0]?.message).toContain('NM109 "12345" is not one of 61101, 65065');
@@ -223,7 +203,7 @@ describe('interpretRoute', () => {
             const results = ['FI', 'PI'].map((qualifier) => {
                 const levels = `HL*1**20*1~NM1*PR*2*P*****${qualifier}*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~`;
 
-                return interpretRoute(entryOf(levels), qualifierListProfile);
+                return interpretRoute(entry271(levels), qualifierListProfile);
             });
 
             expect(results.map(result => result.findings)).toEqual([[], []]);
@@ -232,7 +212,7 @@ describe('interpretRoute', () => {
         it('should report an NM108 that is not listed', () => {
             const levels = 'HL*1**20*1~NM1*PR*2*P*****XX*P1~HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 
-            const result = interpretRoute(entryOf(levels), qualifierListProfile);
+            const result = interpretRoute(entry271(levels), qualifierListProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['unexpected-source NM1']);
             expect(result.findings[0]?.message).toBe('2100A NM108 "XX" is not one of FI, PI (Test route)');
@@ -241,7 +221,7 @@ describe('interpretRoute', () => {
 
     describe('members', () => {
         it('should pass the entry to readMember', () => {
-            const entry = entryOf(`${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~`);
+            const entry = entry271(`${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~`);
             const entries: RouteEntry[] = [];
             const profile: RouteProfile<string, 'odd-member'> = {
                 ...testProfile,
@@ -261,7 +241,7 @@ describe('interpretRoute', () => {
         it('should report a placeholder member ID and keep the ID as sent', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*MISSING~`;
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(codesAndTags(result.findings)).toEqual(['member-id-placeholder NM1']);
             expect(result.members).toEqual(['MISSING']);
@@ -269,7 +249,7 @@ describe('interpretRoute', () => {
         });
 
         it('should give a view to a member without an NM1', () => {
-            const result = interpretRoute(entryOf(`${GOOD}HL*3*2*22*0~EB*1**30~`), testProfile);
+            const result = interpretRoute(entry271(`${GOOD}HL*3*2*22*0~EB*1**30~`), testProfile);
 
             expect(result.findings).toEqual([]);
             expect(result.members).toEqual(['-']);
@@ -284,7 +264,7 @@ describe('interpretRoute', () => {
                 'HL*6*2*22*0~NM1*IL*1*POE*ED****MI*MISSING~',
             ].join('');
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.members).toEqual(['A1', '-', 'ODD', 'MISSING']);
             expect(codesAndTags(result.findings)).toEqual([
@@ -300,7 +280,7 @@ describe('interpretRoute', () => {
         it('should add the condition to a listed error', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**72*C~`;
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.errors).toHaveLength(1);
             expect(result.errors[0]).toMatchObject({
@@ -315,7 +295,7 @@ describe('interpretRoute', () => {
         it('should report an error whose AAA03 is not listed', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**73*C~`;
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.errors[0]).toMatchObject({
                 condition: undefined,
@@ -327,7 +307,7 @@ describe('interpretRoute', () => {
         it('should report an error with no AAA03', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N***C~`;
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.errors[0]).toMatchObject({ condition: undefined });
             expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
@@ -336,7 +316,7 @@ describe('interpretRoute', () => {
         it('should report a benefit-level error with an AAA03 listed at another level', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~AAA*N**72*C~`;
 
-            const result = interpretRoute(entryOf(levels), testProfile);
+            const result = interpretRoute(entry271(levels), testProfile);
 
             expect(result.errors[0]).toMatchObject({ condition: undefined, level: 'benefit' });
             expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
@@ -355,7 +335,7 @@ describe('interpretRoute', () => {
                 'HL*4*3*23*0~NM1*03*1*DOE*KID~AAA*N**75*C~',
             ].join('');
 
-            const result = interpretRoute(entryOf(levels), anyLevelProfile);
+            const result = interpretRoute(entry271(levels), anyLevelProfile);
 
             expect(result.errors.map(error => error.level)).toEqual([
                 'source',
@@ -370,7 +350,7 @@ describe('interpretRoute', () => {
         it('should not match a condition without a level at the benefit level', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~AAA*N**75*C~`;
 
-            const result = interpretRoute(entryOf(levels), anyLevelProfile);
+            const result = interpretRoute(entry271(levels), anyLevelProfile);
 
             expect(result.errors[0]).toMatchObject({ condition: undefined, level: 'benefit' });
             expect(codesAndTags(result.findings)).toEqual(['unlisted-error AAA']);
@@ -379,7 +359,7 @@ describe('interpretRoute', () => {
         it('should match a benefit-level condition only at the benefit level', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**62*C~EB*1**30~AAA*N**62*C~`;
 
-            const result = interpretRoute(entryOf(levels), {
+            const result = interpretRoute(entry271(levels), {
                 ...testProfile,
                 errors: [
                     {
@@ -398,7 +378,7 @@ describe('interpretRoute', () => {
         it('should not report unlisted errors when listsAllErrors is false', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~AAA*N**73*C~`;
 
-            const result = interpretRoute(entryOf(levels), {
+            const result = interpretRoute(entry271(levels), {
                 ...testProfile,
                 listsAllErrors: false,
             });
@@ -410,7 +390,7 @@ describe('interpretRoute', () => {
         it('should not report a benefit-level error when listsAllErrors is false', () => {
             const levels = `${GOOD}HL*3*2*22*0~NM1*IL*1*DOE*JO****MI*A1~EB*1**30~AAA*N**72*C~`;
 
-            const result = interpretRoute(entryOf(levels), {
+            const result = interpretRoute(entry271(levels), {
                 ...testProfile,
                 listsAllErrors: false,
             });

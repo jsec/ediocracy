@@ -128,13 +128,11 @@ class RouteInterpreter<View, FindingCode extends string> {
             return;
         }
 
-        const allowedQualifiers = typeof expected.idQualifier === 'string'
-            ? [expected.idQualifier]
-            : expected.idQualifier;
+        const allowedQualifiers = [expected.idQualifier].flat();
         const allowedQualifierText = typeof expected.idQualifier === 'string'
             ? `"${expected.idQualifier}"`
             : `one of ${expected.idQualifier.join(', ')}`;
-        const allowedIds = typeof expected.id === 'string' ? [expected.id] : expected.id;
+        const allowedIds = [expected.id].flat();
         const allowedIdText = typeof expected.id === 'string'
             ? `"${expected.id}"`
             : `one of ${expected.id.join(', ')}`;

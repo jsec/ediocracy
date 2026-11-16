@@ -177,7 +177,8 @@ class EligibilityResponseReader {
  *
  * @example
  * ```ts
- * import { read271, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read271 } from '@ediocracy/parser/271';
  *
  * const transaction = readX12(text).interchanges[0]?.groups[0]?.transactions[0];
  * if (transaction) {
@@ -198,7 +199,8 @@ export function read271(transaction: Transaction): Response271 {
  *
  * @example
  * ```ts
- * import { read271s, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { read271s } from '@ediocracy/parser/271';
  *
  * for (const { response } of read271s(readX12(text))) {
  *     console.log(response.subscribers.length, response.findings.length);

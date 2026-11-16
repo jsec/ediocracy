@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { humanaProfile, interpretRoute, type RouteEntry } from '../src/profiles/271/routes/index.js';
-import { codesAndTags, firstEntry, wrap } from './utils.js';
+import { codesAndTags, entry271 } from './utils.js';
 
 const DUAL_MEDICARE = 'NM1*IL*1*DOE*JOHN*M***MI*H00000000~REF*6P*R8975001*HUMANA HEALTH PLAN, INC.~'
     + 'EB*1*EMP*30*HN~';
@@ -10,13 +10,6 @@ const DUAL_MEDICAID = 'NM1*IL*1*DOE*JOHN*M***MI*H00000000~REF*6P*R8962001*HUMANA
 const RECEIVER = 'HL*2*1*21*1~NM1*1P*2*R*****XX*1~';
 const SUBSCRIBER = 'NM1*IL*1*DOE*JOHN*T**JR*MI*123456789~';
 
-function entryOf(levels: string): RouteEntry {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return firstEntry(wrap(`${body}SE*${count}*0001~`));
-}
-
 function humanaEntryOf(segments: string, payerId = '61101', receiverCode = '1P'): RouteEntry {
     const levels = [
         `HL*1**20*1~NM1*PR*2*HUMANA*****PI*${payerId}~`,
@@ -24,7 +17,7 @@ function humanaEntryOf(segments: string, payerId = '61101', receiverCode = '1P')
         `HL*3*2*22*0~${segments}`,
     ].join('');
 
-    return entryOf(levels);
+    return entry271(levels);
 }
 
 describe('humanaProfile', () => {
@@ -62,7 +55,7 @@ describe('humanaProfile', () => {
         it('should add the condition to an access restriction error on the source', () => {
             const levels = `HL*1**20*1~NM1*PR*2*HUMANA*****PI*61101~AAA*N**41*C~${RECEIVER}`;
 
-            const result = interpretRoute(entryOf(levels), humanaProfile);
+            const result = interpretRoute(entry271(levels), humanaProfile);
 
             expect(result.errors).toMatchObject([{ condition: 'not-approved-by-cms', level: 'source' }]);
         });
@@ -148,7 +141,7 @@ describe('humanaProfile', () => {
                 `HL*4*2*22*0~${DUAL_MEDICAID}`,
             ].join('');
 
-            const result = interpretRoute(entryOf(levels), humanaProfile);
+            const result = interpretRoute(entry271(levels), humanaProfile);
 
             expect(result.members.map(member => member.sameIdMembers)).toEqual([[1], [0]]);
             expect(result.members.map(member => member.plans.length)).toEqual([1, 1]);
@@ -162,7 +155,7 @@ describe('humanaProfile', () => {
                 'HL*4*3*23*0~NM1*03*1*DOE*JANE****MI*123~',
             ].join('');
 
-            const result = interpretRoute(entryOf(levels), humanaProfile);
+            const result = interpretRoute(entry271(levels), humanaProfile);
 
             expect(result.members.map(member => member.sameIdMembers)).toEqual([[], []]);
         });

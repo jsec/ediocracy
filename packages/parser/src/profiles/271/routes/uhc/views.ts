@@ -9,9 +9,9 @@ import type {
     VariesBy,
 } from './types.js';
 
-type Report = (code: UhcFindingCode, segment: Segment, message: string) => void;
-
 import { readCoverageDates } from '../coverage-dates.js';
+
+type Report = (code: UhcFindingCode, segment: Segment, message: string) => void;
 
 // MSG text on a variable copay (guide v9.0, §6.2 #11–12).
 const LOCATION_MESSAGE = 'AMOUNT VARIES BY LOCATION';
@@ -33,10 +33,8 @@ export function readUhc(
     person: Person,
     report: Report,
 ): UhcView {
-    const copays = readCopays(member, report);
-
     return {
-        copayRanges: copays.copayRanges,
+        ...readCopays(member, report),
         coverageDates: readCoverageDates(member),
         otherPayers: member.otherParties
             .filter(entry => entry.kind === 'R')
@@ -44,7 +42,6 @@ export function readUhc(
                 entry,
                 name: entry.parties[0]?.lastName,
             })),
-        variableCopays: copays.variableCopays,
     };
 }
 

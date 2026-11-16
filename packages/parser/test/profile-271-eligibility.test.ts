@@ -1,15 +1,12 @@
 import { assert, describe, expect, it } from 'vitest';
 
 import { interpret271, type Response271 } from '../src/profiles/271/index.js';
-import { only271, readFixture, wrap } from './utils.js';
+import { entry271, only271, readFixture, wrap } from './utils.js';
 
 const SOURCE_AND_RECEIVER = 'HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~';
 
 function respond(levels: string): Response271 {
-    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
-    const count = body.split('~').filter(segment => segment !== '').length + 1;
-
-    return only271(wrap(`${body}SE*${count}*0001~`));
+    return entry271(levels).response;
 }
 
 describe('interpret271', () => {

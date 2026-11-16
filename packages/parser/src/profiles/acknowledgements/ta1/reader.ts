@@ -25,7 +25,8 @@ export type Ta1 = {
  *
  * @example
  * ```ts
- * import { readTa1s, readX12 } from '@ediocracy/parser';
+ * import { readX12 } from '@ediocracy/parser';
+ * import { readTa1s } from '@ediocracy/parser/acknowledgements';
  *
  * for (const { ta1 } of readTa1s(readX12(text))) {
  *     console.log(ta1.controlNumber, ta1.code, ta1.noteCode);

@@ -10,7 +10,7 @@ import type {
     StatusEntry,
 } from './types.js';
 
-import { allDependents, isOneOf, toPlainDate } from '../../eligibility/interpreter.js';
+import { allDependents, dateOf, isOneOf, toPlainDate } from '../../eligibility/interpreter.js';
 import { readCoverageDates } from '../coverage-dates.js';
 
 type Report = (code: HumanaFindingCode, segment: Segment, message: string) => void;
@@ -38,8 +38,8 @@ const MISSING_MESSAGE = 'An in-network row with the same EB01, EB02, EB03 and EB
 // NM101 values for a subscriber or dependent name.
 const MEMBER_ENTITY_CODES = ['03', 'IL'];
 // 2100A NM109 values by line of business.
-const DENTAL_PAYER_IDS = ['65065', 'CX021'];
-const MEDICAL_PAYER_IDS = ['61101', '61115'];
+export const DENTAL_PAYER_IDS = ['65065', 'CX021'];
+export const MEDICAL_PAYER_IDS = ['61101', '61115'];
 // REF01 for the plan, group or network name.
 const PLAN_REFERENCE = '6P';
 
@@ -98,12 +98,6 @@ function checkBenefitMessages(member: MemberEligibility, plans: PlanEntry[], rep
             report('missing-benefit-message', row.benefit.eb, MISSING_MESSAGE);
         }
     }
-}
-
-function dateOf(benefit: Benefit, qualifier: string): Temporal.PlainDate | undefined {
-    const segment = benefit.dates.find(date => date.element(1) === qualifier);
-
-    return toPlainDate(segment?.element(3));
 }
 
 function readBilling(status: StatusEntry[], report: Report): BillingEntry[] {

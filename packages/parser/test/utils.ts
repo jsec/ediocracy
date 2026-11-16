@@ -11,7 +11,7 @@ import { read271s, type Response271 } from '../src/profiles/271/index.js';
 
 export const fixtureDirectory = path.resolve(import.meta.dirname, 'fixtures');
 
-export type LoopSummary = {
+type LoopSummary = {
     id: string;
     loops: LoopSummary[];
     tags: string[];
@@ -20,6 +20,15 @@ export type LoopSummary = {
 // Each finding as its code and the tag of its segment, for example `unlisted-error AAA`.
 export function codesAndTags(findings: { code: string; segment: { tag: string } }[]): string[] {
     return findings.map(finding => `${finding.code} ${finding.segment.tag}`);
+}
+
+// A 271 with ST, BHT and SE around the HL levels. `component` is ISA16.
+export function entry271(levels: string, component = ':'): RouteEntry {
+    const body = `ST*271*0001*005010X279A1~BHT*0022*11*1*20260101*1200~${levels}`;
+    const count = body.split('~').filter(segment => segment !== '').length + 1;
+    const text = wrap(`${body}SE*${count}*0001~`).replace('*P*:~', () => `*P*${component}~`);
+
+    return firstEntry(text);
 }
 
 export function envelopeLines(document: X12Document): string[] {
@@ -66,13 +75,7 @@ export function firstTransaction(text: string): Transaction {
 }
 
 export function only271(text: string): Response271 {
-    const [result] = read271s(readX12(text));
-
-    if (!result) {
-        throw new Error('No 271 transaction set in the text');
-    }
-
-    return result.response;
+    return firstEntry(text).response;
 }
 
 export function readFixture(name: string): string {
