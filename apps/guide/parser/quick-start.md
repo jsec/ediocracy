@@ -8,13 +8,13 @@ benefits that the payer reported.
 
 ## Run it
 
-::: aside Install
+::: tip Install
 `pnpm add @ediocracy/parser`
 
 The package isn't published to npm yet.
 :::
 
-::: aside Requires
+::: tip Requires
 Node.js 26 or later. ESM only.
 :::
 

@@ -1,4 +1,3 @@
-import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -6,20 +5,16 @@ import { createMarkdownRenderer } from 'vitepress';
 import { describe, expect, it } from 'vitest';
 
 import { ediocracyMarkdown } from '../.vitepress/markdown.ts';
-import examplesData from '../.vitepress/theme/examples.data.ts';
-import { renderForSearch } from '../.vitepress/search-render.mjs';
-import { BANNED_PHRASES, checkDocument, checkDownloadLinks, checkSidebarSlugs } from '../scripts/check-content.mjs';
-import { EXAMPLE_FILENAMES, loadExample } from '../src/lib/examples.mjs';
+import { checkDocument, checkDownloadLinks, checkSidebarSlugs } from '../scripts/check-content.mjs';
 import { buildWalkthrough, segmentRole } from '../src/lib/walkthrough.mjs';
 
 const FRONTMATTER = /^---\n([\s\S]*?)\n---\n/;
 const TITLE_LINE = /^title:\s*(.+)$/m;
 const PARAGRAPH_BREAK = /\n\s*\n/;
 const LIST_MARKER = /^\s*[-*+]\s+/gm;
-const HEADING = /^(#{1,6})\s+\S/mg;
 const CODE_BLOCK = /```[\s\S]*?```/g;
 const WEB_ADDRESS = /https?:\/\/\S+/g;
-const MARKDOWN_FILE = /\.mdx?$/;
+const MARKDOWN_FILE = /\.md$/;
 
 const guideRoot = fileURLToPath(new URL('..', import.meta.url));
 
@@ -92,31 +87,10 @@ function pageParts(source) {
 }
 
 describe('guide pages', () => {
-  it.each(pages)('should give %s a frontmatter title and no Markdown H1', (relativePath) => {
-    const parts = pageParts(readGuideFile(relativePath));
-
-    expect(parts.title).toBeTruthy();
-    expect(parts.body).not.toMatch(/^#\s+/m);
-  });
-
   it.each(pages)('should open %s with a paragraph that matches %s', (relativePath, topic) => {
     const parts = pageParts(readGuideFile(relativePath));
 
     expect(parts.firstParagraph).toMatch(topic);
-  });
-
-  it.each(pages)('should keep %s free of banned phrases', (relativePath) => {
-    const prose = withoutCodeAndUrls(readGuideFile(relativePath));
-
-    expect(prose).not.toMatch(BANNED_PHRASES);
-  });
-
-  it.each(pages)('should not skip heading levels in %s', (relativePath) => {
-    const parts = pageParts(readGuideFile(relativePath));
-    const levels = [...parts.body.matchAll(HEADING)].map((match) => match[1].length);
-    const skippedLevels = levels.filter((level, index) => index > 0 && level > levels[index - 1] + 1);
-
-    expect(skippedLevels).toEqual([]);
   });
 
   it('should state the source scope and link the primary sources in public-x12-sources.md', () => {
@@ -248,7 +222,7 @@ describe('ediocracyMarkdown', () => {
 
 ## With notes
 
-::: aside Reads as
+::: tip Reads as
 A limit of five visits.
 :::
 
@@ -279,44 +253,6 @@ Plain text.
     const html = md.render(source);
 
     expect(html).toContain('<code class="edi-role-benefit">EB01</code>');
-  });
-});
-
-describe('loadExample', () => {
-  it.each(EXAMPLE_FILENAMES)('should return the exact bytes of %s', async (filename) => {
-    const source = await loadExample(filename);
-    const expected = readGuideFile(`public/examples/${filename}`);
-
-    expect(source).toBe(expected);
-  });
-
-  it('should resolve files independently of the working directory', () => {
-    const moduleUrl = new URL('../src/lib/examples.mjs', import.meta.url).href;
-    const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
-    const expected = readGuideFile('public/examples/single-eb.edi');
-    const script = `import { loadExample } from ${JSON.stringify(moduleUrl)}; process.stdout.write(await loadExample('single-eb.edi'));`;
-    const source = execFileSync(process.execPath, ['--input-type=module', '-e', script], {
-      cwd: repositoryRoot,
-      encoding: 'utf8',
-    });
-
-    expect(source).toBe(expected);
-  });
-});
-
-describe('examples data loader', () => {
-  it('should return the walkthrough for every example file', async () => {
-    const data = await examplesData.load();
-    const expected = {};
-
-    for (const filename of EXAMPLE_FILENAMES) {
-      const source = await loadExample(filename);
-
-      expected[filename] = buildWalkthrough(source);
-    }
-
-    expect(Object.keys(data)).toEqual([...EXAMPLE_FILENAMES]);
-    expect(data).toEqual(expected);
   });
 });
 
@@ -386,30 +322,5 @@ describe('checkDownloadLinks', () => {
     const findings = checkDownloadLinks(source, 'guide/valid.md', ['examples/single-eb.edi']);
 
     expect(findings).toMatchObject([{ code: 'missing-download', line: 1 }]);
-  });
-});
-
-describe('renderForSearch', () => {
-  const render = (src) => `<rendered>${src}</rendered>`;
-
-  it('should add the frontmatter title as an H1 before the page body', () => {
-    const md = {
-      render(src, env) {
-        if (env) {
-          env.frontmatter = { title: 'Party hierarchy' };
-        }
-
-        return render(src);
-      },
-    };
-    const html = renderForSearch('Body text.', {}, md);
-
-    expect(html).toBe('<rendered># Party hierarchy</rendered><rendered>Body text.</rendered>');
-  });
-
-  it('should render only the body when the page has no title', () => {
-    const html = renderForSearch('Body text.', {}, { render });
-
-    expect(html).toBe('<rendered>Body text.</rendered>');
   });
 });

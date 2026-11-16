@@ -1,5 +1,3 @@
-// @ts-check
-
 import { readdirSync, readFileSync } from 'node:fs';
 import { extname, join, relative, resolve } from 'node:path';
 
@@ -10,8 +8,8 @@ const CONTENT_ROOT = resolve(PROJECT_ROOT, 'guide');
 const CONTENT_PREFIX = 'guide/';
 const PARSER_ROOT = resolve(PROJECT_ROOT, 'parser');
 const PUBLIC_ROOT = resolve(PROJECT_ROOT, 'public');
-export const BANNED_PHRASES = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
-const MARKDOWN_EXTENSION = /\.mdx?$/;
+const BANNED_PHRASES = /\b(?:simply|obviously|please note|let's|click here|easy)\b/i;
+const MARKDOWN_EXTENSION = /\.md$/;
 const INDEX_PAGE = /(^|\/)index$/;
 const FRONTMATTER = /^---\n([\s\S]*?)\n---(?:\n|$)/;
 const TITLE_LINES = /^title:\s*(.*)$/gm;
@@ -150,7 +148,7 @@ export function runContentChecks() {
   const contentPaths = [];
 
   for (const entry of readdirSync(CONTENT_ROOT, { recursive: true, withFileTypes: true })) {
-    if (!entry.isDirectory() && ['.md', '.mdx'].includes(extname(entry.name))) {
+    if (!entry.isDirectory() && extname(entry.name) === '.md') {
       contentPaths.push(relative(PROJECT_ROOT, join(entry.parentPath, entry.name)));
     }
   }

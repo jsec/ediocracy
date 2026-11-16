@@ -195,15 +195,6 @@ describe('buildWalkthrough', () => {
         medicareAdvantage.interchanges[0].segments,
       ]);
     });
-
-    it('should put each terminated segment of the display source on its own line', () => {
-      const walkthrough = buildWalkthrough(baseline);
-      const lines = walkthrough.displaySource.split('\n');
-
-      expect(lines).toHaveLength(14);
-      expect(lines.every((line) => line.endsWith('~'))).toBe(true);
-      expect(lines.join('')).toBe(baseline);
-    });
   });
 
   describe('fields', () => {

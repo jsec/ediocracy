@@ -11,12 +11,12 @@ the payer.
 
 ## EB example
 
-::: aside Before you decide
+::: tip Before you decide
 Read the other benefit statements, dates, and payer instructions before
 deciding the member's coverage or payer order.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [EB →](/guide/reference/segments#eb)
 :::
 
@@ -43,11 +43,11 @@ That line provides one statement in its surrounding subscriber context.
 
 ## LS and LE example
 
-::: aside Guide-dependent
+::: tip Guide-dependent
 The applicable 271 guide determines whether a response uses this loop.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [LS →](/guide/reference/segments#ls) [LE →](/guide/reference/segments#le)
 :::
 
@@ -65,11 +65,11 @@ The applicable 271 guide determines whether a response uses this loop.
 
 ## DTP example
 
-::: aside Reads as
+::: tip Reads as
 Plan date: January 1, 2099.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [DTP →](/guide/reference/segments#dtp)
 :::
 
@@ -86,15 +86,15 @@ Plan date: January 1, 2099.
 
 ## HSD example
 
-::: aside Reads as
+::: tip Reads as
 A limit of five visits in six months.
 :::
 
-::: aside Payer variation
+::: tip Payer variation
 Payers differ in when they send `HSD`.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [HSD →](/guide/reference/segments#hsd)
 :::
 
@@ -112,12 +112,12 @@ Payers differ in when they send `HSD`.
 
 ## REF example
 
-::: aside Caution
+::: tip Caution
 Read the identifier with its loop and the applicable payer or intermediary
 guide.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [REF →](/guide/reference/segments#ref)
 :::
 
@@ -138,12 +138,12 @@ connection.
 
 ## MSG example
 
-::: aside Related
+::: tip Related
 X12 [Request for Interpretation (RFI) 2628](https://x12.org/resources/requests-for-interpretation/rfi-2628-msg-segment-271)
 describes another 271 use of `MSG`.
 :::
 
-::: aside Field tables
+::: tip Field tables
 [MSG →](/guide/reference/segments#msg)
 :::
 

@@ -1,5 +1,3 @@
-// @ts-check
-
 import { readX12 } from '@ediocracy/parser';
 
 /** @typedef {{ purpose: string, fields: Array<[string, string]> }} SegmentDefinition */
@@ -401,7 +399,7 @@ function fieldsForSegment(definition, fields) {
  * This is intentionally limited to source segment and field views.
  *
  * @param {string} source
- * @returns {{ displaySource: string, interchanges: Array<{ ordinal: number, raw: string, segments: Array<{ ordinal: number, name: string, raw: string, explanation: string, fields: WalkthroughField[] }> }> }}
+ * @returns {{ interchanges: Array<{ ordinal: number, segments: Array<{ name: string, raw: string, explanation: string, fields: WalkthroughField[] }> }> }}
  */
 export function buildWalkthrough(source) {
   const document = readX12(source);
@@ -418,7 +416,7 @@ export function buildWalkthrough(source) {
       interchange.header.offset,
       source.indexOf(segmentTerminator, interchange.trailer.offset) + 1,
     );
-    const segments = raw.split(segmentTerminator).filter(Boolean).map((segment, segmentIndex) => {
+    const segments = raw.split(segmentTerminator).filter(Boolean).map((segment) => {
       const fields = segment.split(elementSeparator);
       const name = fields[0];
       const definition = SEGMENT_DEFINITIONS[name];
@@ -428,7 +426,6 @@ export function buildWalkthrough(source) {
       }
 
       return {
-        ordinal: segmentIndex + 1,
         name,
         raw: `${segment}${segmentTerminator}`,
         explanation: segmentExplanation(definition, fields),
@@ -438,15 +435,9 @@ export function buildWalkthrough(source) {
 
     return {
       ordinal: interchangeIndex + 1,
-      raw,
       segments,
     };
   });
 
-  return {
-    displaySource: interchanges
-      .flatMap((interchange) => interchange.segments.map((segment) => segment.raw))
-      .join('\n'),
-    interchanges,
-  };
+  return { interchanges };
 }

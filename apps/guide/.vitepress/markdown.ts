@@ -1,4 +1,3 @@
-import container from 'markdown-it-container';
 import type { MarkdownRenderer } from 'vitepress';
 
 import { segmentRole } from '../src/lib/walkthrough.mjs';
@@ -6,7 +5,7 @@ import { segmentRole } from '../src/lib/walkthrough.mjs';
 type StateCore = Parameters<Parameters<MarkdownRenderer['core']['ruler']['push']>[1]>[0];
 type Token = StateCore['tokens'][number];
 
-const ASIDE_KEYWORD = /^aside\s*/;
+const TIP_KEYWORD = /^tip\s*/;
 
 function colorSegmentCode(state: StateCore) {
   for (const token of state.tokens) {
@@ -47,7 +46,7 @@ function placeNotesInMargin(state: StateCore) {
     let isInNote = false;
 
     for (const token of section.slice(headingLength)) {
-      if (token.type === 'container_aside_open') {
+      if (token.type === 'container_tip_open') {
         isInNote = true;
       }
 
@@ -57,7 +56,7 @@ function placeNotesInMargin(state: StateCore) {
         main.push(token);
       }
 
-      if (token.type === 'container_aside_close') {
+      if (token.type === 'container_tip_close') {
         isInNote = false;
       }
     }
@@ -81,19 +80,13 @@ function placeNotesInMargin(state: StateCore) {
 }
 
 export function ediocracyMarkdown(md: MarkdownRenderer) {
-  md.use(container, 'aside', {
-    render(tokens: Token[], index: number) {
-      const token = tokens[index];
+  // `::: tip Label` is a margin note. VitePress registers the tip container before this runs.
+  md.renderer.rules.container_tip_open = (tokens, index) => {
+    const label = md.utils.escapeHtml(tokens[index].info.trim().replace(TIP_KEYWORD, ''));
 
-      if (token.nesting === -1) {
-        return '</aside>\n';
-      }
-
-      const label = md.utils.escapeHtml(token.info.trim().replace(ASIDE_KEYWORD, ''));
-
-      return `<aside class="edi-note"><p class="edi-note-label">${label}</p>\n`;
-    },
-  });
+    return `<aside class="edi-note"><p class="edi-note-label">${label}</p>\n`;
+  };
+  md.renderer.rules.container_tip_close = () => '</aside>\n';
 
   md.core.ruler.push('segment_role_code', colorSegmentCode);
   md.core.ruler.push('margin_notes', placeNotesInMargin);

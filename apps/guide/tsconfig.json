@@ -12,5 +12,5 @@
     "noUncheckedSideEffectImports": false,
     "types": ["node"]
   },
-  "include": [".vitepress/**/*.ts", ".vitepress/**/*.mjs", ".vitepress/**/*.vue"]
+  "include": [".vitepress/**/*.ts", ".vitepress/**/*.mjs", ".vitepress/**/*.vue", "scripts/*.mjs", "src/**/*.mjs"]
 }

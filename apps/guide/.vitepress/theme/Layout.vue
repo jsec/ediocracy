@@ -2,10 +2,10 @@
 import type { DefaultTheme as Theme } from 'vitepress';
 
 import { useData, useRoute } from 'vitepress';
-import DefaultTheme from 'vitepress/theme';
+import DefaultTheme from 'vitepress/theme-without-fonts';
 import { computed } from 'vue';
 
-const API_PAGE = /^\/parser\/api\/parser\/(?:(.+)\/)?(functions|classes|interfaces|type-aliases|variables)\//;
+const API_PAGE = /^\/parser\/api\/(?:(.+)\/)?(functions|classes|interfaces|type-aliases|variables)\//;
 const PAGE_SUFFIX = /(?:index)?(?:\.html|\.md)?$/;
 const API_KINDS: Record<string, string> = {
   'functions': 'function',

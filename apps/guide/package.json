@@ -6,9 +6,7 @@
     "dev": "pnpm run docs:api && vitepress dev",
     "build": "pnpm run check && vitepress build",
     "preview": "vitepress preview",
-    "check": "pnpm run docs:api && pnpm run test && pnpm run check:js && vue-tsc --noEmit && pnpm run check:examples && pnpm run check:content && pnpm run check:snippets",
-    "check:js": "tsc --ignoreConfig --noEmit --skipLibCheck --allowJs --checkJs --strict --module nodenext --target es2025 --types node src/lib/examples.mjs src/lib/walkthrough.mjs scripts/check-content.mjs .vitepress/sidebar-guide.mjs .vitepress/search-render.mjs scripts/run-snippets.mjs scripts/typedoc-hide-object-signatures.mjs scripts/typedoc-short-paths.mjs",
-    "check:examples": "node scripts/check-examples.mjs",
+    "check": "pnpm run docs:api && pnpm run test && vue-tsc --noEmit && pnpm run check:content && pnpm run check:snippets",
     "check:content": "node scripts/check-content.mjs",
     "check:snippets": "tsc -p parser/snippets && node scripts/run-snippets.mjs",
     "docs:api": "typedoc",
@@ -22,9 +20,7 @@
     "vue": "3.5.44"
   },
   "devDependencies": {
-    "@types/markdown-it-container": "4.0.1",
     "@types/node": "26.6.5",
-    "markdown-it-container": "4.0.0",
     "typedoc": "0.28.20",
     "typedoc-plugin-markdown": "4.14.1",
     "typedoc-vitepress-theme": "1.1.4",

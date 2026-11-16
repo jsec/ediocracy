@@ -1,5 +1,3 @@
-// @ts-check
-
 import { spawnSync } from 'node:child_process';
 import { copyFileSync, mkdtempSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';

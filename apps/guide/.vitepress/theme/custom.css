@@ -1,7 +1,6 @@
 :root {
   --edi-bg: #ffffff;
   --edi-bg-soft: #f6f8fa;
-  --edi-bg-code: #f6f8fa;
   --edi-bg-mute: #eff2f5;
   --edi-divider: #d8dee4;
   --edi-border: #d1d9e0;
@@ -10,7 +9,6 @@
   --edi-text-3: #393f46;
   --edi-text-4: #59636e;
   --edi-text-5: #818b98;
-  --edi-text-number: #818b98;
   --edi-accent: #9a6700;
   --edi-accent-hover: #7d4e00;
   --edi-accent-wash: #fff8c5;
@@ -44,33 +42,22 @@
   --vp-c-default-soft: var(--edi-bg-mute);
   --vp-button-brand-text: var(--edi-on-fill);
   --vp-button-brand-hover-text: var(--edi-on-fill);
-  --vp-code-bg: var(--edi-bg-mute);
   --vp-code-color: var(--edi-text-1);
-  --vp-code-block-bg: var(--edi-bg-code);
+  --vp-code-block-bg: var(--edi-bg-soft);
   --vp-code-font-size: 0.88em;
   --vp-code-line-height: 1.75;
   --vp-code-line-highlight-color: var(--edi-accent-wash);
   --vp-code-line-number-color: var(--edi-text-5);
-  --vp-code-copy-code-bg: var(--edi-bg-soft);
   --vp-code-copy-code-hover-bg: var(--edi-bg-mute);
-  --vp-sidebar-bg-color: var(--edi-bg);
-  --vp-nav-bg-color: var(--edi-bg);
-  --vp-nav-height: 64px;
-  --vp-sidebar-width: 272px;
-  --vp-local-search-bg: var(--edi-bg);
   --vp-local-search-result-bg: var(--edi-bg-soft);
-  --vp-local-search-highlight-bg: var(--edi-accent);
   --vp-local-search-highlight-text: var(--edi-on-fill);
   --vp-custom-block-info-bg: var(--edi-bg-soft);
   --vp-custom-block-info-border: var(--edi-divider);
-  --vp-custom-block-tip-bg: var(--edi-bg-soft);
-  --vp-custom-block-tip-border: var(--edi-divider);
 }
 
 .dark {
   --edi-bg: #0d1117;
   --edi-bg-soft: #151b23;
-  --edi-bg-code: #151b23;
   --edi-bg-mute: #212830;
   --edi-divider: #262c36;
   --edi-border: #3d444d;
@@ -79,7 +66,6 @@
   --edi-text-3: #b7bdc8;
   --edi-text-4: #9198a1;
   --edi-text-5: #656c76;
-  --edi-text-number: #656c76;
   --edi-accent: #d29922;
   --edi-accent-hover: #e3b341;
   --edi-accent-wash: #272115;
@@ -132,7 +118,7 @@ body {
 }
 
 .edi-logo-star {
-  color: var(--edi-text-number);
+  color: var(--edi-text-5);
 }
 
 .edi-logo-tilde {
@@ -194,14 +180,25 @@ body {
   padding-bottom: 16px;
 }
 
-.VPSidebarItem.level-0 > .item .text {
-  padding-left: 10px;
+/* Uppercase mono labels: sidebar groups, the outline title, table headers, note labels and the segment index header. */
+
+.VPSidebarItem.level-0 > .item .text,
+.VPSidebar .VPSidebarItem.level-1:has(> .items) > .item .text,
+.VPDocAsideOutline .outline-title,
+.vp-doc th,
+.vp-doc .edi-note .edi-note-label,
+.edi-index-header,
+.edi-index-header:hover {
   font-family: var(--edi-mono);
   font-size: 11px;
-  font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--edi-text-4);
+}
+
+.VPSidebarItem.level-0 > .item .text {
+  padding-left: 10px;
+  font-weight: 400;
 }
 
 .VPSidebarItem.level-1 > .item {
@@ -243,11 +240,7 @@ body {
 
 .VPSidebar .VPSidebarItem.level-1:has(> .items) > .item .text {
   padding: 12px 10px 4px;
-  font-family: var(--edi-mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--edi-text-4);
 }
 
 .VPSidebar .VPSidebarItem.level-1 > .items {
@@ -288,12 +281,7 @@ body {
 }
 
 .VPDocAsideOutline .outline-title {
-  font-family: var(--edi-mono);
-  font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--edi-text-4);
 }
 
 .VPDocAsideOutline .content {
@@ -407,7 +395,7 @@ body {
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0;
-  color: var(--edi-text-number);
+  color: var(--edi-text-5);
 }
 
 .vp-doc a {
@@ -423,7 +411,6 @@ body {
 }
 
 .vp-doc :not(pre) > code {
-  border-radius: 4px;
   padding: 1px 5px;
   font-size: 0.88em;
 }
@@ -480,12 +467,7 @@ body {
 
 .vp-doc th {
   background: var(--edi-bg-soft);
-  font-family: var(--edi-mono);
-  font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--edi-text-4);
 }
 
 .vp-doc tr,
@@ -555,8 +537,7 @@ body {
   color: var(--edi-role, var(--edi-text-1));
 }
 
-.edi-button,
-.vp-doc .edi-button {
+.edi-button {
   display: inline-block;
   border: 1px solid var(--edi-border);
   border-radius: 8px;
@@ -625,7 +606,7 @@ body {
   color: var(--edi-on-fill);
 }
 
-/* Margin notes: `::: aside Label` in Markdown */
+/* Margin notes: `::: tip Label` in Markdown */
 
 .edi-columns {
   display: flex;
@@ -662,10 +643,6 @@ body {
 
 .vp-doc .edi-note .edi-note-label {
   margin-bottom: 6px;
-  font-family: var(--edi-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--edi-text-1);
 }
 
@@ -699,7 +676,7 @@ body {
 .edi-annotated-source {
   overflow-x: auto;
   padding: 14px 18px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
   font-size: 17px;
   line-height: 1.8;
   white-space: pre;
@@ -760,7 +737,7 @@ body {
   overflow: hidden;
   border: 1px solid var(--edi-divider);
   border-radius: 12px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
   font-family: var(--edi-mono);
 }
 
@@ -916,7 +893,7 @@ body {
   border: 1px solid var(--edi-divider);
   border-radius: 8px;
   padding: 14px 16px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
   font-size: 17px;
   line-height: 1.7;
   white-space: pre-wrap;
@@ -1061,11 +1038,6 @@ body {
 .edi-index-header:hover {
   padding: 12px 20px;
   background: var(--edi-bg-soft);
-  font-family: var(--edi-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--edi-text-4);
   cursor: default;
 }
 
@@ -1075,7 +1047,7 @@ body {
 }
 
 .edi-index-segment.is-open {
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
 }
 
 .edi-index-name {
@@ -1161,7 +1133,7 @@ body {
   border: 1px solid var(--edi-divider);
   border-radius: 10px;
   padding: 20px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
 }
 
 .edi-control-pair-ids {
@@ -1203,24 +1175,11 @@ body {
   overflow: hidden;
   border: 1px solid var(--edi-divider);
   border-radius: 10px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
 }
 
 .edi-code-panel-file {
   color: var(--edi-text-2);
-}
-
-.edi-copy {
-  border: 1px solid var(--edi-border);
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-family: var(--edi-mono);
-  font-size: 12px;
-  color: var(--edi-text-2);
-}
-
-.edi-copy.is-copied {
-  color: var(--edi-role-ben);
 }
 
 .edi-code-panel div[class*='language-'],
@@ -1230,7 +1189,6 @@ body {
   border-radius: 0;
 }
 
-.edi-code-panel button.copy,
 .edi-code-panel span.lang {
   display: none;
 }
@@ -1256,7 +1214,7 @@ body {
   background: var(--edi-bg-soft);
   font-family: var(--edi-mono);
   font-size: 13px;
-  color: var(--edi-text-number);
+  color: var(--edi-text-5);
 }
 
 .edi-code-panel-result {
@@ -1359,7 +1317,7 @@ body {
   border: 1px solid var(--edi-divider);
   border-radius: 10px;
   padding: 18px 20px;
-  background: var(--edi-bg-code);
+  background: var(--edi-bg-soft);
 }
 
 [class*='_parser_api_'].vp-doc blockquote > p {
@@ -1448,10 +1406,6 @@ body {
   line-height: 1;
   letter-spacing: -0.03em;
   color: var(--edi-text-1);
-}
-
-.edi-wordmark .edi-logo-star {
-  color: var(--edi-text-5);
 }
 
 .edi-tagline {
@@ -1600,7 +1554,7 @@ body {
 }
 
 .edi-anatomy-element.is-empty .edi-anatomy-position {
-  color: var(--edi-text-number);
+  color: var(--edi-text-5);
 }
 
 .edi-anatomy-element.is-id .edi-anatomy-position {
