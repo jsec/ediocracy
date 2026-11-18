@@ -25,6 +25,7 @@ export type {
     Benefit,
     Party,
     Person,
+    Procedure,
     RequestError,
     Response271,
     Response271FindingCode,

@@ -53,8 +53,10 @@ A [`Person`](/parser/api/271/type-aliases/Person) is a party that also has
 Each [`Benefit`](/parser/api/271/type-aliases/Benefit) is one `EB` segment and
 the segments that qualify it. The parser returns codes as they appear in the
 response, without translation. For example, `status` is `EB01`, and
-`serviceTypes` is the list of `EB03` repetitions. The `eb` field contains the
-`EB` segment itself, so you can read elements that the type doesn't name.
+`serviceTypes` is the list of `EB03` repetitions. `procedure` is the `EB13`
+procedure code, split into its `qualifier`, `code`, and `modifiers`. The `eb`
+field contains the `EB` segment itself, so you can read elements that the type
+doesn't name.
 
 ## Apply the payer's rules {#apply-the-payers-rules}
 

@@ -125,6 +125,39 @@ describe('interpret271', () => {
         });
     });
 
+    describe('authorization and procedure', () => {
+        it('should read EB11 Y, N and U as authorizationRequired', () => {
+            const response = respond(`${SOURCE_AND_RECEIVER}HL*3*2*22*0~NM1*IL*1*A*****MI*M1~`
+                + 'EB*1**1********Y~EB*1**2********N~EB*1**3********U~');
+            const coverage = interpret271(response).members[0]?.coverage ?? [];
+
+            expect(coverage.map(entry => entry.authorizationRequired)).toEqual(['Y', 'N', 'U']);
+        });
+
+        it('should give authorizationRequired undefined for an EB11 outside Y, N and U', () => {
+            const response = respond(`${SOURCE_AND_RECEIVER}HL*3*2*22*0~NM1*IL*1*A*****MI*M1~`
+                + 'EB*1**30********X~');
+            const [entry] = interpret271(response).members[0]?.coverage ?? [];
+
+            expect(entry?.authorizationRequired).toBeUndefined();
+            expect(entry?.benefit.eb.element(11)).toBe('X');
+        });
+
+        it('should copy the EB13 procedure onto the entry', () => {
+            const response = respond(`${SOURCE_AND_RECEIVER}HL*3*2*22*0~NM1*IL*1*A*****MI*M1~`
+                + 'EB*1************HC:92653:26~');
+            const [entry] = interpret271(response).members[0]?.coverage ?? [];
+
+            expect(entry).toMatchObject({
+                procedure: {
+                    code: '92653',
+                    modifiers: ['26'],
+                    qualifier: 'HC',
+                },
+            });
+        });
+    });
+
     describe('other parties', () => {
         it('should name the Humana primary care provider', () => {
             const eligibility = interpret271(only271(readFixture('271/sandbox-humana.x12')));

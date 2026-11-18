@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { readX12 } from '../src/index.js';
 import { read271, read271s } from '../src/profiles/271/index.js';
-import { codesAndTags, firstTransaction, only271, readFixture, wrap } from './utils.js';
+import { codesAndTags, entry271, firstTransaction, only271, readFixture, wrap } from './utils.js';
 
 describe('read271', () => {
     describe('generic fixtures', () => {
@@ -258,6 +258,42 @@ describe('read271', () => {
             const qualifiers = subscriber?.references.map(segment => segment.element(1));
 
             expect(qualifiers).toEqual(['6P', '18', '6P', '18']);
+        });
+    });
+
+    describe('procedure', () => {
+        const SUBSCRIBER = 'HL*1**20*1~NM1*PR*2*P~HL*2*1*21*1~NM1*1P*2*R~HL*3*2*22*0~NM1*IL*1*A*****MI*M1~';
+
+        it('should read the EB13 qualifier, code and modifier from the HETS sample', () => {
+            const response = only271(readFixture('271/hets/cms-hets2024-4-example.x12'));
+            const procedures = response.subscribers
+                .flatMap(subscriber => subscriber.benefits)
+                .map(benefit => benefit.procedure)
+                .filter(procedure => procedure?.code === '92653');
+
+            expect(procedures).toEqual([
+                { code: '92653', modifiers: [], qualifier: 'HC' },
+                { code: '92653', modifiers: [], qualifier: 'HC' },
+                { code: '92653', modifiers: ['26'], qualifier: 'HC' },
+            ]);
+        });
+
+        it('should read up to four modifiers, leave out empty ones and skip the description', () => {
+            const response = entry271(`${SUBSCRIBER}EB*D************HC:99213:25::59:XU:OFFICE VISIT~`).response;
+            const [benefit] = response.subscribers[0]?.benefits ?? [];
+
+            expect(benefit?.procedure).toEqual({
+                code: '99213',
+                modifiers: ['25', '59', 'XU'],
+                qualifier: 'HC',
+            });
+        });
+
+        it('should leave procedure undefined when EB13 is absent or empty', () => {
+            const response = entry271(`${SUBSCRIBER}EB*1**30~EB*D************~`).response;
+            const procedures = response.subscribers[0]?.benefits.map(benefit => benefit.procedure);
+
+            expect(procedures).toEqual([undefined, undefined]);
         });
     });
 

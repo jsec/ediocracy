@@ -22,6 +22,7 @@ import type {
 const ACTIVE_STATUSES = ['1', '2', '3', '4', '5'] as const;
 // PER03, PER05 and PER07 each qualify the number in the element after them.
 const CONTACT_QUALIFIER_POSITIONS = [3, 5, 7];
+const AUTHORIZATION_CODES = ['N', 'U', 'Y'] as const satisfies BenefitFields['authorizationRequired'][];
 const COST_SHARE_KINDS = ['A', 'B', 'C', 'G'] as const satisfies CostShareEntry['kind'][];
 const COVERAGE_STATUSES = [
     ...ACTIVE_STATUSES,
@@ -126,11 +127,17 @@ class EligibilityInterpreter {
     }
 
     #readBenefitFields(benefit: Benefit): BenefitFields {
+        const authorizationRequired = isOneOf(AUTHORIZATION_CODES, benefit.authorizationRequired)
+            ? benefit.authorizationRequired
+            : undefined;
+
         return {
+            authorizationRequired,
             benefit,
             dates: this.#parseDates(benefit.dates),
             messages: benefit.messages,
             network: isOneOf(NETWORKS, benefit.inNetwork) ? benefit.inNetwork : undefined,
+            procedure: benefit.procedure,
             references: benefit.references.map(segment => readReference(segment)),
             serviceTypes: benefit.serviceTypes,
         };

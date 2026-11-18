@@ -6,6 +6,7 @@ import type { Benefit, Party, Person, RequestError, Response271, Response271Find
 import { buildLoops } from '../../loops/loops.js';
 
 const VERSION = '005010X279A1';
+const MAX_MODIFIERS = 4;
 
 // Loops 2000C (subscriber) and 2000D (dependent) share a structure; `letter` ends each loop ID.
 function subscriberOrDependentLevel(letter: 'C' | 'D'): LoopSpec {
@@ -255,6 +256,14 @@ function readBenefit(loop: Loop): Benefit {
     const [eb] = loop.segments;
     const additionalInfo = loop.loops.filter(child => child.id.startsWith('2115')).map(child => child.segments[0]);
     const relatedEntities = loop.loops.filter(child => child.id === 'LS').flatMap(child => child.loops);
+    const [qualifier, code, ...modifiers] = eb.components(13);
+    const procedure = eb.element(13)
+        ? {
+                code,
+                modifiers: modifiers.slice(0, MAX_MODIFIERS).filter(modifier => modifier !== ''),
+                qualifier,
+            }
+        : undefined;
 
     return {
         additionalInfo,
@@ -270,6 +279,7 @@ function readBenefit(loop: Loop): Benefit {
         messages: segmentsWithTag(loop, 'MSG').map(segment => segment.element(1) ?? ''),
         percent: eb.element(8),
         planDescription: eb.element(5),
+        procedure,
         quantity: { qualifier: eb.element(9), value: eb.element(10) },
         references: segmentsWithTag(loop, 'REF'),
         relatedEntities,

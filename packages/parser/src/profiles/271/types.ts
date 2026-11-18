@@ -33,6 +33,8 @@ export type Benefit = {
     percent: string | undefined;
     /** Plan coverage description (EB05). */
     planDescription: string | undefined;
+    /** The procedure code (EB13). `undefined` when EB13 is absent or empty. */
+    procedure: Procedure | undefined;
     /** Quantity qualifier (EB09) and quantity (EB10). */
     quantity: {
         /** What the quantity counts, such as visits or days (EB09). */
@@ -96,6 +98,16 @@ export type Person = Party & {
     relationship: Segment | undefined;
     /** Trace numbers (TRN segments). */
     traces: Segment[];
+};
+
+/** A procedure code composite (EB13, C003). */
+export type Procedure = {
+    /** The procedure code (C003-02). */
+    code: string | undefined;
+    /** Procedure modifiers (C003-03 to C003-06), with empty ones left out. */
+    modifiers: string[];
+    /** What kind of code `code` is, such as `HC` for HCPCS and CPT codes (C003-01). */
+    qualifier: string | undefined;
 };
 
 /** An error the payer reported instead of, or alongside, an answer (an AAA segment). */

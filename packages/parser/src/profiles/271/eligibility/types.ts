@@ -1,6 +1,6 @@
 import type { Segment } from '../../../reader/segment.js';
 import type { Finding } from '../../../reader/types.js';
-import type { Benefit, Response271FindingCode } from '../types.js';
+import type { Benefit, Procedure, Response271FindingCode } from '../types.js';
 
 /** A street address. */
 export type Address = {
@@ -16,6 +16,11 @@ export type Address = {
 
 /** The fields every coverage, cost share, limitation and other party entry has. */
 export type BenefitFields = {
+    /**
+     * Whether the service needs authorization or certification (EB11): `Y` yes, `N` no, `U`
+     * unknown. `undefined` when EB11 is absent or holds another code.
+     */
+    authorizationRequired: 'N' | 'U' | 'Y' | undefined;
     /** The benefit as `read271` returned it. */
     benefit: Benefit;
     /** Dates that apply to the entry. Dates that could not be read are left out. */
@@ -27,6 +32,8 @@ export type BenefitFields = {
      * `U`, `W` or `Y`.
      */
     network: 'N' | 'U' | 'W' | 'Y' | undefined;
+    /** The procedure code (EB13). `undefined` when EB13 is absent or empty. */
+    procedure: Procedure | undefined;
     /** Reference numbers for the entry. */
     references: ReferenceEntry[];
     /** Service type codes (EB03). */
