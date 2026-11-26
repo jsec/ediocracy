@@ -17,6 +17,7 @@ export default defineConfig([
             }],
             'unicorn/consistent-class-member-order': 'off',
             'unicorn/no-break-in-nested-loop': 'off',
+            'unicorn/prefer-ternary': 'off',
             'unicorn/single-line-block-comment-style': 'off',
         },
     },
