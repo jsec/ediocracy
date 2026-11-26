@@ -7,6 +7,7 @@
     "pnpm-workspace.yaml",
     "turbo.json",
     "lefthook.yml",
+    "mise.toml",
     "renovate.json",
     ".github/path-filters.json",
     ".github/workflows/ci.yml"
@@ -18,6 +19,7 @@
     "pnpm-workspace.yaml",
     "turbo.json",
     "lefthook.yml",
+    "mise.toml",
     "renovate.json",
     ".github/path-filters.json",
     ".github/workflows/ci.yml"

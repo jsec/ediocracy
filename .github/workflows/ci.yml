@@ -40,10 +40,10 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
 
-      - name: Use Node.js 26
+      - name: Use the Node.js version in mise.toml
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: '26'
+          node-version-file: mise.toml
           cache: pnpm
 
       - name: Install dependencies
@@ -63,10 +63,10 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
 
-      - name: Use Node.js 26
+      - name: Use the Node.js version in mise.toml
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: '26'
+          node-version-file: mise.toml
           cache: pnpm
 
       - name: Install dependencies

@@ -17,6 +17,7 @@ pre-push:
         - "pnpm-workspace.yaml"
         - "turbo.json"
         - "lefthook.yml"
+        - "mise.toml"
       run: pnpm turbo run build --filter=@ediocracy/guide
 
     parser-check:
@@ -27,4 +28,5 @@ pre-push:
         - "pnpm-workspace.yaml"
         - "turbo.json"
         - "lefthook.yml"
+        - "mise.toml"
       run: pnpm turbo run check --filter=@ediocracy/parser

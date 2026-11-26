@@ -50,6 +50,13 @@
       "rangeStrategy": "pin"
     },
     {
+      "description": "Keep engines.node as the published minimum. The parser needs Node 26 for Temporal.",
+      "matchDepTypes": [
+        "engines"
+      ],
+      "enabled": false
+    },
+    {
       "description": "Group non-major workspace dependency updates.",
       "matchManagers": [
         "npm"
